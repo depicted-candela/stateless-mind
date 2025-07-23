@@ -1,0 +1,56 @@
+              HOWTO Fetch Internet Resources
+                    Using The urllib Package
+                                                                                              Release 3.13.3
+
+
+                      Guido van Rossum and the Python development team
+
+
+                                                                                                   April 27, 2025
+                                                                                Python Software Foundation
+                                                                                    Email: docs@python.org
+
+
+Contents
+
+1 Introduction                                                                                                   1
+
+2 Fetching URLs                                                                                                  2
+  2.1 Data . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   3
+  2.2 Headers . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    4
+
+3 Handling Exceptions                                                                                            4
+  3.1 URLError . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     4
+  3.2 HTTPError . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      5
+  3.3 Wrapping it Up . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     6
+
+4 info and geturl                                                                                                7
+
+5 Openers and Handlers                                                                                           7
+
+6 Basic Authentication                                                                                           8
+
+7 Proxies                                                                                                        9
+
+8 Sockets and Layers                                                                                             9
+
+9 Footnotes                                                                                                      10
+
+Index                                                                                                            11
+
+
+
+        Author
+            Michael Foord
+
+
+1 Introduction
+
+ Related Articles
+
+ You may also find useful the following article on fetching web resources with Python:
+
+
+
+                                                        1
+

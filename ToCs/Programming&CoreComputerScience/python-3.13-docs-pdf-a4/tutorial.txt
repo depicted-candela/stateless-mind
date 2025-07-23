@@ -1,0 +1,260 @@
+                            Python Tutorial
+                                     Release 3.13.3
+
+
+
+
+Guido van Rossum and the Python development team
+
+
+
+
+                                           April 27, 2025
+
+
+
+
+                              Python Software Foundation
+                                  Email: docs@python.org
+                                                                                               CONTENTS
+
+
+
+
+1 Whetting Your Appetite                                                                                         3
+
+2 Using the Python Interpreter                                                                                   5
+  2.1 Invoking the Interpreter . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   5
+        2.1.1 Argument Passing . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       6
+        2.1.2 Interactive Mode . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       6
+  2.2 The Interpreter and Its Environment . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      6
+        2.2.1 Source Code Encoding . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .         6
+
+3 An Informal Introduction to Python                                                                              7
+  3.1 Using Python as a Calculator . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      7
+       3.1.1 Numbers . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        7
+       3.1.2 Text . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       9
+       3.1.3 Lists . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     12
+  3.2 First Steps Towards Programming . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        14
+
+4 More Control Flow Tools                                                                                        17
+  4.1 if Statements . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    17
+  4.2 for Statements . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     17
+  4.3 The range() Function . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       18
+  4.4 break and continue Statements . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          19
+  4.5 else Clauses on Loops . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      19
+  4.6 pass Statements . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      20
+  4.7 match Statements . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       21
+  4.8 Defining Functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     23
+  4.9 More on Defining Functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       25
+       4.9.1 Default Argument Values . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .         25
+       4.9.2 Keyword Arguments . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .           26
+       4.9.3 Special parameters . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        27
+       4.9.4 Arbitrary Argument Lists . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        30
+       4.9.5 Unpacking Argument Lists . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          30
+       4.9.6 Lambda Expressions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          30
+       4.9.7 Documentation Strings . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .         31
+       4.9.8 Function Annotations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        31
+  4.10 Intermezzo: Coding Style . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    32
+
+5 Data Structures                                                                                                33
+  5.1 More on Lists . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    33
+        5.1.1 Using Lists as Stacks . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      34
+        5.1.2 Using Lists as Queues . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      35
+        5.1.3 List Comprehensions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        35
+        5.1.4 Nested List Comprehensions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .         36
+  5.2 The del statement . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      37
+  5.3 Tuples and Sequences . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     38
+  5.4 Sets . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   39
+
+
+                                                                                                                  i
+     5.5   Dictionaries . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   39
+     5.6   Looping Techniques . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       40
+     5.7   More on Conditions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     42
+     5.8   Comparing Sequences and Other Types . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          42
+
+6 Modules                                                                                                             43
+  6.1 More on Modules . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .           44
+      6.1.1 Executing modules as scripts . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .              45
+      6.1.2 The Module Search Path . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .                45
+      6.1.3 “Compiled” Python files . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .             46
+  6.2 Standard Modules . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          46
+  6.3 The dir() Function . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .            47
+  6.4 Packages . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          48
+      6.4.1 Importing * From a Package . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .                49
+      6.4.2 Intra-package References . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .              50
+      6.4.3 Packages in Multiple Directories . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .              51
+
+7 Input and Output                                                                                                    53
+  7.1 Fancier Output Formatting . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .           53
+        7.1.1 Formatted String Literals . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .           54
+        7.1.2 The String format() Method . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .            55
+        7.1.3 Manual String Formatting . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .            56
+        7.1.4 Old string formatting . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .           57
+  7.2 Reading and Writing Files . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .           57
+        7.2.1 Methods of File Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .           58
+        7.2.2 Saving structured data with json . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .            59
+
+8 Errors and Exceptions                                                                                               61
+  8.1 Syntax Errors . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .         61
+  8.2 Exceptions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          61
+  8.3 Handling Exceptions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .           62
+  8.4 Raising Exceptions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          64
+  8.5 Exception Chaining . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          65
+  8.6 User-defined Exceptions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .           66
+  8.7 Defining Clean-up Actions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .           66
+  8.8 Predefined Clean-up Actions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .           68
+  8.9 Raising and Handling Multiple Unrelated Exceptions . . . . . . . . . . . . . . . . . . . . . . . .              68
+  8.10 Enriching Exceptions with Notes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          70
+
+9 Classes                                                                                                             73
+  9.1 A Word About Names and Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .              73
+  9.2 Python Scopes and Namespaces . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .              73
+        9.2.1 Scopes and Namespaces Example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .               75
+  9.3 A First Look at Classes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .         75
+        9.3.1 Class Definition Syntax . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .           75
+        9.3.2 Class Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .           76
+        9.3.3 Instance Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          77
+        9.3.4 Method Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .            77
+        9.3.5 Class and Instance Variables . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .            78
+  9.4 Random Remarks . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .            79
+  9.5 Inheritance . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .         80
+        9.5.1 Multiple Inheritance . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          81
+  9.6 Private Variables . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .         81
+  9.7 Odds and Ends . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .           82
+  9.8 Iterators . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       83
+  9.9 Generators . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          84
+  9.10 Generator Expressions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          84
+
+10 Brief Tour of the Standard Library                                                                                 87
+
+
+ii
+   10.1 Operating System Interface . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      87
+   10.2 File Wildcards . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      87
+   10.3 Command Line Arguments . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          87
+   10.4 Error Output Redirection and Program Termination . . . . . . . . . . . . . . . . . . . . . . . . .          88
+   10.5 String Pattern Matching . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       88
+   10.6 Mathematics . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       88
+   10.7 Internet Access . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     89
+   10.8 Dates and Times . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       90
+   10.9 Data Compression . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        90
+   10.10 Performance Measurement . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        90
+   10.11 Quality Control . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    91
+   10.12 Batteries Included . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   91
+
+11 Brief Tour of the Standard Library — Part II                                                                     93
+   11.1 Output Formatting . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       93
+   11.2 Templating . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      94
+   11.3 Working with Binary Data Record Layouts . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .         95
+   11.4 Multi-threading . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     95
+   11.5 Logging . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     96
+   11.6 Weak References . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       96
+   11.7 Tools for Working with Lists . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      97
+   11.8 Decimal Floating-Point Arithmetic . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       98
+
+12 Virtual Environments and Packages                                                                             101
+   12.1 Introduction . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 101
+   12.2 Creating Virtual Environments . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 101
+   12.3 Managing Packages with pip . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 102
+
+13 What Now?                                                                                                        105
+
+14 Interactive Input Editing and History Substitution                                                             107
+   14.1 Tab Completion and History Editing . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 107
+   14.2 Alternatives to the Interactive Interpreter . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 107
+
+15 Floating-Point Arithmetic: Issues and Limitations                                                           109
+   15.1 Representation Error . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 112
+
+16 Appendix                                                                                                    115
+   16.1 Interactive Mode . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 115
+        16.1.1 Error Handling . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 115
+        16.1.2 Executable Python Scripts . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 115
+        16.1.3 The Interactive Startup File . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 116
+        16.1.4 The Customization Modules . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 116
+
+A Glossary                                                                                                          117
+
+B About this documentation                                                                                 135
+  B.1 Contributors to the Python documentation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 135
+
+C History and License                                                                                         137
+  C.1 History of the software . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 137
+  C.2 Terms and conditions for accessing or otherwise using Python . . . . . . . . . . . . . . . . . . . . 138
+        C.2.1 PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2 . . . . . . . . . . . . . 138
+        C.2.2 BEOPEN.COM LICENSE AGREEMENT FOR PYTHON 2.0 . . . . . . . . . . . . . . 139
+        C.2.3 CNRI LICENSE AGREEMENT FOR PYTHON 1.6.1 . . . . . . . . . . . . . . . . . . 139
+        C.2.4 CWI LICENSE AGREEMENT FOR PYTHON 0.9.0 THROUGH 1.2 . . . . . . . . . . 140
+        C.2.5 ZERO-CLAUSE BSD LICENSE FOR CODE IN THE PYTHON DOCUMENTATION . 141
+  C.3 Licenses and Acknowledgements for Incorporated Software . . . . . . . . . . . . . . . . . . . . . 141
+        C.3.1 Mersenne Twister . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 141
+        C.3.2 Sockets . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 142
+
+
+                                                                                                                     iii
+        C.3.3    Asynchronous socket services . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 143
+        C.3.4    Cookie management . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 143
+        C.3.5    Execution tracing . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 143
+        C.3.6    UUencode and UUdecode functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . 144
+        C.3.7    XML Remote Procedure Calls . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 145
+        C.3.8    test_epoll . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 145
+        C.3.9    Select kqueue . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 146
+        C.3.10   SipHash24 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 146
+        C.3.11   strtod and dtoa . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 147
+        C.3.12   OpenSSL . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 147
+        C.3.13   expat . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 150
+        C.3.14   libffi . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 151
+        C.3.15   zlib . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 151
+        C.3.16   cfuhash . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 152
+        C.3.17   libmpdec . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 152
+        C.3.18   W3C C14N test suite . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 153
+        C.3.19   mimalloc . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 154
+        C.3.20   asyncio . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 154
+        C.3.21   Global Unbounded Sequences (GUS) . . . . . . . . . . . . . . . . . . . . . . . . . . . . 154
+
+D Copyright                                                                                                      157
+
+Index                                                                                                            159
+
+
+
+
+iv
+                                                                                Python Tutorial, Release 3.13.3
+
+
+Python is an easy to learn, powerful programming language. It has efficient high-level data structures and a simple
+but effective approach to object-oriented programming. Python’s elegant syntax and dynamic typing, together with
+its interpreted nature, make it an ideal language for scripting and rapid application development in many areas on
+most platforms.
+The Python interpreter and the extensive standard library are freely available in source or binary form for all major
+platforms from the Python web site, https://www.python.org/, and may be freely distributed. The same site also
+contains distributions of and pointers to many free third party Python modules, programs and tools, and additional
+documentation.
+The Python interpreter is easily extended with new functions and data types implemented in C or C++ (or other
+languages callable from C). Python is also suitable as an extension language for customizable applications.
+This tutorial introduces the reader informally to the basic concepts and features of the Python language and system. It
+helps to have a Python interpreter handy for hands-on experience, but all examples are self-contained, so the tutorial
+can be read off-line as well.
+For a description of standard objects and modules, see library-index. reference-index gives a more formal definition
+of the language. To write extensions in C or C++, read extending-index and c-api-index. There are also several books
+covering Python in depth.
+This tutorial does not attempt to be comprehensive and cover every single feature, or even every commonly used
+feature. Instead, it introduces many of Python’s most noteworthy features, and will give you a good idea of the
+language’s flavor and style. After reading it, you will be able to read and write Python modules and programs, and
+you will be ready to learn more about the various Python library modules described in library-index.
+The Glossary is also worth going through.
+
+
+
+
+CONTENTS                                                                                                             1
+Python Tutorial, Release 3.13.3
+
+
+
+
+2                                 CONTENTS
+

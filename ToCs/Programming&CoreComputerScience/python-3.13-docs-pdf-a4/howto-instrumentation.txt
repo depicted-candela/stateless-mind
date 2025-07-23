@@ -1,0 +1,49 @@
+        Instrumenting CPython with DTrace
+                           and SystemTap
+                                                                                          Release 3.13.3
+
+
+                     Guido van Rossum and the Python development team
+
+
+                                                                                               April 27, 2025
+                                                                             Python Software Foundation
+                                                                                 Email: docs@python.org
+
+
+Contents
+
+1 Enabling the static markers                                                                                2
+
+2 Static DTrace probes                                                                                       3
+
+3 Static SystemTap markers                                                                                   4
+
+4 Available static markers                                                                                   5
+
+5 SystemTap Tapsets                                                                                          6
+
+6 Examples                                                                                                   7
+
+
+
+      author
+           David Malcolm
+      author
+           Łukasz Langa
+DTrace and SystemTap are monitoring tools, each providing a way to inspect what the processes on a computer
+system are doing. They both use domain-specific languages allowing a user to write scripts which:
+   • filter which processes are to be observed
+   • gather data from the processes of interest
+   • generate reports on the data
+As of Python 3.6, CPython can be built with embedded “markers”, also known as “probes”, that can be observed by
+a DTrace or SystemTap script, making it easier to monitor what the CPython processes on a system are doing.
+CPython implementation detail: DTrace markers are implementation details of the CPython interpreter. No
+guarantees are made about probe compatibility between versions of CPython. DTrace scripts can stop working or
+work incorrectly without warning when changing CPython versions.
+
+
+
+
+                                                      1
+

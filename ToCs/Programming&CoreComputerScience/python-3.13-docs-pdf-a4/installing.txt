@@ -1,0 +1,116 @@
+              Installing Python Modules
+                                     Release 3.13.3
+
+
+
+
+Guido van Rossum and the Python development team
+
+
+
+
+                                           April 27, 2025
+
+
+
+
+                              Python Software Foundation
+                                  Email: docs@python.org
+                                                                                                CONTENTS
+
+
+
+
+1 Key terms                                                                                                       3
+
+2 Basic usage                                                                                                     5
+
+3 How do I …?                                                                                                     7
+  3.1 … install pip in versions of Python prior to Python 3.4? . . . . . . . . . . . . . . . . . . . . . .        7
+  3.2 … install packages just for the current user? . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     7
+  3.3 … install scientific Python packages? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     7
+  3.4 … work with multiple versions of Python installed in parallel? . . . . . . . . . . . . . . . . . . .        7
+
+4 Common installation issues                                                                                      9
+  4.1 Installing into the system Python on Linux . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      9
+  4.2 Pip not installed . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   9
+  4.3 Installing binary extensions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    9
+
+A Glossary                                                                                                        11
+
+B About this documentation                                                                                        29
+  B.1 Contributors to the Python documentation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        29
+
+C History and License                                                                                             31
+  C.1 History of the software . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     31
+  C.2 Terms and conditions for accessing or otherwise using Python . . . . . . . . . . . . . . . . . . . .        32
+        C.2.1 PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2 . . . . . . . . . . . . .                              32
+        C.2.2 BEOPEN.COM LICENSE AGREEMENT FOR PYTHON 2.0 . . . . . . . . . . . . . .                             33
+        C.2.3 CNRI LICENSE AGREEMENT FOR PYTHON 1.6.1 . . . . . . . . . . . . . . . . . .                         33
+        C.2.4 CWI LICENSE AGREEMENT FOR PYTHON 0.9.0 THROUGH 1.2 . . . . . . . . . .                              34
+        C.2.5 ZERO-CLAUSE BSD LICENSE FOR CODE IN THE PYTHON DOCUMENTATION .                                      35
+  C.3 Licenses and Acknowledgements for Incorporated Software . . . . . . . . . . . . . . . . . . . . .           35
+        C.3.1 Mersenne Twister . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        35
+        C.3.2 Sockets . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       36
+        C.3.3 Asynchronous socket services . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        37
+        C.3.4 Cookie management . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .         37
+        C.3.5 Execution tracing . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       37
+        C.3.6 UUencode and UUdecode functions . . . . . . . . . . . . . . . . . . . . . . . . . . . .             38
+        C.3.7 XML Remote Procedure Calls . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .            39
+        C.3.8 test_epoll . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      39
+        C.3.9 Select kqueue . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       40
+        C.3.10 SipHash24 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      40
+        C.3.11 strtod and dtoa . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    41
+        C.3.12 OpenSSL . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        41
+        C.3.13 expat . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    44
+        C.3.14 libffi . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   45
+        C.3.15 zlib . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     45
+        C.3.16 cfuhash . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      46
+
+
+                                                                                                                   i
+        C.3.17   libmpdec . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    46
+        C.3.18   W3C C14N test suite . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     47
+        C.3.19   mimalloc . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    48
+        C.3.20   asyncio . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   48
+        C.3.21   Global Unbounded Sequences (GUS) . . . . . . . . . . . . . . . . . . . . . . . . . . . .        48
+
+D Copyright                                                                                                      51
+
+Index                                                                                                            53
+
+
+
+
+ii
+                                                                    Installing Python Modules, Release 3.13.3
+
+
+      Email
+          distutils-sig@python.org
+As a popular open source development project, Python has an active supporting community of contributors and users
+that also make their software available for other Python developers to use under open source license terms.
+This allows Python users to share and collaborate effectively, benefiting from the solutions others have already created
+to common (and sometimes even rare!) problems, as well as potentially contributing their own solutions to the
+common pool.
+This guide covers the installation part of the process. For a guide to creating and sharing your own Python projects,
+refer to the Python packaging user guide.
+
+
+ ® Note
+
+ For corporate and other institutional users, be aware that many organisations have their own policies around
+ using and contributing to open source software. Please take such policies into account when making use of the
+ distribution and installation tools provided with Python.
+
+
+
+
+CONTENTS                                                                                                              1
+Installing Python Modules, Release 3.13.3
+
+
+
+
+2                                           CONTENTS
+

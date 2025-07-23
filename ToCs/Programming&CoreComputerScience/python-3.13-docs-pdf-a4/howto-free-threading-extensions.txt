@@ -1,0 +1,56 @@
+               C API Extension Support for Free
+                                    Threading
+                                                                                               Release 3.13.3
+
+
+                      Guido van Rossum and the Python development team
+
+
+                                                                                                   April 27, 2025
+                                                                                 Python Software Foundation
+                                                                                     Email: docs@python.org
+
+
+Contents
+
+1 Identifying the Free-Threaded Build in C                                                                        1
+
+2 Module Initialization                                                                                           2
+  2.1 Multi-Phase Initialization . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    2
+  2.2 Single-Phase Initialization . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   2
+
+3 General API Guidelines                                                                                          3
+  3.1 Container Thread Safety . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     3
+
+4 Borrowed References                                                                                             3
+
+5 Memory Allocation APIs                                                                                          4
+
+6 Thread State and GIL APIs                                                                                       4
+
+7 Protecting Internal Extension State                                                                             4
+
+8 Building Extensions for the Free-Threaded Build                                                                 4
+  8.1 Limited C API and Stable ABI . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        4
+  8.2 Windows . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       5
+
+
+
+Starting with the 3.13 release, CPython has experimental support for running with the global interpreter lock (GIL)
+disabled in a configuration called free threading. This document describes how to adapt C API extensions to support
+free threading.
+
+
+1 Identifying the Free-Threaded Build in C
+The CPython C API exposes the Py_GIL_DISABLED macro: in the free-threaded build it’s defined to 1, and in the
+regular build it’s not defined. You can use it to enable code that only runs under the free-threaded build:
+
+#ifdef Py_GIL_DISABLED
+/* code that only runs in the free-threaded build */
+#endif
+
+
+
+
+                                                         1
+

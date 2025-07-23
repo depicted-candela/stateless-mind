@@ -1,0 +1,303 @@
+                         The Python/C API
+                                     Release 3.13.3
+
+
+
+
+Guido van Rossum and the Python development team
+
+
+
+
+                                           April 27, 2025
+
+
+
+
+                              Python Software Foundation
+                                  Email: docs@python.org
+                                                                                              CONTENTS
+
+
+
+
+1 Introduction                                                                                                   3
+  1.1 Coding standards . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     3
+  1.2 Include Files . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    3
+  1.3 Useful macros . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      4
+  1.4 Objects, Types and Reference Counts . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        6
+        1.4.1 Reference Counts . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       7
+        1.4.2 Types . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     10
+  1.5 Exceptions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    10
+  1.6 Embedding Python . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      12
+  1.7 Debugging Builds . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    12
+
+2 C API Stability                                                                                               13
+  2.1 Unstable C API . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    13
+  2.2 Stable Application Binary Interface . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     13
+       2.2.1 Limited C API . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        13
+       2.2.2 Stable ABI . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     14
+       2.2.3 Limited API Scope and Performance . . . . . . . . . . . . . . . . . . . . . . . . . . . .          14
+       2.2.4 Limited API Caveats . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        14
+  2.3 Platform Considerations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     15
+  2.4 Contents of Limited API . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     15
+
+3 The Very High Level Layer                                                                                     41
+
+4 Reference Counting                                                                                            45
+
+5 Exception Handling                                                                                            49
+  5.1 Printing and clearing . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   49
+  5.2 Raising exceptions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    50
+  5.3 Issuing warnings . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    52
+  5.4 Querying the error indicator . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    53
+  5.5 Signal Handling . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   56
+  5.6 Exception Classes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   57
+  5.7 Exception Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     58
+  5.8 Unicode Exception Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     59
+  5.9 Recursion Control . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     60
+  5.10 Standard Exceptions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    60
+  5.11 Standard Warning Categories . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    62
+
+6 Utilities                                                                                                     63
+  6.1 Operating System Utilities . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    63
+  6.2 System Functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    66
+  6.3 Process Control . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   67
+  6.4 Importing Modules . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     68
+  6.5 Data marshalling support . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    72
+  6.6 Parsing arguments and building values . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     73
+
+
+                                                                                                                 i
+          6.6.1 Parsing arguments . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       73
+          6.6.2 Building values . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       79
+     6.7 String conversion and formatting . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     81
+     6.8 PyHash API . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       83
+     6.9 Reflection . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   84
+     6.10 Codec registry and support functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    85
+          6.10.1 Codec lookup API . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       86
+          6.10.2 Registry API for Unicode encoding error handlers . . . . . . . . . . . . . . . . . . . . .         86
+     6.11 PyTime C API . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      87
+          6.11.1 Types . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      87
+          6.11.2 Clock Functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      87
+          6.11.3 Raw Clock Functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        88
+          6.11.4 Conversion functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       88
+     6.12 Support for Perf Maps . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     88
+
+7 Abstract Objects Layer                                                                                       91
+  7.1 Object Protocol . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 91
+  7.2 Call Protocol . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 98
+       7.2.1 The tp_call Protocol . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 98
+       7.2.2 The Vectorcall Protocol . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 98
+       7.2.3 Object Calling API . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 100
+       7.2.4 Call Support API . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 102
+  7.3 Number Protocol . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 103
+  7.4 Sequence Protocol . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 106
+  7.5 Mapping Protocol . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 107
+  7.6 Iterator Protocol . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 109
+  7.7 Buffer Protocol . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 110
+       7.7.1 Buffer structure . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 111
+       7.7.2 Buffer request types . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 112
+       7.7.3 Complex arrays . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 114
+       7.7.4 Buffer-related functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 115
+
+8 Concrete Objects Layer                                                                                      117
+  8.1 Fundamental Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 117
+       8.1.1 Type Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 117
+       8.1.2 The None Object . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 123
+  8.2 Numeric Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 123
+       8.2.1 Integer Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 123
+       8.2.2 Boolean Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 130
+       8.2.3 Floating-Point Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 130
+       8.2.4 Complex Number Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 132
+  8.3 Sequence Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 134
+       8.3.1 Bytes Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 134
+       8.3.2 Byte Array Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 135
+       8.3.3 Unicode Objects and Codecs . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 136
+       8.3.4 Tuple Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 154
+       8.3.5 Struct Sequence Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 156
+       8.3.6 List Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 157
+  8.4 Container Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 159
+       8.4.1 Dictionary Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 159
+       8.4.2 Set Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 164
+  8.5 Function Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 165
+       8.5.1 Function Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 165
+       8.5.2 Instance Method Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 167
+       8.5.3 Method Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 168
+       8.5.4 Cell Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 168
+       8.5.5 Code Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 169
+       8.5.6 Extra information . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 172
+
+
+
+ii
+   8.6    Other Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 173
+          8.6.1 File Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 173
+          8.6.2 Module Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 174
+          8.6.3 Iterator Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 182
+          8.6.4 Descriptor Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 183
+          8.6.5 Slice Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 183
+          8.6.6 MemoryView objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 185
+          8.6.7 Weak Reference Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 185
+          8.6.8 Capsules . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 187
+          8.6.9 Frame Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 188
+          8.6.10 Generator Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 191
+          8.6.11 Coroutine Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 191
+          8.6.12 Context Variables Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 192
+          8.6.13 DateTime Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 193
+          8.6.14 Objects for Type Hinting . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 197
+
+9 Initialization, Finalization, and Threads                                                                     199
+  9.1 Before Python Initialization . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 199
+  9.2 Global configuration variables . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 200
+  9.3 Initializing and finalizing the interpreter . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 203
+  9.4 Process-wide parameters . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 206
+  9.5 Thread State and the Global Interpreter Lock . . . . . . . . . . . . . . . . . . . . . . . . . . . . 209
+         9.5.1 Releasing the GIL from extension code . . . . . . . . . . . . . . . . . . . . . . . . . . . 209
+         9.5.2 Non-Python created threads . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 210
+         9.5.3 Cautions about fork() . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 210
+         9.5.4 High-level API . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 211
+         9.5.5 Low-level API . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 213
+  9.6 Sub-interpreter support . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 216
+         9.6.1 A Per-Interpreter GIL . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 218
+         9.6.2 Bugs and caveats . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 219
+  9.7 Asynchronous Notifications . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 219
+  9.8 Profiling and Tracing . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 220
+  9.9 Reference tracing . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 221
+  9.10 Advanced Debugger Support . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 222
+  9.11 Thread Local Storage Support . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 222
+         9.11.1 Thread Specific Storage (TSS) API . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 223
+         9.11.2 Thread Local Storage (TLS) API . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 224
+  9.12 Synchronization Primitives . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 225
+         9.12.1 Python Critical Section API . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 225
+
+10 Python Initialization Configuration                                                                           227
+   10.1 Example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 227
+   10.2 PyWideStringList . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 228
+   10.3 PyStatus . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 228
+   10.4 PyPreConfig . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 230
+   10.5 Preinitialize Python with PyPreConfig . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 231
+   10.6 PyConfig . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 232
+   10.7 Initialization with PyConfig . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 243
+   10.8 Isolated Configuration . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 245
+   10.9 Python Configuration . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 245
+   10.10 Python Path Configuration . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 245
+   10.11 Py_GetArgcArgv() . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 246
+   10.12 Multi-Phase Initialization Private Provisional API . . . . . . . . . . . . . . . . . . . . . . . . . . 247
+
+11 Memory Management                                                                                           249
+   11.1 Overview . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 249
+   11.2 Allocator Domains . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 250
+   11.3 Raw Memory Interface . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 250
+   11.4 Memory Interface . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 251
+
+
+                                                                                                                  iii
+     11.5  Object allocators . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 252
+     11.6  Default Memory Allocators . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 253
+     11.7  Customize Memory Allocators . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 254
+     11.8  Debug hooks on the Python memory allocators . . . . . . . . . . . . . . . . . . . . . . . . . . . 255
+     11.9  The pymalloc allocator . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 257
+           11.9.1 Customize pymalloc Arena Allocator . . . . . . . . . . . . . . . . . . . . . . . . . . . . 257
+     11.10 The mimalloc allocator . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 257
+     11.11 tracemalloc C API . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 257
+     11.12 Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 258
+
+12 Object Implementation Support                                                                               259
+   12.1 Allocating Objects on the Heap . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 259
+   12.2 Common Object Structures . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 260
+        12.2.1 Base object types and macros . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 260
+        12.2.2 Implementing functions and methods . . . . . . . . . . . . . . . . . . . . . . . . . . . . 261
+        12.2.3 Accessing attributes of extension types . . . . . . . . . . . . . . . . . . . . . . . . . . . 265
+   12.3 Type Object Structures . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 268
+        12.3.1 Quick Reference . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 269
+        12.3.2 PyTypeObject Definition . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 273
+        12.3.3 PyObject Slots . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 274
+        12.3.4 PyVarObject Slots . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 275
+        12.3.5 PyTypeObject Slots . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 275
+        12.3.6 Static Types . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 294
+        12.3.7 Heap Types . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 295
+        12.3.8 Number Object Structures . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 295
+        12.3.9 Mapping Object Structures . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 297
+        12.3.10 Sequence Object Structures . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 297
+        12.3.11 Buffer Object Structures . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 298
+        12.3.12 Async Object Structures . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 299
+        12.3.13 Slot Type typedefs . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 300
+        12.3.14 Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 301
+   12.4 Supporting Cyclic Garbage Collection . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 304
+        12.4.1 Controlling the Garbage Collector State . . . . . . . . . . . . . . . . . . . . . . . . . . . 306
+        12.4.2 Querying Garbage Collector State . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 307
+
+13 API and ABI Versioning                                                                                         309
+
+14 Monitoring C API                                                                                               311
+
+15 Generating Execution Events                                                                                313
+   15.1 Managing the Monitoring State . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 314
+
+A Glossary                                                                                                        317
+
+B About this documentation                                                                                 335
+  B.1 Contributors to the Python documentation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 335
+
+C History and License                                                                                         337
+  C.1 History of the software . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 337
+  C.2 Terms and conditions for accessing or otherwise using Python . . . . . . . . . . . . . . . . . . . . 338
+        C.2.1 PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2 . . . . . . . . . . . . . 338
+        C.2.2 BEOPEN.COM LICENSE AGREEMENT FOR PYTHON 2.0 . . . . . . . . . . . . . . 339
+        C.2.3 CNRI LICENSE AGREEMENT FOR PYTHON 1.6.1 . . . . . . . . . . . . . . . . . . 339
+        C.2.4 CWI LICENSE AGREEMENT FOR PYTHON 0.9.0 THROUGH 1.2 . . . . . . . . . . 340
+        C.2.5 ZERO-CLAUSE BSD LICENSE FOR CODE IN THE PYTHON DOCUMENTATION . 341
+  C.3 Licenses and Acknowledgements for Incorporated Software . . . . . . . . . . . . . . . . . . . . . 341
+        C.3.1 Mersenne Twister . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 341
+        C.3.2 Sockets . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 342
+        C.3.3 Asynchronous socket services . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 343
+
+
+iv
+        C.3.4    Cookie management . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 343
+        C.3.5    Execution tracing . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 343
+        C.3.6    UUencode and UUdecode functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . 344
+        C.3.7    XML Remote Procedure Calls . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 345
+        C.3.8    test_epoll . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 345
+        C.3.9    Select kqueue . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 346
+        C.3.10   SipHash24 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 346
+        C.3.11   strtod and dtoa . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 347
+        C.3.12   OpenSSL . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 347
+        C.3.13   expat . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 350
+        C.3.14   libffi . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 351
+        C.3.15   zlib . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 351
+        C.3.16   cfuhash . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 352
+        C.3.17   libmpdec . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 352
+        C.3.18   W3C C14N test suite . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 353
+        C.3.19   mimalloc . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 354
+        C.3.20   asyncio . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 354
+        C.3.21   Global Unbounded Sequences (GUS) . . . . . . . . . . . . . . . . . . . . . . . . . . . . 354
+
+D Copyright                                                                                                      357
+
+Index                                                                                                            359
+
+
+
+
+                                                                                                                   v
+vi
+                                                                          The Python/C API, Release 3.13.3
+
+
+This manual documents the API used by C and C++ programmers who want to write extension modules or embed
+Python. It is a companion to extending-index, which describes the general principles of extension writing but does
+not document the API functions in detail.
+
+
+
+
+CONTENTS                                                                                                        1
+The Python/C API, Release 3.13.3
+
+
+
+
+2                                  CONTENTS
+

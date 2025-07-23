@@ -1,0 +1,299 @@
+ Python Frequently Asked Questions
+                                     Release 3.13.3
+
+
+
+
+Guido van Rossum and the Python development team
+
+
+
+
+                                           April 27, 2025
+
+
+
+
+                              Python Software Foundation
+                                  Email: docs@python.org
+                                                                                             CONTENTS
+
+
+
+
+1 General Python FAQ                                                                                           1
+  1.1 General Information . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    1
+       1.1.1 What is Python? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     1
+       1.1.2 What is the Python Software Foundation? . . . . . . . . . . . . . . . . . . . . . . . . .         1
+       1.1.3 Are there copyright restrictions on the use of Python? . . . . . . . . . . . . . . . . . . .      1
+       1.1.4 Why was Python created in the first place? . . . . . . . . . . . . . . . . . . . . . . . . .      1
+       1.1.5 What is Python good for? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      2
+       1.1.6 How does the Python version numbering scheme work? . . . . . . . . . . . . . . . . . .            2
+       1.1.7 How do I obtain a copy of the Python source? . . . . . . . . . . . . . . . . . . . . . . .        3
+       1.1.8 How do I get documentation on Python? . . . . . . . . . . . . . . . . . . . . . . . . . .         3
+       1.1.9 I’ve never programmed before. Is there a Python tutorial? . . . . . . . . . . . . . . . . .       3
+       1.1.10 Is there a newsgroup or mailing list devoted to Python? . . . . . . . . . . . . . . . . . . .    3
+       1.1.11 How do I get a beta test version of Python? . . . . . . . . . . . . . . . . . . . . . . . . .    3
+       1.1.12 How do I submit bug reports and patches for Python? . . . . . . . . . . . . . . . . . . .        3
+       1.1.13 Are there any published articles about Python that I can reference? . . . . . . . . . . . .      3
+       1.1.14 Are there any books on Python? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       4
+       1.1.15 Where in the world is www.python.org located? . . . . . . . . . . . . . . . . . . . . . .        4
+       1.1.16 Why is it called Python? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   4
+       1.1.17 Do I have to like “Monty Python’s Flying Circus”? . . . . . . . . . . . . . . . . . . . . .      4
+  1.2 Python in the real world . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   4
+       1.2.1 How stable is Python? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     4
+       1.2.2 How many people are using Python? . . . . . . . . . . . . . . . . . . . . . . . . . . . .         4
+       1.2.3 Have any significant projects been done in Python? . . . . . . . . . . . . . . . . . . . . .      4
+       1.2.4 What new developments are expected for Python in the future? . . . . . . . . . . . . . .          4
+       1.2.5 Is it reasonable to propose incompatible changes to Python? . . . . . . . . . . . . . . . .       5
+       1.2.6 Is Python a good language for beginning programmers? . . . . . . . . . . . . . . . . . .          5
+
+2 Programming FAQ                                                                                               7
+  2.1 General Questions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     7
+       2.1.1 Is there a source code level debugger with breakpoints, single-stepping, etc.? . . . . . . .       7
+       2.1.2 Are there tools to help find bugs or perform static analysis? . . . . . . . . . . . . . . . .      7
+       2.1.3 How can I create a stand-alone binary from a Python script? . . . . . . . . . . . . . . . .        7
+       2.1.4 Are there coding standards or a style guide for Python programs? . . . . . . . . . . . . .         8
+  2.2 Core Language . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     8
+       2.2.1 Why am I getting an UnboundLocalError when the variable has a value? . . . . . . . . .             8
+       2.2.2 What are the rules for local and global variables in Python? . . . . . . . . . . . . . . . .       9
+       2.2.3 Why do lambdas defined in a loop with different values all return the same result? . . . . .       9
+       2.2.4 How do I share global variables across modules? . . . . . . . . . . . . . . . . . . . . . .       10
+       2.2.5 What are the “best practices” for using import in a module? . . . . . . . . . . . . . . . .       10
+       2.2.6 Why are default values shared between objects? . . . . . . . . . . . . . . . . . . . . . .        11
+       2.2.7 How can I pass optional or keyword parameters from one function to another? . . . . . .           12
+       2.2.8 What is the difference between arguments and parameters? . . . . . . . . . . . . . . . .          12
+       2.2.9 Why did changing list ‘y’ also change list ‘x’? . . . . . . . . . . . . . . . . . . . . . . . .   12
+       2.2.10 How do I write a function with output parameters (call by reference)? . . . . . . . . . . .      13
+
+
+                                                                                                                i
+           2.2.11 How do you make a higher order function in Python? . . . . . . . . . . . . . . . . . . .           14
+           2.2.12 How do I copy an object in Python? . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       15
+           2.2.13 How can I find the methods or attributes of an object? . . . . . . . . . . . . . . . . . . .       15
+           2.2.14 How can my code discover the name of an object? . . . . . . . . . . . . . . . . . . . . .          16
+           2.2.15 What’s up with the comma operator’s precedence? . . . . . . . . . . . . . . . . . . . . .          16
+           2.2.16 Is there an equivalent of C’s “?:” ternary operator? . . . . . . . . . . . . . . . . . . . . .     16
+           2.2.17 Is it possible to write obfuscated one-liners in Python? . . . . . . . . . . . . . . . . . . .     17
+           2.2.18 What does the slash(/) in the parameter list of a function mean? . . . . . . . . . . . . . .       17
+     2.3   Numbers and strings . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     18
+           2.3.1 How do I specify hexadecimal and octal integers? . . . . . . . . . . . . . . . . . . . . .          18
+           2.3.2 Why does -22 // 10 return -3? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       18
+           2.3.3 How do I get int literal attribute instead of SyntaxError? . . . . . . . . . . . . . . . . . .      18
+           2.3.4 How do I convert a string to a number? . . . . . . . . . . . . . . . . . . . . . . . . . . .        18
+           2.3.5 How do I convert a number to a string? . . . . . . . . . . . . . . . . . . . . . . . . . . .        19
+           2.3.6 How do I modify a string in place? . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        19
+           2.3.7 How do I use strings to call functions/methods? . . . . . . . . . . . . . . . . . . . . . . .       19
+           2.3.8 Is there an equivalent to Perl’s chomp() for removing trailing newlines from strings? . . .         20
+           2.3.9 Is there a scanf() or sscanf() equivalent? . . . . . . . . . . . . . . . . . . . . . . .            20
+           2.3.10 What does UnicodeDecodeError or UnicodeEncodeError error mean? . . . . . . .                       21
+           2.3.11 Can I end a raw string with an odd number of backslashes? . . . . . . . . . . . . . . . .          21
+     2.4   Performance . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     21
+           2.4.1 My program is too slow. How do I speed it up? . . . . . . . . . . . . . . . . . . . . . . .         21
+           2.4.2 What is the most efficient way to concatenate many strings together? . . . . . . . . . . . .        22
+     2.5   Sequences (Tuples/Lists) . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    22
+           2.5.1 How do I convert between tuples and lists? . . . . . . . . . . . . . . . . . . . . . . . . .        22
+           2.5.2 What’s a negative index? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        23
+           2.5.3 How do I iterate over a sequence in reverse order? . . . . . . . . . . . . . . . . . . . . .        23
+           2.5.4 How do you remove duplicates from a list? . . . . . . . . . . . . . . . . . . . . . . . . .         23
+           2.5.5 How do you remove multiple items from a list . . . . . . . . . . . . . . . . . . . . . . .          23
+           2.5.6 How do you make an array in Python? . . . . . . . . . . . . . . . . . . . . . . . . . . .           23
+           2.5.7 How do I create a multidimensional list? . . . . . . . . . . . . . . . . . . . . . . . . . .        24
+           2.5.8 How do I apply a method or function to a sequence of objects? . . . . . . . . . . . . . . .         24
+           2.5.9 Why does a_tuple[i] += [‘item’] raise an exception when the addition works? . . . . . . .           25
+           2.5.10 I want to do a complicated sort: can you do a Schwartzian Transform in Python? . . . . .           26
+           2.5.11 How can I sort one list by values from another list? . . . . . . . . . . . . . . . . . . . . .     26
+     2.6   Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   26
+           2.6.1 What is a class? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      26
+           2.6.2 What is a method? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       27
+           2.6.3 What is self? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       27
+           2.6.4 How do I check if an object is an instance of a given class or of a subclass of it? . . . . . .     27
+           2.6.5 What is delegation? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       28
+           2.6.6 How do I call a method defined in a base class from a derived class that extends it? . . . .        29
+           2.6.7 How can I organize my code to make it easier to change the base class? . . . . . . . . . .          29
+           2.6.8 How do I create static class data and static class methods? . . . . . . . . . . . . . . . . .       29
+           2.6.9 How can I overload constructors (or methods) in Python? . . . . . . . . . . . . . . . . .           30
+           2.6.10 I try to use __spam and I get an error about _SomeClassName__spam. . . . . . . . . . .             30
+           2.6.11 My class defines __del__ but it is not called when I delete the object. . . . . . . . . . . .      31
+           2.6.12 How do I get a list of all instances of a given class? . . . . . . . . . . . . . . . . . . . . .   31
+           2.6.13 Why does the result of id() appear to be not unique? . . . . . . . . . . . . . . . . . . .         31
+           2.6.14 When can I rely on identity tests with the is operator? . . . . . . . . . . . . . . . . . . .      32
+           2.6.15 How can a subclass control what data is stored in an immutable instance? . . . . . . . . .         33
+           2.6.16 How do I cache method calls? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       34
+     2.7   Modules . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   35
+           2.7.1 How do I create a .pyc file? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      35
+           2.7.2 How do I find the current module name? . . . . . . . . . . . . . . . . . . . . . . . . . .          35
+           2.7.3 How can I have modules that mutually import each other? . . . . . . . . . . . . . . . . .           36
+           2.7.4 __import__(‘x.y.z’) returns <module ‘x’>; how do I get z? . . . . . . . . . . . . . . . . .         36
+
+
+
+ii
+          2.7.5    When I edit an imported module and reimport it, the changes don’t show up. Why does
+                   this happen? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   37
+
+3 Design and History FAQ                                                                                            39
+  3.1 Why does Python use indentation for grouping of statements? . . . . . . . . . . . . . . . . . . . .           39
+  3.2 Why am I getting strange results with simple arithmetic operations? . . . . . . . . . . . . . . . . .         39
+  3.3 Why are floating-point calculations so inaccurate? . . . . . . . . . . . . . . . . . . . . . . . . . .        39
+  3.4 Why are Python strings immutable? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .           40
+  3.5 Why must ‘self’ be used explicitly in method definitions and calls? . . . . . . . . . . . . . . . . . .       40
+  3.6 Why can’t I use an assignment in an expression? . . . . . . . . . . . . . . . . . . . . . . . . . . .         41
+  3.7 Why does Python use methods for some functionality (e.g. list.index()) but functions for other (e.g.
+       len(list))? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    41
+  3.8 Why is join() a string method instead of a list or tuple method? . . . . . . . . . . . . . . . . . . .        41
+  3.9 How fast are exceptions? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        42
+  3.10 Why isn’t there a switch or case statement in Python? . . . . . . . . . . . . . . . . . . . . . . . .        42
+  3.11 Can’t you emulate threads in the interpreter instead of relying on an OS-specific thread implemen-
+       tation? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      43
+  3.12 Why can’t lambda expressions contain statements? . . . . . . . . . . . . . . . . . . . . . . . . . .         43
+  3.13 Can Python be compiled to machine code, C or some other language? . . . . . . . . . . . . . . .              43
+  3.14 How does Python manage memory? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .             43
+  3.15 Why doesn’t CPython use a more traditional garbage collection scheme? . . . . . . . . . . . . . .            44
+  3.16 Why isn’t all memory freed when CPython exits? . . . . . . . . . . . . . . . . . . . . . . . . . .           44
+  3.17 Why are there separate tuple and list data types? . . . . . . . . . . . . . . . . . . . . . . . . . . .      44
+  3.18 How are lists implemented in CPython? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          44
+  3.19 How are dictionaries implemented in CPython? . . . . . . . . . . . . . . . . . . . . . . . . . . .           44
+  3.20 Why must dictionary keys be immutable? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .           45
+  3.21 Why doesn’t list.sort() return the sorted list? . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    46
+  3.22 How do you specify and enforce an interface spec in Python? . . . . . . . . . . . . . . . . . . . .          46
+  3.23 Why is there no goto? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        46
+  3.24 Why can’t raw strings (r-strings) end with a backslash? . . . . . . . . . . . . . . . . . . . . . . .        47
+  3.25 Why doesn’t Python have a “with” statement for attribute assignments? . . . . . . . . . . . . . . .          47
+  3.26 Why don’t generators support the with statement? . . . . . . . . . . . . . . . . . . . . . . . . . .         48
+  3.27 Why are colons required for the if/while/def/class statements? . . . . . . . . . . . . . . . . . . . .       48
+  3.28 Why does Python allow commas at the end of lists and tuples? . . . . . . . . . . . . . . . . . . .           49
+
+4 Library and Extension FAQ                                                                                         51
+  4.1 General Library Questions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .         51
+       4.1.1 How do I find a module or application to perform task X? . . . . . . . . . . . . . . . . .             51
+       4.1.2 Where is the math.py (socket.py, regex.py, etc.) source file? . . . . . . . . . . . . . . . .          51
+       4.1.3 How do I make a Python script executable on Unix? . . . . . . . . . . . . . . . . . . . .              51
+       4.1.4 Is there a curses/termcap package for Python? . . . . . . . . . . . . . . . . . . . . . . .            52
+       4.1.5 Is there an equivalent to C’s onexit() in Python? . . . . . . . . . . . . . . . . . . . . . .          52
+       4.1.6 Why don’t my signal handlers work? . . . . . . . . . . . . . . . . . . . . . . . . . . . .             52
+  4.2 Common tasks . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          52
+       4.2.1 How do I test a Python program or component? . . . . . . . . . . . . . . . . . . . . . .               52
+       4.2.2 How do I create documentation from doc strings? . . . . . . . . . . . . . . . . . . . . .              53
+       4.2.3 How do I get a single keypress at a time? . . . . . . . . . . . . . . . . . . . . . . . . . .          53
+  4.3 Threads . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       53
+       4.3.1 How do I program using threads? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .            53
+       4.3.2 None of my threads seem to run: why? . . . . . . . . . . . . . . . . . . . . . . . . . . .             53
+       4.3.3 How do I parcel out work among a bunch of worker threads? . . . . . . . . . . . . . . .                54
+       4.3.4 What kinds of global value mutation are thread-safe? . . . . . . . . . . . . . . . . . . . .           55
+       4.3.5 Can’t we get rid of the Global Interpreter Lock? . . . . . . . . . . . . . . . . . . . . . .           55
+  4.4 Input and Output . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        56
+       4.4.1 How do I delete a file? (And other file questions…) . . . . . . . . . . . . . . . . . . . .            56
+       4.4.2 How do I copy a file? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          56
+       4.4.3 How do I read (or write) binary data? . . . . . . . . . . . . . . . . . . . . . . . . . . . .          56
+       4.4.4 I can’t seem to use os.read() on a pipe created with os.popen(); why? . . . . . . . . . . . .          57
+
+
+
+                                                                                                                    iii
+           4.4.5 How do I access the serial (RS232) port? . . . . . . . . . . . . . . . . . . . . . . . . . .        57
+           4.4.6 Why doesn’t closing sys.stdout (stdin, stderr) really close it? . . . . . . . . . . . . . . . .     57
+     4.5   Network/Internet Programming . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        57
+           4.5.1 What WWW tools are there for Python? . . . . . . . . . . . . . . . . . . . . . . . . . .            57
+           4.5.2 What module should I use to help with generating HTML? . . . . . . . . . . . . . . . . .            58
+           4.5.3 How do I send mail from a Python script? . . . . . . . . . . . . . . . . . . . . . . . . .          58
+           4.5.4 How do I avoid blocking in the connect() method of a socket? . . . . . . . . . . . . . . .          58
+     4.6   Databases . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   59
+           4.6.1 Are there any interfaces to database packages in Python? . . . . . . . . . . . . . . . . . .        59
+           4.6.2 How do you implement persistent objects in Python? . . . . . . . . . . . . . . . . . . . .          59
+     4.7   Mathematics and Numerics . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      59
+           4.7.1 How do I generate random numbers in Python? . . . . . . . . . . . . . . . . . . . . . . .           59
+
+5 Extending/Embedding FAQ                                                                                            61
+  5.1 Can I create my own functions in C? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          61
+  5.2 Can I create my own functions in C++? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .            61
+  5.3 Writing C is hard; are there any alternatives? . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       61
+  5.4 How can I execute arbitrary Python statements from C? . . . . . . . . . . . . . . . . . . . . . . .            61
+  5.5 How can I evaluate an arbitrary Python expression from C? . . . . . . . . . . . . . . . . . . . . .            61
+  5.6 How do I extract C values from a Python object? . . . . . . . . . . . . . . . . . . . . . . . . . .            61
+  5.7 How do I use Py_BuildValue() to create a tuple of arbitrary length? . . . . . . . . . . . . . . . . .          62
+  5.8 How do I call an object’s method from C? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .           62
+  5.9 How do I catch the output from PyErr_Print() (or anything that prints to stdout/stderr)? . . . . . .           62
+  5.10 How do I access a module written in Python from C? . . . . . . . . . . . . . . . . . . . . . . . .            63
+  5.11 How do I interface to C++ objects from Python? . . . . . . . . . . . . . . . . . . . . . . . . . . .          63
+  5.12 I added a module using the Setup file and the make fails; why? . . . . . . . . . . . . . . . . . . .          63
+  5.13 How do I debug an extension? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          63
+  5.14 I want to compile a Python module on my Linux system, but some files are missing. Why? . . . . .              64
+  5.15 How do I tell “incomplete input” from “invalid input”? . . . . . . . . . . . . . . . . . . . . . . .          64
+  5.16 How do I find undefined g++ symbols __builtin_new or __pure_virtual? . . . . . . . . . . . . . .              64
+  5.17 Can I create an object class with some methods implemented in C and others in Python (e.g. through
+       inheritance)? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       64
+
+6 Python on Windows FAQ                                                                                              65
+  6.1 How do I run a Python program under Windows? . . . . . . . . . . . . . . . . . . . . . . . . . .               65
+  6.2 How do I make Python scripts executable? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .           66
+  6.3 Why does Python sometimes take so long to start? . . . . . . . . . . . . . . . . . . . . . . . . . .           66
+  6.4 How do I make an executable from a Python script? . . . . . . . . . . . . . . . . . . . . . . . . .            66
+  6.5 Is a *.pyd file the same as a DLL? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .           66
+  6.6 How can I embed Python into a Windows application? . . . . . . . . . . . . . . . . . . . . . . .               67
+  6.7 How do I keep editors from inserting tabs into my Python source? . . . . . . . . . . . . . . . . .             68
+  6.8 How do I check for a keypress without blocking? . . . . . . . . . . . . . . . . . . . . . . . . . .            68
+  6.9 How do I solve the missing api-ms-win-crt-runtime-l1-1-0.dll error? . . . . . . . . . . . . . . . .            68
+
+7 Graphic User Interface FAQ                                                                                         69
+  7.1 General GUI Questions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          69
+  7.2 What GUI toolkits exist for Python? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          69
+  7.3 Tkinter questions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        69
+       7.3.1 How do I freeze Tkinter applications? . . . . . . . . . . . . . . . . . . . . . . . . . . . .           69
+       7.3.2 Can I have Tk events handled while waiting for I/O? . . . . . . . . . . . . . . . . . . . .             69
+       7.3.3 I can’t get key bindings to work in Tkinter: why? . . . . . . . . . . . . . . . . . . . . . .           69
+
+8 “Why is Python Installed on my Computer?” FAQ                                                                      71
+  8.1 What is Python? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          71
+  8.2 Why is Python installed on my machine? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .           71
+  8.3 Can I delete Python? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .         71
+
+A Glossary                                                                                                           73
+
+
+
+iv
+B About this documentation                                                                                      91
+  B.1 Contributors to the Python documentation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      91
+
+C History and License                                                                                            93
+  C.1 History of the software . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 93
+  C.2 Terms and conditions for accessing or otherwise using Python . . . . . . . . . . . . . . . . . . . . 94
+        C.2.1 PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2 . . . . . . . . . . . . . 94
+        C.2.2 BEOPEN.COM LICENSE AGREEMENT FOR PYTHON 2.0 . . . . . . . . . . . . . . 95
+        C.2.3 CNRI LICENSE AGREEMENT FOR PYTHON 1.6.1 . . . . . . . . . . . . . . . . . . 95
+        C.2.4 CWI LICENSE AGREEMENT FOR PYTHON 0.9.0 THROUGH 1.2 . . . . . . . . . . 96
+        C.2.5 ZERO-CLAUSE BSD LICENSE FOR CODE IN THE PYTHON DOCUMENTATION . 97
+  C.3 Licenses and Acknowledgements for Incorporated Software . . . . . . . . . . . . . . . . . . . . . 97
+        C.3.1 Mersenne Twister . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 97
+        C.3.2 Sockets . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 98
+        C.3.3 Asynchronous socket services . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 99
+        C.3.4 Cookie management . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 99
+        C.3.5 Execution tracing . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 99
+        C.3.6 UUencode and UUdecode functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . 100
+        C.3.7 XML Remote Procedure Calls . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 101
+        C.3.8 test_epoll . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 101
+        C.3.9 Select kqueue . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 102
+        C.3.10 SipHash24 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 102
+        C.3.11 strtod and dtoa . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 103
+        C.3.12 OpenSSL . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 103
+        C.3.13 expat . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 106
+        C.3.14 libffi . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 107
+        C.3.15 zlib . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 107
+        C.3.16 cfuhash . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 108
+        C.3.17 libmpdec . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 108
+        C.3.18 W3C C14N test suite . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 109
+        C.3.19 mimalloc . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 110
+        C.3.20 asyncio . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 110
+        C.3.21 Global Unbounded Sequences (GUS) . . . . . . . . . . . . . . . . . . . . . . . . . . . . 110
+
+D Copyright                                                                                                    113
+
+Index                                                                                                          115
+
+
+
+
+                                                                                                                 v
+vi
+

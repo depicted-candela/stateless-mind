@@ -1,0 +1,57 @@
+                                                                 Logging HOWTO
+                                                                                               Release 3.13.3
+
+
+                      Guido van Rossum and the Python development team
+
+
+                                                                                                   April 27, 2025
+                                                                                 Python Software Foundation
+                                                                                     Email: docs@python.org
+
+
+Contents
+
+1 Basic Logging Tutorial                                                                                          2
+  1.1 When to use logging . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     2
+  1.2 A simple example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      3
+  1.3 Logging to a file . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   3
+  1.4 Logging variable data . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     4
+  1.5 Changing the format of displayed messages . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       4
+  1.6 Displaying the date/time in messages . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      5
+  1.7 Next Steps . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    5
+
+2 Advanced Logging Tutorial                                                                                        5
+  2.1 Logging Flow . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       6
+  2.2 Loggers . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      7
+  2.3 Handlers . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     8
+  2.4 Formatters . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     9
+  2.5 Configuring Logging . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      9
+  2.6 What happens if no configuration is provided . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      12
+  2.7 Configuring Logging for a Library . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       12
+
+3 Logging Levels                                                                                                  13
+  3.1 Custom Levels . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     14
+
+4 Useful Handlers                                                                                                 14
+
+5 Exceptions raised during logging                                                                                15
+
+6 Using arbitrary objects as messages                                                                             15
+
+7 Optimization                                                                                                    15
+
+8 Other resources                                                                                                 16
+
+Index                                                                                                             17
+
+
+
+        Author
+            Vinay Sajip <vinay_sajip at red-dove dot com>
+
+
+
+
+                                                         1
+

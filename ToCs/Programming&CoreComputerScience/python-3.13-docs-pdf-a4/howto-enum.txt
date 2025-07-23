@@ -1,0 +1,57 @@
+                                                                          Enum HOWTO
+                                                                                                Release 3.13.3
+
+
+                      Guido van Rossum and the Python development team
+
+
+                                                                                                     April 27, 2025
+                                                                                   Python Software Foundation
+                                                                                       Email: docs@python.org
+
+
+Contents
+
+1 Programmatic access to enumeration members and their attributes                                                   5
+
+2 Duplicating enum members and values                                                                               5
+
+3 Ensuring unique enumeration values                                                                                6
+
+4 Using automatic values                                                                                            6
+
+5 Iteration                                                                                                         7
+
+6 Comparisons                                                                                                       7
+
+7 Allowed members and attributes of enumerations                                                                    8
+
+8 Restricted Enum subclassing                                                                                       9
+
+9 Dataclass support                                                                                                 9
+
+10 Pickling                                                                                                         10
+
+11 Functional API                                                                                                   10
+
+12 Derived Enumerations                                                                                             12
+   12.1 IntEnum . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     12
+   12.2 StrEnum . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     13
+   12.3 IntFlag . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   13
+   12.4 Flag . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    14
+   12.5 Others . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    15
+
+13 When to use __new__() vs. __init__()                                                                             16
+   13.1 Finer Points . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    17
+
+14 How are Enums and Flags different?                                                                               20
+   14.1 Enum Classes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      20
+   14.2 Flag Classes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    20
+   14.3 Enum Members (aka instances) . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        21
+   14.4 Flag Members . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      21
+
+
+
+
+                                                          1
+

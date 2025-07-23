@@ -1,0 +1,56 @@
+                                                         Sorting Techniques
+                                                                                                Release 3.13.3
+
+
+                      Guido van Rossum and the Python development team
+
+
+                                                                                                       April 27, 2025
+                                                                                  Python Software Foundation
+                                                                                      Email: docs@python.org
+
+
+Contents
+
+1 Sorting Basics                                                                                                   1
+
+2 Key Functions                                                                                                    2
+
+3 Operator Module Functions and Partial Function Evaluation                                                        3
+
+4 Ascending and Descending                                                                                         3
+
+5 Sort Stability and Complex Sorts                                                                                 3
+
+6 Decorate-Sort-Undecorate                                                                                         4
+
+7 Comparison Functions                                                                                             5
+
+8 Odds and Ends                                                                                                    5
+
+9 Partial Sorts                                                                                                    6
+
+Index                                                                                                              7
+
+
+
+        Author
+            Andrew Dalke and Raymond Hettinger
+Python lists have a built-in list.sort() method that modifies the list in-place. There is also a sorted() built-in
+function that builds a new sorted list from an iterable.
+In this document, we explore the various techniques for sorting data using Python.
+
+
+1 Sorting Basics
+A simple ascending sort is very easy: just call the sorted() function. It returns a new sorted list:
+
+>>> sorted([5, 2, 3, 1, 4])
+[1, 2, 3, 4, 5]
+
+You can also use the list.sort() method. It modifies the list in-place (and returns None to avoid confusion).
+Usually it’s less convenient than sorted() - but if you don’t need the original list, it’s slightly more efficient.
+
+
+
+                                                          1
+

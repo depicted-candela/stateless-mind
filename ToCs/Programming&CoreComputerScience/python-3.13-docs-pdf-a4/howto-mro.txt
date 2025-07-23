@@ -1,0 +1,54 @@
+              The Python 2.3 Method Resolution
+                                        Order
+                                                                                                 Release 3.13.3
+
+
+                      Guido van Rossum and the Python development team
+
+
+                                                                                                      April 27, 2025
+                                                                                   Python Software Foundation
+                                                                                       Email: docs@python.org
+
+
+Contents
+
+1 The beginning                                                                                                     2
+
+2 The C3 Method Resolution Order                                                                                    3
+
+3 Examples                                                                                                          4
+
+4 Bad Method Resolution Orders                                                                                      6
+
+5 The end                                                                                                           9
+
+6 Resources                                                                                                         10
+
+
+
+
+ ® Note
+
+ This is a historical document, provided as an appendix to the official documentation. The Method Resolution
+ Order discussed here was introduced in Python 2.3, but it is still used in later versions – including Python 3.
+
+
+By Michele Simionato.
+      Abstract
+           This document is intended for Python programmers who want to understand the C3 Method Reso-
+           lution Order used in Python 2.3. Although it is not intended for newbies, it is quite pedagogical with
+           many worked out examples. I am not aware of other publicly available documents with the same
+           scope, therefore it should be useful.
+Disclaimer:
+      I donate this document to the Python Software Foundation, under the Python 2.3 license. As usual in these
+      circumstances, I warn the reader that what follows should be correct, but I don’t give any warranty. Use
+      it at your own risk and peril!
+Acknowledgments:
+      All the people of the Python mailing list who sent me their support. Paul Foley who pointed out various
+      imprecisions and made me to add the part on local precedence ordering. David Goodger for help with the
+
+
+
+                                                          1
+

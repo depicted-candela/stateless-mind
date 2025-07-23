@@ -1,0 +1,55 @@
+                               Regular Expression HOWTO
+                                                                                               Release 3.13.3
+
+
+                      Guido van Rossum and the Python development team
+
+
+                                                                                                   April 27, 2025
+                                                                                 Python Software Foundation
+                                                                                     Email: docs@python.org
+
+
+Contents
+
+1 Introduction                                                                                                    2
+
+2 Simple Patterns                                                                                                 2
+  2.1 Matching Characters . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       2
+  2.2 Repeating Things . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      3
+
+3 Using Regular Expressions                                                                                       4
+  3.1 Compiling Regular Expressions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       4
+  3.2 The Backslash Plague . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      5
+  3.3 Performing Matches . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      5
+  3.4 Module-Level Functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      7
+  3.5 Compilation Flags . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     7
+
+4 More Pattern Power                                                                                               9
+  4.1 More Metacharacters . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        9
+  4.2 Grouping . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      11
+  4.3 Non-capturing and Named Groups . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          12
+  4.4 Lookahead Assertions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      13
+
+5 Modifying Strings                                                                                               14
+  5.1 Splitting Strings . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   14
+  5.2 Search and Replace . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      15
+
+6 Common Problems                                                                                                 16
+  6.1 Use String Methods . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      17
+  6.2 match() versus search() . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     17
+  6.3 Greedy versus Non-Greedy . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        17
+  6.4 Using re.VERBOSE . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        18
+
+7 Feedback                                                                                                        18
+
+
+
+      Author
+          A.M. Kuchling <amk@amk.ca>
+
+
+
+
+                                                         1
+

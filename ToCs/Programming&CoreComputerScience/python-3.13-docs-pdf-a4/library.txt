@@ -1,0 +1,1368 @@
+         The Python Library Reference
+                                     Release 3.13.3
+
+
+
+
+Guido van Rossum and the Python development team
+
+
+
+
+                                           April 27, 2025
+
+
+
+
+                              Python Software Foundation
+                                  Email: docs@python.org
+                                                                                               CONTENTS
+
+
+
+
+1 Introduction                                                                                                   3
+  1.1 Notes on availability . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    3
+        1.1.1 WebAssembly platforms . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          4
+        1.1.2 Mobile platforms . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       4
+
+2 Built-in Functions                                                                                             7
+
+3 Built-in Constants                                                                                             35
+  3.1 Constants added by the site module . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .         36
+
+4 Built-in Types                                                                                                 37
+  4.1 Truth Value Testing . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    37
+  4.2 Boolean Operations — and, or, not . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        37
+  4.3 Comparisons . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      38
+  4.4 Numeric Types — int, float, complex . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .            38
+         4.4.1 Bitwise Operations on Integer Types . . . . . . . . . . . . . . . . . . . . . . . . . . . .       40
+         4.4.2 Additional Methods on Integer Types . . . . . . . . . . . . . . . . . . . . . . . . . . . .       40
+         4.4.3 Additional Methods on Float . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       42
+         4.4.4 Hashing of numeric types . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      43
+  4.5 Boolean Type - bool . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      45
+  4.6 Iterator Types . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   45
+         4.6.1 Generator Types . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     46
+  4.7 Sequence Types — list, tuple, range . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .            46
+         4.7.1 Common Sequence Operations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          46
+         4.7.2 Immutable Sequence Types . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        48
+         4.7.3 Mutable Sequence Types . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        48
+         4.7.4 Lists . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   49
+         4.7.5 Tuples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    49
+         4.7.6 Ranges . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    50
+  4.8 Text Sequence Type — str . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .         51
+         4.8.1 String Methods . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      52
+         4.8.2 Formatted String Literals (f-strings) . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   61
+         4.8.3 printf-style String Formatting . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      62
+  4.9 Binary Sequence Types — bytes, bytearray, memoryview . . . . . . . . . . . . . . . . . . .                 64
+         4.9.1 Bytes Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     65
+         4.9.2 Bytearray Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     66
+         4.9.3 Bytes and Bytearray Operations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      67
+         4.9.4 printf-style Bytes Formatting . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       78
+         4.9.5 Memory Views . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        80
+  4.10 Set Types — set, frozenset . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        87
+  4.11 Mapping Types — dict . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        89
+         4.11.1 Dictionary view objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    93
+  4.12 Context Manager Types . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       94
+  4.13 Type Annotation Types — Generic Alias, Union . . . . . . . . . . . . . . . . . . . . . . . . . . .        95
+
+
+
+                                                                                                                  i
+          4.13.1 Generic Alias Type . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 95
+          4.13.2 Union Type . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 99
+     4.14 Other Built-in Types . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 101
+          4.14.1 Modules . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 101
+          4.14.2 Classes and Class Instances . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 101
+          4.14.3 Functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 101
+          4.14.4 Methods . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 101
+          4.14.5 Code Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 102
+          4.14.6 Type Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 102
+          4.14.7 The Null Object . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 102
+          4.14.8 The Ellipsis Object . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 102
+          4.14.9 The NotImplemented Object . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 102
+          4.14.10 Internal Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 103
+     4.15 Special Attributes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 103
+     4.16 Integer string conversion length limitation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 103
+          4.16.1 Affected APIs . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 104
+          4.16.2 Configuring the limit . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 104
+          4.16.3 Recommended configuration . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 105
+
+5 Built-in Exceptions                                                                                          107
+  5.1 Exception context . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 107
+  5.2 Inheriting from built-in exceptions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 108
+  5.3 Base classes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 108
+  5.4 Concrete exceptions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 109
+         5.4.1 OS exceptions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 114
+  5.5 Warnings . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 115
+  5.6 Exception groups . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 116
+  5.7 Exception hierarchy . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 118
+
+6 Text Processing Services                                                                                      121
+  6.1 string — Common string operations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 121
+        6.1.1 String constants . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 121
+        6.1.2 Custom String Formatting . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 122
+        6.1.3 Format String Syntax . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 123
+        6.1.4 Template strings . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 130
+        6.1.5 Helper functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 132
+  6.2 re — Regular expression operations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 132
+        6.2.1 Regular Expression Syntax . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 133
+        6.2.2 Module Contents . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 140
+        6.2.3 Regular Expression Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 146
+        6.2.4 Match Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 147
+        6.2.5 Regular Expression Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 150
+  6.3 difflib — Helpers for computing deltas . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 155
+        6.3.1 SequenceMatcher Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 159
+        6.3.2 SequenceMatcher Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 162
+        6.3.3 Differ Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 163
+        6.3.4 Differ Example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 163
+        6.3.5 A command-line interface to difflib . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 164
+        6.3.6 ndiff example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 165
+  6.4 textwrap — Text wrapping and filling . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 168
+  6.5 unicodedata — Unicode Database . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 171
+  6.6 stringprep — Internet String Preparation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 173
+  6.7 readline — GNU readline interface . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 174
+        6.7.1 Init file . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 175
+        6.7.2 Line buffer . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 175
+        6.7.3 History file . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 175
+        6.7.4 History list . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 176
+        6.7.5 Startup hooks . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 176
+
+
+
+ii
+          6.7.6 Completion . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 177
+          6.7.7 Example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 177
+   6.8    rlcompleter — Completion function for GNU readline . . . . . . . . . . . . . . . . . . . . . . 179
+
+7 Binary Data Services                                                                                      181
+  7.1 struct — Interpret bytes as packed binary data . . . . . . . . . . . . . . . . . . . . . . . . . . 181
+       7.1.1 Functions and Exceptions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 181
+       7.1.2 Format Strings . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 182
+       7.1.3 Applications . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 186
+       7.1.4 Classes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 187
+  7.2 codecs — Codec registry and base classes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 188
+       7.2.1 Codec Base Classes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 191
+       7.2.2 Encodings and Unicode . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 197
+       7.2.3 Standard Encodings . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 199
+       7.2.4 Python Specific Encodings . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 201
+       7.2.5 encodings.idna — Internationalized Domain Names in Applications . . . . . . . . . . 203
+       7.2.6 encodings.mbcs — Windows ANSI codepage . . . . . . . . . . . . . . . . . . . . . . 204
+       7.2.7 encodings.utf_8_sig — UTF-8 codec with BOM signature . . . . . . . . . . . . . . 204
+
+8 Data Types                                                                                                205
+  8.1 datetime — Basic date and time types . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 205
+       8.1.1 Aware and Naive Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 205
+       8.1.2 Constants . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 206
+       8.1.3 Available Types . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 206
+       8.1.4 timedelta Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 207
+       8.1.5 date Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 210
+       8.1.6 datetime Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 215
+       8.1.7 time Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 227
+       8.1.8 tzinfo Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 230
+       8.1.9 timezone Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 237
+       8.1.10 strftime() and strptime() Behavior . . . . . . . . . . . . . . . . . . . . . . . . . 238
+  8.2 zoneinfo — IANA time zone support . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 242
+       8.2.1 Using ZoneInfo . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 242
+       8.2.2 Data sources . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 243
+       8.2.3 The ZoneInfo class . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 244
+       8.2.4 Functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 246
+       8.2.5 Globals . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 246
+       8.2.6 Exceptions and warnings . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 247
+  8.3 calendar — General calendar-related functions . . . . . . . . . . . . . . . . . . . . . . . . . . 247
+       8.3.1 Command-Line Usage . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 253
+  8.4 collections — Container datatypes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 255
+       8.4.1 ChainMap objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 255
+       8.4.2 Counter objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 257
+       8.4.3 deque objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 261
+       8.4.4 defaultdict objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 264
+       8.4.5 namedtuple() Factory Function for Tuples with Named Fields . . . . . . . . . . . . . 266
+       8.4.6 OrderedDict objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 269
+       8.4.7 UserDict objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 271
+       8.4.8 UserList objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 272
+       8.4.9 UserString objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 272
+  8.5 collections.abc — Abstract Base Classes for Containers . . . . . . . . . . . . . . . . . . . . 272
+       8.5.1 Collections Abstract Base Classes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 274
+       8.5.2 Collections Abstract Base Classes – Detailed Descriptions . . . . . . . . . . . . . . . . . 275
+       8.5.3 Examples and Recipes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 277
+  8.6 heapq — Heap queue algorithm . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 278
+       8.6.1 Basic Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 279
+       8.6.2 Priority Queue Implementation Notes . . . . . . . . . . . . . . . . . . . . . . . . . . . . 279
+       8.6.3 Theory . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 280
+
+
+
+                                                                                                              iii
+     8.7    bisect — Array bisection algorithm . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 281
+            8.7.1  Performance Notes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 283
+            8.7.2  Searching Sorted Lists . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 283
+            8.7.3  Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 284
+     8.8    array — Efficient arrays of numeric values . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 285
+     8.9    weakref — Weak references . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 288
+            8.9.1 Weak Reference Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 292
+            8.9.2 Example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 293
+            8.9.3 Finalizer Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 293
+            8.9.4 Comparing finalizers with __del__() methods . . . . . . . . . . . . . . . . . . . . . . 294
+     8.10   types — Dynamic type creation and names for built-in types . . . . . . . . . . . . . . . . . . . . 295
+            8.10.1 Dynamic Type Creation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 296
+            8.10.2 Standard Interpreter Types . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 297
+            8.10.3 Additional Utility Classes and Functions . . . . . . . . . . . . . . . . . . . . . . . . . . 301
+            8.10.4 Coroutine Utility Functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 301
+     8.11   copy — Shallow and deep copy operations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 302
+     8.12   pprint — Data pretty printer . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 303
+            8.12.1 Functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 303
+            8.12.2 PrettyPrinter Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 304
+            8.12.3 Example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 306
+     8.13   reprlib — Alternate repr() implementation . . . . . . . . . . . . . . . . . . . . . . . . . . . 309
+            8.13.1 Repr Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 310
+            8.13.2 Subclassing Repr Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 311
+     8.14   enum — Support for enumerations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 312
+            8.14.1 Module Contents . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 313
+            8.14.2 Data Types . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 314
+            8.14.3 Utilities and Decorators . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 325
+            8.14.4 Notes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 327
+     8.15   graphlib — Functionality to operate with graph-like structures . . . . . . . . . . . . . . . . . . 327
+            8.15.1 Exceptions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 329
+
+9 Numeric and Mathematical Modules                                                                         331
+  9.1 numbers — Numeric abstract base classes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 331
+      9.1.1 The numeric tower . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 331
+      9.1.2 Notes for type implementers . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 332
+  9.2 math — Mathematical functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 334
+      9.2.1 Number-theoretic functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 335
+      9.2.2 Floating point arithmetic . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 336
+      9.2.3 Floating point manipulation functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . 337
+      9.2.4 Power, exponential and logarithmic functions . . . . . . . . . . . . . . . . . . . . . . . . 339
+      9.2.5 Summation and product functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 340
+      9.2.6 Angular conversion . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 341
+      9.2.7 Trigonometric functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 341
+      9.2.8 Hyperbolic functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 341
+      9.2.9 Special functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 342
+      9.2.10 Constants . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 342
+  9.3 cmath — Mathematical functions for complex numbers . . . . . . . . . . . . . . . . . . . . . . . 343
+      9.3.1 Conversions to and from polar coordinates . . . . . . . . . . . . . . . . . . . . . . . . . 344
+      9.3.2 Power and logarithmic functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 345
+      9.3.3 Trigonometric functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 345
+      9.3.4 Hyperbolic functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 346
+      9.3.5 Classification functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 346
+      9.3.6 Constants . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 347
+  9.4 decimal — Decimal fixed-point and floating-point arithmetic . . . . . . . . . . . . . . . . . . . 347
+      9.4.1 Quick-start Tutorial . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 349
+      9.4.2 Decimal objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 352
+      9.4.3 Context objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 359
+      9.4.4 Constants . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 365
+
+
+iv
+          9.4.5  Rounding modes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 366
+          9.4.6  Signals . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 366
+          9.4.7  Floating-Point Notes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 368
+          9.4.8  Working with threads . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 369
+          9.4.9  Recipes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 370
+          9.4.10 Decimal FAQ . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 373
+   9.5    fractions — Rational numbers . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 376
+   9.6    random — Generate pseudo-random numbers . . . . . . . . . . . . . . . . . . . . . . . . . . . . 379
+          9.6.1 Bookkeeping functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 380
+          9.6.2 Functions for bytes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 380
+          9.6.3 Functions for integers . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 381
+          9.6.4 Functions for sequences . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 381
+          9.6.5 Discrete distributions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 382
+          9.6.6 Real-valued distributions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 382
+          9.6.7 Alternative Generator . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 384
+          9.6.8 Notes on Reproducibility . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 384
+          9.6.9 Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 384
+          9.6.10 Recipes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 387
+          9.6.11 Command-line usage . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 388
+          9.6.12 Command-line example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 388
+   9.7    statistics — Mathematical statistics functions . . . . . . . . . . . . . . . . . . . . . . . . . . 389
+          9.7.1 Averages and measures of central location . . . . . . . . . . . . . . . . . . . . . . . . . 390
+          9.7.2 Measures of spread . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 390
+          9.7.3 Statistics for relations between two inputs . . . . . . . . . . . . . . . . . . . . . . . . . . 390
+          9.7.4 Function details . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 390
+          9.7.5 Exceptions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 400
+          9.7.6 NormalDist objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 400
+          9.7.7 Examples and Recipes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 402
+
+10 Functional Programming Modules                                                                              405
+   10.1 itertools — Functions creating iterators for efficient looping . . . . . . . . . . . . . . . . . . . 405
+        10.1.1 Itertool Functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 407
+        10.1.2 Itertools Recipes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 417
+   10.2 functools — Higher-order functions and operations on callable objects . . . . . . . . . . . . . . 422
+        10.2.1 partial Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 432
+   10.3 operator — Standard operators as functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . 433
+        10.3.1 Mapping Operators to Functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 437
+        10.3.2 In-place Operators . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 438
+
+11 File and Directory Access                                                                                   441
+   11.1 pathlib — Object-oriented filesystem paths . . . . . . . . . . . . . . . . . . . . . . . . . . . . 441
+         11.1.1 Basic use . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 442
+         11.1.2 Exceptions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 443
+         11.1.3 Pure paths . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 443
+         11.1.4 Concrete paths . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 452
+         11.1.5 Pattern language . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 463
+         11.1.6 Comparison to the glob module . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 464
+         11.1.7 Comparison to the os and os.path modules . . . . . . . . . . . . . . . . . . . . . . . . 464
+   11.2 os.path — Common pathname manipulations . . . . . . . . . . . . . . . . . . . . . . . . . . . 466
+   11.3 stat — Interpreting stat() results . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 472
+   11.4 filecmp — File and Directory Comparisons . . . . . . . . . . . . . . . . . . . . . . . . . . . . 478
+         11.4.1 The dircmp class . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 479
+   11.5 tempfile — Generate temporary files and directories . . . . . . . . . . . . . . . . . . . . . . . 480
+         11.5.1 Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 484
+         11.5.2 Deprecated functions and variables . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 485
+   11.6 glob — Unix style pathname pattern expansion . . . . . . . . . . . . . . . . . . . . . . . . . . . 486
+         11.6.1 Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 487
+   11.7 fnmatch — Unix filename pattern matching . . . . . . . . . . . . . . . . . . . . . . . . . . . . 488
+
+
+
+                                                                                                                  v
+     11.8 linecache — Random access to text lines . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 489
+     11.9 shutil — High-level file operations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 490
+          11.9.1 Directory and files operations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 490
+          11.9.2 Archiving operations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 496
+          11.9.3 Querying the size of the output terminal . . . . . . . . . . . . . . . . . . . . . . . . . . 500
+
+12 Data Persistence                                                                                           501
+   12.1 pickle — Python object serialization . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 501
+        12.1.1 Relationship to other Python modules . . . . . . . . . . . . . . . . . . . . . . . . . . . . 501
+        12.1.2 Data stream format . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 502
+        12.1.3 Module Interface . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 503
+        12.1.4 What can be pickled and unpickled? . . . . . . . . . . . . . . . . . . . . . . . . . . . . 506
+        12.1.5 Pickling Class Instances . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 507
+        12.1.6 Custom Reduction for Types, Functions, and Other Objects . . . . . . . . . . . . . . . . 513
+        12.1.7 Out-of-band Buffers . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 513
+        12.1.8 Restricting Globals . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 515
+        12.1.9 Performance . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 516
+        12.1.10 Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 516
+   12.2 copyreg — Register pickle support functions . . . . . . . . . . . . . . . . . . . . . . . . . . . 517
+        12.2.1 Example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 517
+   12.3 shelve — Python object persistence . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 518
+        12.3.1 Restrictions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 519
+        12.3.2 Example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 520
+   12.4 marshal — Internal Python object serialization . . . . . . . . . . . . . . . . . . . . . . . . . . . 520
+   12.5 dbm — Interfaces to Unix “databases” . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 522
+        12.5.1 dbm.sqlite3 — SQLite backend for dbm . . . . . . . . . . . . . . . . . . . . . . . . 524
+        12.5.2 dbm.gnu — GNU database manager . . . . . . . . . . . . . . . . . . . . . . . . . . . . 524
+        12.5.3 dbm.ndbm — New Database Manager . . . . . . . . . . . . . . . . . . . . . . . . . . . 526
+        12.5.4 dbm.dumb — Portable DBM implementation . . . . . . . . . . . . . . . . . . . . . . . 527
+   12.6 sqlite3 — DB-API 2.0 interface for SQLite databases . . . . . . . . . . . . . . . . . . . . . . 528
+        12.6.1 Tutorial . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 528
+        12.6.2 Reference . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 530
+        12.6.3 How-to guides . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 551
+        12.6.4 Explanation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 558
+
+13 Data Compression and Archiving                                                                             561
+   13.1 zlib — Compression compatible with gzip . . . . . . . . . . . . . . . . . . . . . . . . . . . . 561
+   13.2 gzip — Support for gzip files . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 565
+        13.2.1 Examples of usage . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 567
+        13.2.2 Command Line Interface . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 568
+   13.3 bz2 — Support for bzip2 compression . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 568
+        13.3.1 (De)compression of files . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 568
+        13.3.2 Incremental (de)compression . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 570
+        13.3.3 One-shot (de)compression . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 571
+        13.3.4 Examples of usage . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 571
+   13.4 lzma — Compression using the LZMA algorithm . . . . . . . . . . . . . . . . . . . . . . . . . . 573
+        13.4.1 Reading and writing compressed files . . . . . . . . . . . . . . . . . . . . . . . . . . . . 573
+        13.4.2 Compressing and decompressing data in memory . . . . . . . . . . . . . . . . . . . . . . 574
+        13.4.3 Miscellaneous . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 576
+        13.4.4 Specifying custom filter chains . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 576
+        13.4.5 Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 577
+   13.5 zipfile — Work with ZIP archives . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 578
+        13.5.1 ZipFile Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 580
+        13.5.2 Path Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 584
+        13.5.3 PyZipFile Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 585
+        13.5.4 ZipInfo Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 586
+        13.5.5 Command-Line Interface . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 588
+        13.5.6 Decompression pitfalls . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 589
+
+
+
+vi
+   13.6 tarfile — Read and write tar archive files . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 589
+        13.6.1 TarFile Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 593
+        13.6.2 TarInfo Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 596
+        13.6.3 Extraction filters . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 599
+        13.6.4 Command-Line Interface . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 602
+        13.6.5 Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 603
+        13.6.6 Supported tar formats . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 604
+        13.6.7 Unicode issues . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 604
+
+14 File Formats                                                                                                 607
+   14.1 csv — CSV File Reading and Writing . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 607
+         14.1.1 Module Contents . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 607
+         14.1.2 Dialects and Formatting Parameters . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 611
+         14.1.3 Reader Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 612
+         14.1.4 Writer Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 612
+         14.1.5 Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 613
+   14.2 configparser — Configuration file parser . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 614
+         14.2.1 Quick Start . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 615
+         14.2.2 Supported Datatypes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 616
+         14.2.3 Fallback Values . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 617
+         14.2.4 Supported INI File Structure . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 617
+         14.2.5 Unnamed Sections . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 619
+         14.2.6 Interpolation of values . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 619
+         14.2.7 Mapping Protocol Access . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 620
+         14.2.8 Customizing Parser Behaviour . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 621
+         14.2.9 Legacy API Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 625
+         14.2.10 ConfigParser Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 627
+         14.2.11 RawConfigParser Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 631
+         14.2.12 Exceptions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 632
+   14.3 tomllib — Parse TOML files . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 632
+         14.3.1 Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 633
+         14.3.2 Conversion Table . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 634
+   14.4 netrc — netrc file processing . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 634
+         14.4.1 netrc Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 635
+   14.5 plistlib — Generate and parse Apple .plist files . . . . . . . . . . . . . . . . . . . . . . . . 635
+         14.5.1 Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 637
+
+15 Cryptographic Services                                                                                     639
+   15.1 hashlib — Secure hashes and message digests . . . . . . . . . . . . . . . . . . . . . . . . . . . 639
+        15.1.1 Hash algorithms . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 639
+        15.1.2 Usage . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 640
+        15.1.3 Constructors . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 640
+        15.1.4 Attributes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 641
+        15.1.5 Hash Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 641
+        15.1.6 SHAKE variable length digests . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 641
+        15.1.7 File hashing . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 642
+        15.1.8 Key derivation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 642
+        15.1.9 BLAKE2 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 643
+   15.2 hmac — Keyed-Hashing for Message Authentication . . . . . . . . . . . . . . . . . . . . . . . . 650
+   15.3 secrets — Generate secure random numbers for managing secrets . . . . . . . . . . . . . . . . 652
+        15.3.1 Random numbers . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 652
+        15.3.2 Generating tokens . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 652
+        15.3.3 Other functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 653
+        15.3.4 Recipes and best practices . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 653
+
+16 Generic Operating System Services                                                                         655
+   16.1 os — Miscellaneous operating system interfaces . . . . . . . . . . . . . . . . . . . . . . . . . . . 655
+        16.1.1 File Names, Command Line Arguments, and Environment Variables . . . . . . . . . . . 656
+        16.1.2 Python UTF-8 Mode . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 656
+
+
+                                                                                                                vii
+              16.1.3 Process Parameters . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 657
+              16.1.4 File Object Creation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 664
+              16.1.5 File Descriptor Operations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 664
+              16.1.6 Files and Directories . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 677
+              16.1.7 Process Management . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 703
+              16.1.8 Interface to the scheduler . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 716
+              16.1.9 Miscellaneous System Information . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 718
+              16.1.10 Random numbers . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 719
+       16.2   io — Core tools for working with streams . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 721
+              16.2.1 Overview . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 721
+              16.2.2 Text Encoding . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 722
+              16.2.3 High-level Module Interface . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 722
+              16.2.4 Class hierarchy . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 723
+              16.2.5 Performance . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 733
+       16.3   time — Time access and conversions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 734
+              16.3.1 Functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 735
+              16.3.2 Clock ID Constants . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 744
+              16.3.3 Timezone Constants . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 746
+       16.4   logging — Logging facility for Python . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 746
+              16.4.1 Logger Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 748
+              16.4.2 Logging Levels . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 752
+              16.4.3 Handler Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 753
+              16.4.4 Formatter Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 755
+              16.4.5 Filter Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 756
+              16.4.6 LogRecord Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 757
+              16.4.7 LogRecord attributes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 758
+              16.4.8 LoggerAdapter Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 760
+              16.4.9 Thread Safety . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 760
+              16.4.10 Module-Level Functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 760
+              16.4.11 Module-Level Attributes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 764
+              16.4.12 Integration with the warnings module . . . . . . . . . . . . . . . . . . . . . . . . . . . . 765
+       16.5   logging.config — Logging configuration . . . . . . . . . . . . . . . . . . . . . . . . . . . . 765
+              16.5.1 Configuration functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 766
+              16.5.2 Security considerations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 768
+              16.5.3 Configuration dictionary schema . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 768
+              16.5.4 Configuration file format . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 775
+       16.6   logging.handlers — Logging handlers . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 777
+              16.6.1 StreamHandler . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 778
+              16.6.2 FileHandler . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 778
+              16.6.3 NullHandler . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 779
+              16.6.4 WatchedFileHandler . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 779
+              16.6.5 BaseRotatingHandler . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 780
+              16.6.6 RotatingFileHandler . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 781
+              16.6.7 TimedRotatingFileHandler . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 781
+              16.6.8 SocketHandler . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 783
+              16.6.9 DatagramHandler . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 784
+              16.6.10 SysLogHandler . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 784
+              16.6.11 NTEventLogHandler . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 786
+              16.6.12 SMTPHandler . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 787
+              16.6.13 MemoryHandler . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 787
+              16.6.14 HTTPHandler . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 788
+              16.6.15 QueueHandler . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 789
+              16.6.16 QueueListener . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 790
+       16.7   platform — Access to underlying platform’s identifying data . . . . . . . . . . . . . . . . . . . 791
+              16.7.1 Cross Platform . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 791
+              16.7.2 Java Platform . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 793
+              16.7.3 Windows Platform . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 793
+              16.7.4 macOS Platform . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 794
+
+
+viii
+          16.7.5
+               iOS Platform . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 794
+          16.7.6
+               Unix Platforms . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 794
+          16.7.7
+               Linux Platforms . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 794
+          16.7.8
+               Android Platform . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 795
+   16.8 errno — Standard errno system symbols . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 795
+   16.9 ctypes — A foreign function library for Python . . . . . . . . . . . . . . . . . . . . . . . . . . 803
+        16.9.1 ctypes tutorial . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 803
+        16.9.2 ctypes reference . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 821
+
+17 Command Line Interface Libraries                                                                            837
+   17.1 argparse — Parser for command-line options, arguments and subcommands . . . . . . . . . . . 837
+        17.1.1 ArgumentParser objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 838
+        17.1.2 The add_argument() method . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 845
+        17.1.3 The parse_args() method . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 855
+        17.1.4 Other utilities . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 858
+        17.1.5 Exceptions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 867
+   17.2 optparse — Parser for command line options . . . . . . . . . . . . . . . . . . . . . . . . . . . 881
+        17.2.1 Choosing an argument parsing library . . . . . . . . . . . . . . . . . . . . . . . . . . . . 881
+        17.2.2 Introduction . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 882
+        17.2.3 Background . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 883
+        17.2.4 Tutorial . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 885
+        17.2.5 Reference Guide . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 892
+        17.2.6 Option Callbacks . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 901
+        17.2.7 Extending optparse . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 905
+        17.2.8 Exceptions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 908
+   17.3 getpass — Portable password input . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 908
+   17.4 fileinput — Iterate over lines from multiple input streams . . . . . . . . . . . . . . . . . . . . 909
+   17.5 curses — Terminal handling for character-cell displays . . . . . . . . . . . . . . . . . . . . . . 911
+        17.5.1 Functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 912
+        17.5.2 Window Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 918
+        17.5.3 Constants . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 925
+   17.6 curses.textpad — Text input widget for curses programs . . . . . . . . . . . . . . . . . . . . 936
+        17.6.1 Textbox objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 936
+   17.7 curses.ascii — Utilities for ASCII characters . . . . . . . . . . . . . . . . . . . . . . . . . . 937
+   17.8 curses.panel — A panel stack extension for curses . . . . . . . . . . . . . . . . . . . . . . . . 941
+        17.8.1 Functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 941
+        17.8.2 Panel Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 941
+
+18 Concurrent Execution                                                                                       943
+   18.1 threading — Thread-based parallelism . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 943
+        18.1.1 Thread-Local Data . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 946
+        18.1.2 Thread Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 946
+        18.1.3 Lock Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 949
+        18.1.4 RLock Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 950
+        18.1.5 Condition Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 951
+        18.1.6 Semaphore Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 953
+        18.1.7 Event Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 954
+        18.1.8 Timer Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 955
+        18.1.9 Barrier Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 955
+        18.1.10 Using locks, conditions, and semaphores in the with statement . . . . . . . . . . . . . . 956
+   18.2 multiprocessing — Process-based parallelism . . . . . . . . . . . . . . . . . . . . . . . . . . 957
+        18.2.1 Introduction . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 957
+        18.2.2 Reference . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 964
+        18.2.3 Programming guidelines . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 992
+        18.2.4 Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 995
+   18.3 multiprocessing.shared_memory — Shared memory for direct access across processes . . . 1001
+   18.4 The concurrent package . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1007
+   18.5 concurrent.futures — Launching parallel tasks . . . . . . . . . . . . . . . . . . . . . . . . 1007
+
+
+
+                                                                                                               ix
+          18.5.1 Executor Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1007
+          18.5.2 ThreadPoolExecutor . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1008
+          18.5.3 ProcessPoolExecutor . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1010
+          18.5.4 Future Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1012
+          18.5.5 Module Functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1013
+          18.5.6 Exception classes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1014
+    18.6 subprocess — Subprocess management . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1014
+          18.6.1 Using the subprocess Module . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1014
+          18.6.2 Security Considerations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1023
+          18.6.3 Popen Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1023
+          18.6.4 Windows Popen Helpers . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1025
+          18.6.5 Older high-level API . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1028
+          18.6.6 Replacing Older Functions with the subprocess Module . . . . . . . . . . . . . . . . . 1029
+          18.6.7 Legacy Shell Invocation Functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1032
+          18.6.8 Notes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1033
+    18.7 sched — Event scheduler . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1034
+          18.7.1 Scheduler Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1035
+    18.8 queue — A synchronized queue class . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1036
+          18.8.1 Queue Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1037
+          18.8.2 SimpleQueue Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1038
+    18.9 contextvars — Context Variables . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1039
+          18.9.1 Context Variables . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1039
+          18.9.2 Manual Context Management . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1040
+          18.9.3 asyncio support . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1042
+    18.10 _thread — Low-level threading API . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1043
+
+19 Networking and Interprocess Communication                                                                  1047
+   19.1 asyncio — Asynchronous I/O . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1047
+        19.1.1 Runners . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1048
+        19.1.2 Coroutines and Tasks . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1050
+        19.1.3 Streams . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1069
+        19.1.4 Synchronization Primitives . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1077
+        19.1.5 Subprocesses . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1082
+        19.1.6 Queues . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1087
+        19.1.7 Exceptions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1090
+        19.1.8 Event Loop . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1091
+        19.1.9 Futures . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1114
+        19.1.10 Transports and Protocols . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1117
+        19.1.11 Policies . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1131
+        19.1.12 Platform Support . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1134
+        19.1.13 Extending . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1136
+        19.1.14 High-level API Index . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1137
+        19.1.15 Low-level API Index . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1139
+        19.1.16 Developing with asyncio . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1143
+   19.2 socket — Low-level networking interface . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1146
+        19.2.1 Socket families . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1147
+        19.2.2 Module contents . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1150
+        19.2.3 Socket Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1163
+        19.2.4 Notes on socket timeouts . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1170
+        19.2.5 Example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1171
+   19.3 ssl — TLS/SSL wrapper for socket objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1174
+        19.3.1 Functions, Constants, and Exceptions . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1175
+        19.3.2 SSL Sockets . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1186
+        19.3.3 SSL Contexts . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1191
+        19.3.4 Certificates . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1200
+        19.3.5 Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1201
+        19.3.6 Notes on non-blocking sockets . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1204
+        19.3.7 Memory BIO Support . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1205
+
+
+x
+          19.3.8 SSL session . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1207
+          19.3.9 Security considerations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1207
+          19.3.10 TLS 1.3 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1208
+   19.4   select — Waiting for I/O completion . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1209
+          19.4.1 /dev/poll Polling Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1211
+          19.4.2 Edge and Level Trigger Polling (epoll) Objects . . . . . . . . . . . . . . . . . . . . . . . 1212
+          19.4.3 Polling Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1213
+          19.4.4 Kqueue Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1214
+          19.4.5 Kevent Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1214
+   19.5   selectors — High-level I/O multiplexing . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1216
+          19.5.1 Introduction . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1216
+          19.5.2 Classes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1216
+          19.5.3 Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1219
+   19.6   signal — Set handlers for asynchronous events . . . . . . . . . . . . . . . . . . . . . . . . . . 1219
+          19.6.1 General rules . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1219
+          19.6.2 Module contents . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1220
+          19.6.3 Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1227
+          19.6.4 Note on SIGPIPE . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1227
+          19.6.5 Note on Signal Handlers and Exceptions . . . . . . . . . . . . . . . . . . . . . . . . . . 1228
+   19.7   mmap — Memory-mapped file support . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1229
+          19.7.1 MADV_* Constants . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1233
+          19.7.2 MAP_* Constants . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1233
+
+20 Internet Data Handling                                                                                     1235
+   20.1 email — An email and MIME handling package . . . . . . . . . . . . . . . . . . . . . . . . . . 1235
+         20.1.1 email.message: Representing an email message . . . . . . . . . . . . . . . . . . . . . 1236
+         20.1.2 email.parser: Parsing email messages . . . . . . . . . . . . . . . . . . . . . . . . . . 1244
+         20.1.3 email.generator: Generating MIME documents . . . . . . . . . . . . . . . . . . . . 1247
+         20.1.4 email.policy: Policy Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1250
+         20.1.5 email.errors: Exception and Defect classes . . . . . . . . . . . . . . . . . . . . . . . 1256
+         20.1.6 email.headerregistry: Custom Header Objects . . . . . . . . . . . . . . . . . . . . 1258
+         20.1.7 email.contentmanager: Managing MIME Content . . . . . . . . . . . . . . . . . . . 1263
+         20.1.8 email: Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1266
+         20.1.9 email.message.Message: Representing an email message using the compat32 API . 1272
+         20.1.10 email.mime: Creating email and MIME objects from scratch . . . . . . . . . . . . . . . 1280
+         20.1.11 email.header: Internationalized headers . . . . . . . . . . . . . . . . . . . . . . . . . 1283
+         20.1.12 email.charset: Representing character sets . . . . . . . . . . . . . . . . . . . . . . . 1285
+         20.1.13 email.encoders: Encoders . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1287
+         20.1.14 email.utils: Miscellaneous utilities . . . . . . . . . . . . . . . . . . . . . . . . . . . 1288
+         20.1.15 email.iterators: Iterators . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1290
+   20.2 json — JSON encoder and decoder . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1291
+         20.2.1 Basic Usage . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1294
+         20.2.2 Encoders and Decoders . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1296
+         20.2.3 Exceptions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1298
+         20.2.4 Standard Compliance and Interoperability . . . . . . . . . . . . . . . . . . . . . . . . . 1299
+         20.2.5 Command Line Interface . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1300
+   20.3 mailbox — Manipulate mailboxes in various formats . . . . . . . . . . . . . . . . . . . . . . . . 1301
+         20.3.1 Mailbox objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1302
+         20.3.2 Message objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1311
+         20.3.3 Exceptions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1319
+         20.3.4 Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1319
+   20.4 mimetypes — Map filenames to MIME types . . . . . . . . . . . . . . . . . . . . . . . . . . . 1320
+         20.4.1 MimeTypes Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1322
+   20.5 base64 — Base16, Base32, Base64, Base85 Data Encodings . . . . . . . . . . . . . . . . . . . . 1323
+         20.5.1 Security Considerations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1327
+   20.6 binascii — Convert between binary and ASCII . . . . . . . . . . . . . . . . . . . . . . . . . . 1327
+   20.7 quopri — Encode and decode MIME quoted-printable data . . . . . . . . . . . . . . . . . . . . 1329
+
+
+
+
+                                                                                                                xi
+21 Structured Markup Processing Tools                                                                         1331
+   21.1 html — HyperText Markup Language support . . . . . . . . . . . . . . . . . . . . . . . . . . . 1331
+   21.2 html.parser — Simple HTML and XHTML parser . . . . . . . . . . . . . . . . . . . . . . . . 1331
+         21.2.1 Example HTML Parser Application . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1332
+         21.2.2 HTMLParser Methods . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1332
+         21.2.3 Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1334
+   21.3 html.entities — Definitions of HTML general entities . . . . . . . . . . . . . . . . . . . . . 1336
+   21.4 XML Processing Modules . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1336
+         21.4.1 XML vulnerabilities . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1337
+         21.4.2 The defusedxml Package . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1338
+   21.5 xml.etree.ElementTree — The ElementTree XML API . . . . . . . . . . . . . . . . . . . . 1338
+         21.5.1 Tutorial . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1338
+         21.5.2 XPath support . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1343
+         21.5.3 Reference . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1345
+         21.5.4 XInclude support . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1348
+         21.5.5 Reference . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1349
+   21.6 xml.dom — The Document Object Model API . . . . . . . . . . . . . . . . . . . . . . . . . . . 1357
+         21.6.1 Module Contents . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1358
+         21.6.2 Objects in the DOM . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1359
+         21.6.3 Conformance . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1366
+   21.7 xml.dom.minidom — Minimal DOM implementation . . . . . . . . . . . . . . . . . . . . . . . 1367
+         21.7.1 DOM Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1369
+         21.7.2 DOM Example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1370
+         21.7.3 minidom and the DOM standard . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1371
+   21.8 xml.dom.pulldom — Support for building partial DOM trees . . . . . . . . . . . . . . . . . . . 1371
+         21.8.1 DOMEventStream Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1373
+   21.9 xml.sax — Support for SAX2 parsers . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1373
+         21.9.1 SAXException Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1375
+   21.10 xml.sax.handler — Base classes for SAX handlers . . . . . . . . . . . . . . . . . . . . . . . 1375
+         21.10.1 ContentHandler Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1377
+         21.10.2 DTDHandler Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1379
+         21.10.3 EntityResolver Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1379
+         21.10.4 ErrorHandler Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1379
+         21.10.5 LexicalHandler Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1380
+   21.11 xml.sax.saxutils — SAX Utilities . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1380
+   21.12 xml.sax.xmlreader — Interface for XML parsers . . . . . . . . . . . . . . . . . . . . . . . . 1381
+         21.12.1 XMLReader Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1382
+         21.12.2 IncrementalParser Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1383
+         21.12.3 Locator Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1384
+         21.12.4 InputSource Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1384
+         21.12.5 The Attributes Interface . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1385
+         21.12.6 The AttributesNS Interface . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1385
+   21.13 xml.parsers.expat — Fast XML parsing using Expat . . . . . . . . . . . . . . . . . . . . . . 1385
+         21.13.1 XMLParser Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1386
+         21.13.2 ExpatError Exceptions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1391
+         21.13.3 Example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1391
+         21.13.4 Content Model Descriptions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1392
+         21.13.5 Expat error constants . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1392
+
+22 Internet Protocols and Support                                                                           1397
+   22.1 webbrowser — Convenient web-browser controller . . . . . . . . . . . . . . . . . . . . . . . . 1397
+         22.1.1 Browser Controller Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1399
+   22.2 wsgiref — WSGI Utilities and Reference Implementation . . . . . . . . . . . . . . . . . . . . . 1400
+         22.2.1 wsgiref.util – WSGI environment utilities . . . . . . . . . . . . . . . . . . . . . . . 1400
+         22.2.2 wsgiref.headers – WSGI response header tools . . . . . . . . . . . . . . . . . . . . 1402
+         22.2.3 wsgiref.simple_server – a simple WSGI HTTP server . . . . . . . . . . . . . . . . 1403
+         22.2.4 wsgiref.validate — WSGI conformance checker . . . . . . . . . . . . . . . . . . . 1404
+         22.2.5 wsgiref.handlers – server/gateway base classes . . . . . . . . . . . . . . . . . . . . 1405
+
+
+xii
+      22.2.6 wsgiref.types – WSGI types for static type checking . . . . . . . . . . . . . . . . . . 1408
+      22.2.7 Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1409
+22.3 urllib — URL handling modules . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1410
+22.4 urllib.request — Extensible library for opening URLs . . . . . . . . . . . . . . . . . . . . . 1410
+      22.4.1 Request Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1415
+      22.4.2 OpenerDirector Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1417
+      22.4.3 BaseHandler Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1418
+      22.4.4 HTTPRedirectHandler Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1419
+      22.4.5 HTTPCookieProcessor Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1420
+      22.4.6 ProxyHandler Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1420
+      22.4.7 HTTPPasswordMgr Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1420
+      22.4.8 HTTPPasswordMgrWithPriorAuth Objects . . . . . . . . . . . . . . . . . . . . . . . . . 1420
+      22.4.9 AbstractBasicAuthHandler Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1421
+      22.4.10 HTTPBasicAuthHandler Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1421
+      22.4.11 ProxyBasicAuthHandler Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1421
+      22.4.12 AbstractDigestAuthHandler Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1421
+      22.4.13 HTTPDigestAuthHandler Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1421
+      22.4.14 ProxyDigestAuthHandler Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1421
+      22.4.15 HTTPHandler Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1421
+      22.4.16 HTTPSHandler Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1421
+      22.4.17 FileHandler Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1421
+      22.4.18 DataHandler Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1422
+      22.4.19 FTPHandler Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1422
+      22.4.20 CacheFTPHandler Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1422
+      22.4.21 UnknownHandler Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1422
+      22.4.22 HTTPErrorProcessor Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1422
+      22.4.23 Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1422
+      22.4.24 Legacy interface . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1425
+      22.4.25 urllib.request Restrictions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1427
+22.5 urllib.response — Response classes used by urllib . . . . . . . . . . . . . . . . . . . . . . . 1428
+22.6 urllib.parse — Parse URLs into components . . . . . . . . . . . . . . . . . . . . . . . . . . 1428
+      22.6.1 URL Parsing . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1429
+      22.6.2 URL parsing security . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1433
+      22.6.3 Parsing ASCII Encoded Bytes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1434
+      22.6.4 Structured Parse Results . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1434
+      22.6.5 URL Quoting . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1435
+22.7 urllib.error — Exception classes raised by urllib.request . . . . . . . . . . . . . . . . . . . . 1437
+22.8 urllib.robotparser — Parser for robots.txt . . . . . . . . . . . . . . . . . . . . . . . . . . . 1438
+22.9 http — HTTP modules . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1439
+      22.9.1 HTTP status codes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1440
+      22.9.2 HTTP status category . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1441
+      22.9.3 HTTP methods . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1442
+22.10 http.client — HTTP protocol client . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1442
+      22.10.1 HTTPConnection Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1445
+      22.10.2 HTTPResponse Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1447
+      22.10.3 Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1448
+      22.10.4 HTTPMessage Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1450
+22.11 ftplib — FTP protocol client . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1450
+      22.11.1 Reference . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1451
+22.12 poplib — POP3 protocol client . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1457
+      22.12.1 POP3 Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1458
+      22.12.2 POP3 Example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1459
+22.13 imaplib — IMAP4 protocol client . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1460
+      22.13.1 IMAP4 Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1461
+      22.13.2 IMAP4 Example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1466
+22.14 smtplib — SMTP protocol client . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1466
+      22.14.1 SMTP Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1468
+      22.14.2 SMTP Example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1472
+
+
+                                                                                                            xiii
+      22.15 uuid — UUID objects according to RFC 4122 . . . . . . . . . . . . . . . . . . . . . . . . . . . 1473
+            22.15.1 Command-Line Usage . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1476
+            22.15.2 Example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1476
+            22.15.3 Command-Line Example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1477
+      22.16 socketserver — A framework for network servers . . . . . . . . . . . . . . . . . . . . . . . . 1477
+            22.16.1 Server Creation Notes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1478
+            22.16.2 Server Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1479
+            22.16.3 Request Handler Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1481
+            22.16.4 Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1482
+      22.17 http.server — HTTP servers . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1486
+            22.17.1 Command-line interface . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1491
+            22.17.2 Security considerations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1492
+      22.18 http.cookies — HTTP state management . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1492
+            22.18.1 Cookie Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1493
+            22.18.2 Morsel Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1494
+            22.18.3 Example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1495
+      22.19 http.cookiejar — Cookie handling for HTTP clients . . . . . . . . . . . . . . . . . . . . . . 1496
+            22.19.1 CookieJar and FileCookieJar Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1497
+            22.19.2 FileCookieJar subclasses and co-operation with web browsers . . . . . . . . . . . . . . . 1499
+            22.19.3 CookiePolicy Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1500
+            22.19.4 DefaultCookiePolicy Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1501
+            22.19.5 Cookie Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1502
+            22.19.6 Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1504
+      22.20 xmlrpc — XMLRPC server and client modules . . . . . . . . . . . . . . . . . . . . . . . . . . . 1504
+      22.21 xmlrpc.client — XML-RPC client access . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1504
+            22.21.1 ServerProxy Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1506
+            22.21.2 DateTime Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1507
+            22.21.3 Binary Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1508
+            22.21.4 Fault Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1508
+            22.21.5 ProtocolError Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1509
+            22.21.6 MultiCall Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1510
+            22.21.7 Convenience Functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1511
+            22.21.8 Example of Client Usage . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1511
+            22.21.9 Example of Client and Server Usage . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1512
+      22.22 xmlrpc.server — Basic XML-RPC servers . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1512
+            22.22.1 SimpleXMLRPCServer Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1513
+            22.22.2 CGIXMLRPCRequestHandler . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1516
+            22.22.3 Documenting XMLRPC server . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1517
+            22.22.4 DocXMLRPCServer Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1517
+            22.22.5 DocCGIXMLRPCRequestHandler . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1517
+      22.23 ipaddress — IPv4/IPv6 manipulation library . . . . . . . . . . . . . . . . . . . . . . . . . . . 1518
+            22.23.1 Convenience factory functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1518
+            22.23.2 IP Addresses . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1519
+            22.23.3 IP Network definitions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1523
+            22.23.4 Interface objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1529
+            22.23.5 Other Module Level Functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1530
+            22.23.6 Custom Exceptions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1531
+
+23 Multimedia Services                                                                                     1533
+   23.1 wave — Read and write WAV files . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1533
+        23.1.1 Wave_read Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1533
+        23.1.2 Wave_write Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1534
+   23.2 colorsys — Conversions between color systems . . . . . . . . . . . . . . . . . . . . . . . . . . 1536
+
+24 Internationalization                                                                                      1537
+   24.1 gettext — Multilingual internationalization services . . . . . . . . . . . . . . . . . . . . . . . . 1537
+         24.1.1 GNU gettext API . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1537
+         24.1.2 Class-based API . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1538
+
+
+
+xiv
+        24.1.3 Internationalizing your programs and modules . . . . . . . . . . . . . . . . . . . . . . . 1542
+        24.1.4 Acknowledgements . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1544
+   24.2 locale — Internationalization services . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1545
+        24.2.1 Background, details, hints, tips and caveats . . . . . . . . . . . . . . . . . . . . . . . . . 1552
+        24.2.2 For extension writers and programs that embed Python . . . . . . . . . . . . . . . . . . . 1552
+        24.2.3 Access to message catalogs . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1552
+
+25 Program Frameworks                                                                                         1553
+   25.1 turtle — Turtle graphics . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1553
+        25.1.1 Introduction . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1553
+        25.1.2 Get started . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1553
+        25.1.3 Tutorial . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1554
+        25.1.4 How to… . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1555
+        25.1.5 Turtle graphics reference . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1557
+        25.1.6 Methods of RawTurtle/Turtle and corresponding functions . . . . . . . . . . . . . . . . . 1559
+        25.1.7 Methods of TurtleScreen/Screen and corresponding functions . . . . . . . . . . . . . . . 1576
+        25.1.8 Public classes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1583
+        25.1.9 Explanation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1584
+        25.1.10 Help and configuration . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1585
+        25.1.11 turtledemo — Demo scripts . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1587
+        25.1.12 Changes since Python 2.6 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1588
+        25.1.13 Changes since Python 3.0 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1588
+   25.2 cmd — Support for line-oriented command interpreters . . . . . . . . . . . . . . . . . . . . . . . 1589
+        25.2.1 Cmd Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1589
+        25.2.2 Cmd Example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1591
+   25.3 shlex — Simple lexical analysis . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1594
+        25.3.1 shlex Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1595
+        25.3.2 Parsing Rules . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1597
+        25.3.3 Improved Compatibility with Shells . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1598
+
+26 Graphical User Interfaces with Tk                                                                           1601
+   26.1 tkinter — Python interface to Tcl/Tk . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1601
+        26.1.1 Architecture . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1602
+        26.1.2 Tkinter Modules . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1602
+        26.1.3 Tkinter Life Preserver . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1604
+        26.1.4 Threading model . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1607
+        26.1.5 Handy Reference . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1608
+        26.1.6 File Handlers . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1613
+   26.2 tkinter.colorchooser — Color choosing dialog . . . . . . . . . . . . . . . . . . . . . . . . 1614
+   26.3 tkinter.font — Tkinter font wrapper . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1614
+   26.4 Tkinter Dialogs . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1615
+        26.4.1 tkinter.simpledialog — Standard Tkinter input dialogs . . . . . . . . . . . . . . . 1615
+        26.4.2 tkinter.filedialog — File selection dialogs . . . . . . . . . . . . . . . . . . . . . 1616
+        26.4.3 tkinter.commondialog — Dialog window templates . . . . . . . . . . . . . . . . . . 1618
+   26.5 tkinter.messagebox — Tkinter message prompts . . . . . . . . . . . . . . . . . . . . . . . . 1618
+   26.6 tkinter.scrolledtext — Scrolled Text Widget . . . . . . . . . . . . . . . . . . . . . . . . 1620
+   26.7 tkinter.dnd — Drag and drop support . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1621
+   26.8 tkinter.ttk — Tk themed widgets . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1622
+        26.8.1 Using Ttk . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1622
+        26.8.2 Ttk Widgets . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1622
+        26.8.3 Widget . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1623
+        26.8.4 Combobox . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1625
+        26.8.5 Spinbox . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1626
+        26.8.6 Notebook . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1627
+        26.8.7 Progressbar . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1629
+        26.8.8 Separator . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1629
+        26.8.9 Sizegrip . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1630
+        26.8.10 Treeview . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1630
+
+
+
+                                                                                                                xv
+           26.8.11 Ttk Styling . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1635
+      26.9 IDLE — Python editor and shell . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1640
+           26.9.1 Menus . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1640
+           26.9.2 Editing and Navigation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1644
+           26.9.3 Startup and Code Execution . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1647
+           26.9.4 Help and Preferences . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1650
+           26.9.5 idlelib — implementation of IDLE application . . . . . . . . . . . . . . . . . . . . . . . 1651
+
+27 Development Tools                                                                                           1653
+   27.1 typing — Support for type hints . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1653
+         27.1.1 Specification for the Python Type System . . . . . . . . . . . . . . . . . . . . . . . . . . 1654
+         27.1.2 Type aliases . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1654
+         27.1.3 NewType . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1654
+         27.1.4 Annotating callable objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1656
+         27.1.5 Generics . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1657
+         27.1.6 Annotating tuples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1658
+         27.1.7 The type of class objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1659
+         27.1.8 Annotating generators and coroutines . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1659
+         27.1.9 User-defined generic types . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1660
+         27.1.10 The Any type . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1663
+         27.1.11 Nominal vs structural subtyping . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1664
+         27.1.12 Module contents . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1665
+         27.1.13 Deprecation Timeline of Major Features . . . . . . . . . . . . . . . . . . . . . . . . . . 1705
+   27.2 pydoc — Documentation generator and online help system . . . . . . . . . . . . . . . . . . . . . 1705
+   27.3 Python Development Mode . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1706
+         27.3.1 Effects of the Python Development Mode . . . . . . . . . . . . . . . . . . . . . . . . . . 1707
+         27.3.2 ResourceWarning Example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1708
+         27.3.3 Bad file descriptor error example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1709
+   27.4 doctest — Test interactive Python examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1709
+         27.4.1 Simple Usage: Checking Examples in Docstrings . . . . . . . . . . . . . . . . . . . . . . 1711
+         27.4.2 Simple Usage: Checking Examples in a Text File . . . . . . . . . . . . . . . . . . . . . . 1712
+         27.4.3 Command-line Usage . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1713
+         27.4.4 How It Works . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1713
+         27.4.5 Basic API . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1720
+         27.4.6 Unittest API . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1722
+         27.4.7 Advanced API . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1724
+         27.4.8 Debugging . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1729
+         27.4.9 Soapbox . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1732
+   27.5 unittest — Unit testing framework . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1733
+         27.5.1 Basic example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1734
+         27.5.2 Command-Line Interface . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1735
+         27.5.3 Test Discovery . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1736
+         27.5.4 Organizing test code . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1737
+         27.5.5 Re-using old test code . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1739
+         27.5.6 Skipping tests and expected failures . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1739
+         27.5.7 Distinguishing test iterations using subtests . . . . . . . . . . . . . . . . . . . . . . . . . 1741
+         27.5.8 Classes and functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1742
+         27.5.9 Class and Module Fixtures . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1761
+         27.5.10 Signal Handling . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1762
+   27.6 unittest.mock — mock object library . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1763
+         27.6.1 Quick Guide . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1763
+         27.6.2 The Mock Class . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1765
+         27.6.3 The patchers . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1783
+         27.6.4 MagicMock and magic method support . . . . . . . . . . . . . . . . . . . . . . . . . . . 1792
+         27.6.5 Helpers . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1795
+         27.6.6 Order of precedence of side_effect, return_value and wraps . . . . . . . . . . . . 1803
+   27.7 unittest.mock — getting started . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1805
+         27.7.1 Using Mock . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1805
+
+
+xvi
+         27.7.2 Patch Decorators . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1810
+         27.7.3 Further Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1812
+   27.8 test — Regression tests package for Python . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1824
+         27.8.1 Writing Unit Tests for the test package . . . . . . . . . . . . . . . . . . . . . . . . . . 1825
+         27.8.2 Running tests using the command-line interface . . . . . . . . . . . . . . . . . . . . . . 1826
+   27.9 test.support — Utilities for the Python test suite . . . . . . . . . . . . . . . . . . . . . . . . 1827
+   27.10 test.support.socket_helper — Utilities for socket tests . . . . . . . . . . . . . . . . . . . 1836
+   27.11 test.support.script_helper — Utilities for the Python execution tests . . . . . . . . . . . 1837
+   27.12 test.support.bytecode_helper — Support tools for testing correct bytecode generation . . 1838
+   27.13 test.support.threading_helper — Utilities for threading tests . . . . . . . . . . . . . . . 1838
+   27.14 test.support.os_helper — Utilities for os tests . . . . . . . . . . . . . . . . . . . . . . . . 1839
+   27.15 test.support.import_helper — Utilities for import tests . . . . . . . . . . . . . . . . . . . 1841
+   27.16 test.support.warnings_helper — Utilities for warnings tests . . . . . . . . . . . . . . . . 1842
+
+28 Debugging and Profiling                                                                                      1845
+   28.1 Audit events table . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1845
+   28.2 bdb — Debugger framework . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1849
+   28.3 faulthandler — Dump the Python traceback . . . . . . . . . . . . . . . . . . . . . . . . . . . 1854
+        28.3.1 Dumping the traceback . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1854
+        28.3.2 Fault handler state . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1855
+        28.3.3 Dumping the tracebacks after a timeout . . . . . . . . . . . . . . . . . . . . . . . . . . . 1855
+        28.3.4 Dumping the traceback on a user signal . . . . . . . . . . . . . . . . . . . . . . . . . . . 1855
+        28.3.5 Issue with file descriptors . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1855
+        28.3.6 Example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1856
+   28.4 pdb — The Python Debugger . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1856
+        28.4.1 Debugger Commands . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1859
+   28.5 The Python Profilers . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1865
+        28.5.1 Introduction to the profilers . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1865
+        28.5.2 Instant User’s Manual . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1865
+        28.5.3 profile and cProfile Module Reference . . . . . . . . . . . . . . . . . . . . . . . . 1868
+        28.5.4 The Stats Class . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1869
+        28.5.5 What Is Deterministic Profiling? . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1871
+        28.5.6 Limitations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1872
+        28.5.7 Calibration . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1872
+        28.5.8 Using a custom timer . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1873
+   28.6 timeit — Measure execution time of small code snippets . . . . . . . . . . . . . . . . . . . . . 1873
+        28.6.1 Basic Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1873
+        28.6.2 Python Interface . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1874
+        28.6.3 Command-Line Interface . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1876
+        28.6.4 Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1876
+   28.7 trace — Trace or track Python statement execution . . . . . . . . . . . . . . . . . . . . . . . . 1878
+        28.7.1 Command-Line Usage . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1878
+        28.7.2 Programmatic Interface . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1879
+   28.8 tracemalloc — Trace memory allocations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1881
+        28.8.1 Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1881
+        28.8.2 API . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1885
+
+29 Software Packaging and Distribution                                                                      1891
+   29.1 ensurepip — Bootstrapping the pip installer . . . . . . . . . . . . . . . . . . . . . . . . . . . 1891
+        29.1.1 Command line interface . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1891
+        29.1.2 Module API . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1892
+   29.2 venv — Creation of virtual environments . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1893
+        29.2.1 Creating virtual environments . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1893
+        29.2.2 How venvs work . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1895
+        29.2.3 API . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1896
+        29.2.4 An example of extending EnvBuilder . . . . . . . . . . . . . . . . . . . . . . . . . . . 1899
+   29.3 zipapp — Manage executable Python zip archives . . . . . . . . . . . . . . . . . . . . . . . . . 1902
+        29.3.1 Basic Example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1903
+
+
+
+                                                                                                               xvii
+          29.3.2   Command-Line Interface . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1903
+          29.3.3   Python API . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1903
+          29.3.4   Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1904
+          29.3.5   Specifying the Interpreter . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1905
+          29.3.6   Creating Standalone Applications with zipapp . . . . . . . . . . . . . . . . . . . . . . . 1905
+          29.3.7   The Python Zip Application Archive Format . . . . . . . . . . . . . . . . . . . . . . . . 1906
+
+30 Python Runtime Services                                                                                     1907
+   30.1 sys — System-specific parameters and functions . . . . . . . . . . . . . . . . . . . . . . . . . . 1907
+   30.2 sys.monitoring — Execution event monitoring . . . . . . . . . . . . . . . . . . . . . . . . . 1933
+         30.2.1 Tool identifiers . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1933
+         30.2.2 Events . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1934
+         30.2.3 Turning events on and off . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1936
+         30.2.4 Registering callback functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1936
+   30.3 sysconfig — Provide access to Python’s configuration information . . . . . . . . . . . . . . . . 1937
+         30.3.1 Configuration variables . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1937
+         30.3.2 Installation paths . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1938
+         30.3.3 User scheme . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1939
+         30.3.4 Home scheme . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1939
+         30.3.5 Prefix scheme . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1940
+         30.3.6 Installation path functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1941
+         30.3.7 Other functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1942
+         30.3.8 Using sysconfig as a script . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1943
+   30.4 builtins — Built-in objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1943
+   30.5 __main__ — Top-level code environment . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1944
+         30.5.1 __name__ == '__main__' . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1944
+         30.5.2 __main__.py in Python Packages . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1946
+         30.5.3 import __main__ . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1947
+   30.6 warnings — Warning control . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1949
+         30.6.1 Warning Categories . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1949
+         30.6.2 The Warnings Filter . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1950
+         30.6.3 Temporarily Suppressing Warnings . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1952
+         30.6.4 Testing Warnings . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1953
+         30.6.5 Updating Code For New Versions of Dependencies . . . . . . . . . . . . . . . . . . . . 1953
+         30.6.6 Available Functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1953
+         30.6.7 Available Context Managers . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1955
+   30.7 dataclasses — Data Classes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1956
+         30.7.1 Module contents . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1957
+         30.7.2 Post-init processing . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1963
+         30.7.3 Class variables . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1963
+         30.7.4 Init-only variables . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1963
+         30.7.5 Frozen instances . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1964
+         30.7.6 Inheritance . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1964
+         30.7.7 Re-ordering of keyword-only parameters in __init__() . . . . . . . . . . . . . . . . . 1964
+         30.7.8 Default factory functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1965
+         30.7.9 Mutable default values . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1965
+         30.7.10 Descriptor-typed fields . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1966
+   30.8 contextlib — Utilities for with-statement contexts . . . . . . . . . . . . . . . . . . . . . . . . 1967
+         30.8.1 Utilities . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1967
+         30.8.2 Examples and Recipes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1976
+         30.8.3 Single use, reusable and reentrant context managers . . . . . . . . . . . . . . . . . . . . 1979
+   30.9 abc — Abstract Base Classes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1981
+   30.10 atexit — Exit handlers . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1986
+         30.10.1 atexit Example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1987
+   30.11 traceback — Print or retrieve a stack traceback . . . . . . . . . . . . . . . . . . . . . . . . . . 1988
+         30.11.1 Module-Level Functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1988
+         30.11.2 TracebackException Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1991
+         30.11.3 StackSummary Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1992
+
+
+xviii
+         30.11.4 FrameSummary Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1993
+         30.11.5 Examples of Using the Module-Level Functions . . . . . . . . . . . . . . . . . . . . . . 1994
+         30.11.6 Examples of Using TracebackException . . . . . . . . . . . . . . . . . . . . . . . . 1996
+   30.12 __future__ — Future statement definitions . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1998
+         30.12.1 Module Contents . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1998
+   30.13 gc — Garbage Collector interface . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1999
+   30.14 inspect — Inspect live objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2003
+         30.14.1 Types and members . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2003
+         30.14.2 Retrieving source code . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2008
+         30.14.3 Introspecting callables with the Signature object . . . . . . . . . . . . . . . . . . . . . . 2009
+         30.14.4 Classes and functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2013
+         30.14.5 The interpreter stack . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2016
+         30.14.6 Fetching attributes statically . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2018
+         30.14.7 Current State of Generators, Coroutines, and Asynchronous Generators . . . . . . . . . . 2019
+         30.14.8 Code Objects Bit Flags . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2020
+         30.14.9 Buffer flags . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2021
+         30.14.10Command Line Interface . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2022
+   30.15 site — Site-specific configuration hook . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2022
+         30.15.1 sitecustomize . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2023
+         30.15.2 usercustomize . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2023
+         30.15.3 Readline configuration . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2023
+         30.15.4 Module contents . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2023
+         30.15.5 Command Line Interface . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2024
+
+31 Custom Python Interpreters                                                                                 2027
+   31.1 code — Interpreter base classes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2027
+        31.1.1 Interactive Interpreter Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2028
+        31.1.2 Interactive Console Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2028
+   31.2 codeop — Compile Python code . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2029
+
+32 Importing Modules                                                                                           2031
+   32.1 zipimport — Import modules from Zip archives . . . . . . . . . . . . . . . . . . . . . . . . . . 2031
+        32.1.1 zipimporter Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2032
+        32.1.2 Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2033
+   32.2 pkgutil — Package extension utility . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2033
+   32.3 modulefinder — Find modules used by a script . . . . . . . . . . . . . . . . . . . . . . . . . . 2036
+        32.3.1 Example usage of ModuleFinder . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2036
+   32.4 runpy — Locating and executing Python modules . . . . . . . . . . . . . . . . . . . . . . . . . 2037
+   32.5 importlib — The implementation of import . . . . . . . . . . . . . . . . . . . . . . . . . . . 2040
+        32.5.1 Introduction . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2040
+        32.5.2 Functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2041
+        32.5.3 importlib.abc – Abstract base classes related to import . . . . . . . . . . . . . . . . . 2042
+        32.5.4 importlib.machinery – Importers and path hooks . . . . . . . . . . . . . . . . . . . 2049
+        32.5.5 importlib.util – Utility code for importers . . . . . . . . . . . . . . . . . . . . . . . 2054
+        32.5.6 Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2057
+   32.6 importlib.resources – Package resource reading, opening and access . . . . . . . . . . . . . 2059
+        32.6.1 Functional API . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2061
+   32.7 importlib.resources.abc – Abstract base classes for resources . . . . . . . . . . . . . . . . 2063
+   32.8 importlib.metadata – Accessing package metadata . . . . . . . . . . . . . . . . . . . . . . . 2064
+        32.8.1 Overview . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2065
+        32.8.2 Functional API . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2066
+        32.8.3 Distributions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2069
+        32.8.4 Distribution Discovery . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2070
+        32.8.5 Extending the search algorithm . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2070
+   32.9 The initialization of the sys.path module search path . . . . . . . . . . . . . . . . . . . . . . . 2072
+        32.9.1 Virtual environments . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2072
+        32.9.2 _pth files . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2073
+        32.9.3 Embedded Python . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2073
+
+
+
+                                                                                                                 xix
+33 Python Language Services                                                                                    2075
+   33.1 ast — Abstract Syntax Trees . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2075
+         33.1.1 Abstract Grammar . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2075
+         33.1.2 Node classes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2078
+         33.1.3 ast Helpers . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2107
+         33.1.4 Compiler Flags . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2111
+         33.1.5 Command-Line Usage . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2112
+   33.2 symtable — Access to the compiler’s symbol tables . . . . . . . . . . . . . . . . . . . . . . . . 2112
+         33.2.1 Generating Symbol Tables . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2112
+         33.2.2 Examining Symbol Tables . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2113
+         33.2.3 Command-Line Usage . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2116
+   33.3 token — Constants used with Python parse trees . . . . . . . . . . . . . . . . . . . . . . . . . . 2116
+   33.4 keyword — Testing for Python keywords . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2121
+   33.5 tokenize — Tokenizer for Python source . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2121
+         33.5.1 Tokenizing Input . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2121
+         33.5.2 Command-Line Usage . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2123
+         33.5.3 Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2123
+   33.6 tabnanny — Detection of ambiguous indentation . . . . . . . . . . . . . . . . . . . . . . . . . . 2125
+   33.7 pyclbr — Python module browser support . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2126
+         33.7.1 Function Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2126
+         33.7.2 Class Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2127
+   33.8 py_compile — Compile Python source files . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2128
+         33.8.1 Command-Line Interface . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2129
+   33.9 compileall — Byte-compile Python libraries . . . . . . . . . . . . . . . . . . . . . . . . . . . 2129
+         33.9.1 Command-line use . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2129
+         33.9.2 Public functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2131
+   33.10 dis — Disassembler for Python bytecode . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2133
+         33.10.1 Command-line interface . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2134
+         33.10.2 Bytecode analysis . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2134
+         33.10.3 Analysis functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2135
+         33.10.4 Python Bytecode Instructions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2138
+         33.10.5 Opcode collections . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2154
+   33.11 pickletools — Tools for pickle developers . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2155
+         33.11.1 Command line usage . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2155
+         33.11.2 Programmatic Interface . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2156
+
+34 MS Windows Specific Services                                                                             2157
+   34.1 msvcrt — Useful routines from the MS VC++ runtime . . . . . . . . . . . . . . . . . . . . . . . 2157
+        34.1.1 File Operations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2157
+        34.1.2 Console I/O . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2158
+        34.1.3 Other Functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2158
+   34.2 winreg — Windows registry access . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2159
+        34.2.1 Functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2160
+        34.2.2 Constants . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2165
+        34.2.3 Registry Handle Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2167
+   34.3 winsound — Sound-playing interface for Windows . . . . . . . . . . . . . . . . . . . . . . . . . 2168
+
+35 Unix Specific Services                                                                                    2171
+   35.1 posix — The most common POSIX system calls . . . . . . . . . . . . . . . . . . . . . . . . . . 2171
+         35.1.1 Large File Support . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2171
+         35.1.2 Notable Module Contents . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2171
+   35.2 pwd — The password database . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2172
+   35.3 grp — The group database . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2173
+   35.4 termios — POSIX style tty control . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2173
+         35.4.1 Example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2174
+   35.5 tty — Terminal control functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2175
+   35.6 pty — Pseudo-terminal utilities . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2176
+         35.6.1 Example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2177
+
+
+
+xx
+   35.7 fcntl — The fcntl and ioctl system calls . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2177
+   35.8 resource — Resource usage information . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2180
+        35.8.1 Resource Limits . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2180
+        35.8.2 Resource Usage . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2183
+   35.9 syslog — Unix syslog library routines . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2184
+        35.9.1 Examples . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2186
+
+36 Modules command-line interface (CLI)                                                                      2189
+
+37 Superseded Modules                                                                                     2191
+   37.1 getopt — C-style parser for command line options . . . . . . . . . . . . . . . . . . . . . . . . . 2191
+
+38 Removed Modules                                                                                             2195
+   38.1 aifc — Read and write AIFF and AIFC files . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2195
+   38.2 asynchat — Asynchronous socket command/response handler . . . . . . . . . . . . . . . . . . 2195
+   38.3 asyncore — Asynchronous socket handler . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2195
+   38.4 audioop — Manipulate raw audio data . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2195
+   38.5 cgi — Common Gateway Interface support . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2196
+   38.6 cgitb — Traceback manager for CGI scripts . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2196
+   38.7 chunk — Read IFF chunked data . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2196
+   38.8 crypt — Function to check Unix passwords . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2196
+   38.9 distutils — Building and installing Python modules . . . . . . . . . . . . . . . . . . . . . . . 2196
+   38.10 imghdr — Determine the type of an image . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2196
+   38.11 imp — Access the import internals . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2197
+   38.12 mailcap — Mailcap file handling . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2197
+   38.13 msilib — Read and write Microsoft Installer files . . . . . . . . . . . . . . . . . . . . . . . . . 2197
+   38.14 nis — Interface to Sun’s NIS (Yellow Pages) . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2197
+   38.15 nntplib — NNTP protocol client . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2197
+   38.16 ossaudiodev — Access to OSS-compatible audio devices . . . . . . . . . . . . . . . . . . . . . 2197
+   38.17 pipes — Interface to shell pipelines . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2198
+   38.18 smtpd — SMTP Server . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2198
+   38.19 sndhdr — Determine type of sound file . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2198
+   38.20 spwd — The shadow password database . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2198
+   38.21 sunau — Read and write Sun AU files . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2198
+   38.22 telnetlib — Telnet client . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2198
+   38.23 uu — Encode and decode uuencode files . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2199
+   38.24 xdrlib — Encode and decode XDR data . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2199
+
+39 Security Considerations                                                                                   2201
+
+A Glossary                                                                                                   2203
+
+B About this documentation                                                                                2221
+  B.1 Contributors to the Python documentation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2221
+
+C History and License                                                                                        2223
+  C.1 History of the software . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2223
+  C.2 Terms and conditions for accessing or otherwise using Python . . . . . . . . . . . . . . . . . . . . 2224
+        C.2.1 PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2 . . . . . . . . . . . . . 2224
+        C.2.2 BEOPEN.COM LICENSE AGREEMENT FOR PYTHON 2.0 . . . . . . . . . . . . . . 2225
+        C.2.3 CNRI LICENSE AGREEMENT FOR PYTHON 1.6.1 . . . . . . . . . . . . . . . . . . 2225
+        C.2.4 CWI LICENSE AGREEMENT FOR PYTHON 0.9.0 THROUGH 1.2 . . . . . . . . . . 2226
+        C.2.5 ZERO-CLAUSE BSD LICENSE FOR CODE IN THE PYTHON DOCUMENTATION . 2227
+  C.3 Licenses and Acknowledgements for Incorporated Software . . . . . . . . . . . . . . . . . . . . . 2227
+        C.3.1 Mersenne Twister . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2227
+        C.3.2 Sockets . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2228
+        C.3.3 Asynchronous socket services . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2229
+        C.3.4 Cookie management . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2229
+        C.3.5 Execution tracing . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2229
+
+
+                                                                                                               xxi
+        C.3.6    UUencode and UUdecode functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2230
+        C.3.7    XML Remote Procedure Calls . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2231
+        C.3.8    test_epoll . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2231
+        C.3.9    Select kqueue . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2232
+        C.3.10   SipHash24 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2232
+        C.3.11   strtod and dtoa . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2233
+        C.3.12   OpenSSL . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2233
+        C.3.13   expat . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2236
+        C.3.14   libffi . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2237
+        C.3.15   zlib . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2237
+        C.3.16   cfuhash . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2238
+        C.3.17   libmpdec . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2238
+        C.3.18   W3C C14N test suite . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2239
+        C.3.19   mimalloc . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2240
+        C.3.20   asyncio . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2240
+        C.3.21   Global Unbounded Sequences (GUS) . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2240
+
+D Copyright                                                                                                    2243
+
+Bibliography                                                                                                   2245
+
+Python Module Index                                                                                            2247
+
+Index                                                                                                          2251
+
+
+
+
+xxii
+                                                                The Python Library Reference, Release 3.13.3
+
+
+While reference-index describes the exact syntax and semantics of the Python language, this library reference manual
+describes the standard library that is distributed with Python. It also describes some of the optional components that
+are commonly included in Python distributions.
+Python’s standard library is very extensive, offering a wide range of facilities as indicated by the long table of contents
+listed below. The library contains built-in modules (written in C) that provide access to system functionality such as
+file I/O that would otherwise be inaccessible to Python programmers, as well as modules written in Python that provide
+standardized solutions for many problems that occur in everyday programming. Some of these modules are explicitly
+designed to encourage and enhance the portability of Python programs by abstracting away platform-specifics into
+platform-neutral APIs.
+The Python installers for the Windows platform usually include the entire standard library and often also include many
+additional components. For Unix-like operating systems Python is normally provided as a collection of packages,
+so it may be necessary to use the packaging tools provided with the operating system to obtain some or all of the
+optional components.
+In addition to the standard library, there is an active collection of hundreds of thousands of components (from in-
+dividual programs and modules to packages and entire application development frameworks), available from the
+Python Package Index.
+
+
+
+
+CONTENTS                                                                                                                 1
+The Python Library Reference, Release 3.13.3
+
+
+
+
+2                                              CONTENTS
+

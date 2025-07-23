@@ -1,0 +1,58 @@
+                                                         Logging Cookbook
+                                                                                             Release 3.13.3
+
+
+                     Guido van Rossum and the Python development team
+
+
+                                                                                                  April 27, 2025
+                                                                                Python Software Foundation
+                                                                                    Email: docs@python.org
+
+
+Contents
+
+1 Using logging in multiple modules                                                                             3
+
+2 Logging from multiple threads                                                                                 4
+
+3 Multiple handlers and formatters                                                                              5
+
+4 Logging to multiple destinations                                                                              6
+
+5 Custom handling of levels                                                                                     7
+
+6 Configuration server example                                                                                  10
+
+7 Dealing with handlers that block                                                                              11
+
+8 Sending and receiving logging events across a network                                                         12
+  8.1 Running a logging socket listener in production . . . . . . . . . . . . . . . . . . . . . . . . . . . .   14
+
+9 Adding contextual information to your logging output                                                          15
+  9.1 Using LoggerAdapters to impart contextual information . . . . . . . . . . . . . . . . . . . . . . .       16
+  9.2 Using Filters to impart contextual information . . . . . . . . . . . . . . . . . . . . . . . . . . . .    16
+
+10 Use of contextvars                                                                                           18
+
+11 Imparting contextual information in handlers                                                                 22
+
+12 Logging to a single file from multiple processes                                                             22
+   12.1 Using concurrent.futures.ProcessPoolExecutor . . . . . . . . . . . . . . . . . . . . . . . . . . . .    26
+   12.2 Deploying Web applications using Gunicorn and uWSGI . . . . . . . . . . . . . . . . . . . . . . .       27
+
+13 Using file rotation                                                                                          27
+
+14 Use of alternative formatting styles                                                                         28
+
+15 Customizing LogRecord                                                                                        30
+
+16 Subclassing QueueHandler and QueueListener- a ZeroMQ example                                                 31
+   16.1 Subclass QueueHandler . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     31
+   16.2 Subclass QueueListener . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      32
+
+
+
+
+                                                        1
+

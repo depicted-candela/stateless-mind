@@ -1,0 +1,56 @@
+                              Isolating Extension Modules
+                                                                                              Release 3.13.3
+
+
+                     Guido van Rossum and the Python development team
+
+
+                                                                                                   April 27, 2025
+                                                                                 Python Software Foundation
+                                                                                     Email: docs@python.org
+
+
+Contents
+
+1 Who should read this                                                                                               2
+
+2 Background                                                                                                         2
+  2.1 Enter Per-Module State . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .         2
+  2.2 Isolated Module Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        2
+  2.3 Surprising Edge Cases . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        3
+
+3 Making Modules Safe with Multiple Interpreters                                                                     3
+  3.1 Managing Global State . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          3
+  3.2 Managing Per-Module State . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          3
+  3.3 Opt-Out: Limiting to One Module Object per Process . . . . . . . . . . . . . . . . . . . . . . . .             4
+  3.4 Module State Access from Functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .           4
+
+4 Heap Types                                                                                                         4
+  4.1 Changing Static Types to Heap Types . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          5
+  4.2 Defining Heap Types . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          5
+  4.3 Garbage-Collection Protocol . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          5
+  4.4 Module State Access from Classes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .           7
+  4.5 Module State Access from Regular Methods . . . . . . . . . . . . . . . . . . . . . . . . . . . . .             7
+  4.6 Module State Access from Slot Methods, Getters and Setters . . . . . . . . . . . . . . . . . . . . .           8
+  4.7 Lifetime of the Module State . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .         9
+
+5 Open Issues                                                                                                        9
+  5.1 Per-Class Scope . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        9
+  5.2 Lossless Conversion to Heap Types . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          9
+
+
+
+
+ Abstract
+
+ Traditionally, state belonging to Python extension modules was kept in C static variables, which have process-
+ wide scope. This document describes problems of such per-process state and shows a safer way: per-module
+ state.
+ The document also describes how to switch to per-module state where possible. This transition involves allocating
+ space for that state, potentially switching from static types to heap types, and—perhaps most importantly—
+ accessing per-module state from code.
+
+
+
+                                                        1
+

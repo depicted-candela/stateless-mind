@@ -1,0 +1,292 @@
+     The Python Language Reference
+                                     Release 3.13.3
+
+
+
+
+Guido van Rossum and the Python development team
+
+
+
+
+                                           April 27, 2025
+
+
+
+
+                              Python Software Foundation
+                                  Email: docs@python.org
+                                                                                               CONTENTS
+
+
+
+
+1 Introduction                                                                                                   3
+  1.1 Alternate Implementations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      3
+  1.2 Notation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     4
+
+2 Lexical analysis                                                                                                5
+  2.1 Line structure . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    5
+        2.1.1 Logical lines . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     5
+        2.1.2 Physical lines . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      5
+        2.1.3 Comments . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        5
+        2.1.4 Encoding declarations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       5
+        2.1.5 Explicit line joining . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     6
+        2.1.6 Implicit line joining . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     6
+        2.1.7 Blank lines . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     6
+        2.1.8 Indentation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       6
+        2.1.9 Whitespace between tokens . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .         7
+  2.2 Other tokens . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      7
+  2.3 Identifiers and keywords . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      8
+        2.3.1 Keywords . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        8
+        2.3.2 Soft Keywords . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       9
+        2.3.3 Reserved classes of identifiers . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     9
+  2.4 Literals . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    9
+        2.4.1 String and Bytes literals . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     9
+        2.4.2 String literal concatenation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     12
+        2.4.3 f-strings . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    12
+        2.4.4 Numeric literals . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     14
+        2.4.5 Integer literals . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   14
+        2.4.6 Floating-point literals . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    15
+        2.4.7 Imaginary literals . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     15
+  2.5 Operators . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    15
+  2.6 Delimiters . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     15
+
+3 Data model                                                                                                     17
+  3.1 Objects, values and types . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    17
+  3.2 The standard type hierarchy . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      18
+       3.2.1 None . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      18
+       3.2.2 NotImplemented . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          18
+       3.2.3 Ellipsis . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    18
+       3.2.4 numbers.Number . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .            18
+       3.2.5 Sequences . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       19
+       3.2.6 Set types . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     20
+       3.2.7 Mappings . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        21
+       3.2.8 Callable types . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      21
+       3.2.9 Modules . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       24
+       3.2.10 Custom classes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       27
+
+
+                                                                                                                  i
+           3.2.11 Class instances . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   29
+           3.2.12 I/O objects (also known as file objects) . . . . . . . . . . . . . . . . . . . . . . . . . . .    29
+           3.2.13 Internal types . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    29
+     3.3   Special method names . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     34
+           3.3.1 Basic customization . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      35
+           3.3.2 Customizing attribute access . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       38
+           3.3.3 Customizing class creation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       42
+           3.3.4 Customizing instance and subclass checks . . . . . . . . . . . . . . . . . . . . . . . . .         46
+           3.3.5 Emulating generic types . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      46
+           3.3.6 Emulating callable objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     48
+           3.3.7 Emulating container types . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      48
+           3.3.8 Emulating numeric types . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        50
+           3.3.9 With Statement Context Managers . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          52
+           3.3.10 Customizing positional arguments in class pattern matching . . . . . . . . . . . . . . . .        53
+           3.3.11 Emulating buffer types . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      53
+           3.3.12 Special method lookup . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       53
+     3.4   Coroutines . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   55
+           3.4.1 Awaitable Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      55
+           3.4.2 Coroutine Objects . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      55
+           3.4.3 Asynchronous Iterators . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       56
+           3.4.4 Asynchronous Context Managers . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          56
+
+4 Execution model                                                                                                   59
+  4.1 Structure of a program . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        59
+  4.2 Naming and binding . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          59
+       4.2.1 Binding of names . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .           59
+       4.2.2 Resolution of names . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          60
+       4.2.3 Annotation scopes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          61
+       4.2.4 Lazy evaluation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          61
+       4.2.5 Builtins and restricted execution . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        62
+       4.2.6 Interaction with dynamic features . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          62
+  4.3 Exceptions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        62
+
+5 The import system                                                                                                 65
+  5.1 importlib . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .         65
+  5.2 Packages . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        65
+        5.2.1 Regular packages . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          66
+        5.2.2 Namespace packages . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .            66
+  5.3 Searching . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       66
+        5.3.1 The module cache . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          67
+        5.3.2 Finders and loaders . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .         67
+        5.3.3 Import hooks . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          67
+        5.3.4 The meta path . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .         67
+  5.4 Loading . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       68
+        5.4.1 Loaders . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .         69
+        5.4.2 Submodules . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          70
+        5.4.3 Module specs . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          70
+        5.4.4 __path__ attributes on modules . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          71
+        5.4.5 Module reprs . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          71
+        5.4.6 Cached bytecode invalidation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          71
+  5.5 The Path Based Finder . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .         72
+        5.5.1 Path entry finders . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        72
+        5.5.2 Path entry finder protocol . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        73
+  5.6 Replacing the standard import system . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .          73
+  5.7 Package Relative Imports . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        74
+  5.8 Special considerations for __main__ . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .         74
+        5.8.1 __main__.__spec__ . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .           74
+  5.9 References . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        75
+
+
+
+ii
+6 Expressions                                                                                                     77
+  6.1 Arithmetic conversions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      77
+  6.2 Atoms . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     77
+       6.2.1 Identifiers (Names) . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        77
+       6.2.2 Literals . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       78
+       6.2.3 Parenthesized forms . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        78
+       6.2.4 Displays for lists, sets and dictionaries . . . . . . . . . . . . . . . . . . . . . . . . . . . .    79
+       6.2.5 List displays . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      79
+       6.2.6 Set displays . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       79
+       6.2.7 Dictionary displays . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        80
+       6.2.8 Generator expressions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        80
+       6.2.9 Yield expressions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        81
+  6.3 Primaries . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     85
+       6.3.1 Attribute references . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       85
+       6.3.2 Subscriptions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        85
+       6.3.3 Slicings . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       86
+       6.3.4 Calls . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      86
+  6.4 Await expression . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      88
+  6.5 The power operator . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      88
+  6.6 Unary arithmetic and bitwise operations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       88
+  6.7 Binary arithmetic operations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      89
+  6.8 Shifting operations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     90
+  6.9 Binary bitwise operations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     90
+  6.10 Comparisons . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      90
+       6.10.1 Value comparisons . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .         90
+       6.10.2 Membership test operations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        92
+       6.10.3 Identity comparisons . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        93
+  6.11 Boolean operations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     93
+  6.12 Assignment expressions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     93
+  6.13 Conditional expressions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    94
+  6.14 Lambdas . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      94
+  6.15 Expression lists . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   94
+  6.16 Evaluation order . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     95
+  6.17 Operator precedence . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      95
+
+7 Simple statements                                                                                          97
+  7.1 Expression statements . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 97
+  7.2 Assignment statements . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 97
+       7.2.1 Augmented assignment statements . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 99
+       7.2.2 Annotated assignment statements . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 100
+  7.3 The assert statement . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 100
+  7.4 The pass statement . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 101
+  7.5 The del statement . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 101
+  7.6 The return statement . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 101
+  7.7 The yield statement . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 102
+  7.8 The raise statement . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 102
+  7.9 The break statement . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 104
+  7.10 The continue statement . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 104
+  7.11 The import statement . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 104
+       7.11.1 Future statements . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 105
+  7.12 The global statement . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 106
+  7.13 The nonlocal statement . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 107
+  7.14 The type statement . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 107
+
+8 Compound statements                                                                                        109
+  8.1 The if statement . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 110
+  8.2 The while statement . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 110
+  8.3 The for statement . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 110
+
+
+
+                                                                                                                  iii
+     8.4  The try statement . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 111
+          8.4.1 except clause . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 111
+          8.4.2 except* clause . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 112
+          8.4.3 else clause . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 113
+          8.4.4 finally clause . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 113
+     8.5 The with statement . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 113
+     8.6 The match statement . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 115
+          8.6.1 Overview . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 116
+          8.6.2 Guards . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 116
+          8.6.3 Irrefutable Case Blocks . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 117
+          8.6.4 Patterns . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 117
+     8.7 Function definitions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 123
+     8.8 Class definitions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 125
+     8.9 Coroutines . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 126
+          8.9.1 Coroutine function definition . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 126
+          8.9.2 The async for statement . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 127
+          8.9.3 The async with statement . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 127
+     8.10 Type parameter lists . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 128
+          8.10.1 Generic functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 129
+          8.10.2 Generic classes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 130
+          8.10.3 Generic type aliases . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 131
+
+9 Top-level components                                                                                         133
+  9.1 Complete Python programs . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 133
+  9.2 File input . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 133
+  9.3 Interactive input . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 133
+  9.4 Expression input . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 134
+
+10 Full Grammar specification                                                                                    135
+
+A Glossary                                                                                                       153
+
+B About this documentation                                                                                 171
+  B.1 Contributors to the Python documentation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 171
+
+C History and License                                                                                           173
+  C.1 History of the software . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 173
+  C.2 Terms and conditions for accessing or otherwise using Python . . . . . . . . . . . . . . . . . . . . 174
+        C.2.1 PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2 . . . . . . . . . . . . . 174
+        C.2.2 BEOPEN.COM LICENSE AGREEMENT FOR PYTHON 2.0 . . . . . . . . . . . . . . 175
+        C.2.3 CNRI LICENSE AGREEMENT FOR PYTHON 1.6.1 . . . . . . . . . . . . . . . . . . 175
+        C.2.4 CWI LICENSE AGREEMENT FOR PYTHON 0.9.0 THROUGH 1.2 . . . . . . . . . . 176
+        C.2.5 ZERO-CLAUSE BSD LICENSE FOR CODE IN THE PYTHON DOCUMENTATION . 177
+  C.3 Licenses and Acknowledgements for Incorporated Software . . . . . . . . . . . . . . . . . . . . . 177
+        C.3.1 Mersenne Twister . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 177
+        C.3.2 Sockets . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 178
+        C.3.3 Asynchronous socket services . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 179
+        C.3.4 Cookie management . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 179
+        C.3.5 Execution tracing . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 179
+        C.3.6 UUencode and UUdecode functions . . . . . . . . . . . . . . . . . . . . . . . . . . . . 180
+        C.3.7 XML Remote Procedure Calls . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 181
+        C.3.8 test_epoll . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 181
+        C.3.9 Select kqueue . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 182
+        C.3.10 SipHash24 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 182
+        C.3.11 strtod and dtoa . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 183
+        C.3.12 OpenSSL . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 183
+        C.3.13 expat . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 186
+        C.3.14 libffi . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 187
+        C.3.15 zlib . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 187
+
+
+iv
+        C.3.16   cfuhash . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 188
+        C.3.17   libmpdec . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 188
+        C.3.18   W3C C14N test suite . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 189
+        C.3.19   mimalloc . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 190
+        C.3.20   asyncio . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 190
+        C.3.21   Global Unbounded Sequences (GUS) . . . . . . . . . . . . . . . . . . . . . . . . . . . . 190
+
+D Copyright                                                                                                   193
+
+Index                                                                                                         195
+
+
+
+
+                                                                                                                v
+vi
+                                                         The Python Language Reference, Release 3.13.3
+
+
+This reference manual describes the syntax and “core semantics” of the language. It is terse, but attempts to be
+exact and complete. The semantics of non-essential built-in object types and of the built-in functions and modules
+are described in library-index. For an informal introduction to the language, see tutorial-index. For C or C++
+programmers, two additional manuals exist: extending-index describes the high-level picture of how to write a Python
+extension module, and the c-api-index describes the interfaces available to C/C++ programmers in detail.
+
+
+
+
+CONTENTS                                                                                                          1
+The Python Language Reference, Release 3.13.3
+
+
+
+
+2                                               CONTENTS
+

@@ -1,0 +1,56 @@
+              Curses Programming with Python
+                                                                                               Release 3.13.3
+
+
+                      Guido van Rossum and the Python development team
+
+
+                                                                                                    April 27, 2025
+                                                                                  Python Software Foundation
+                                                                                      Email: docs@python.org
+
+
+Contents
+
+1 What is curses?                                                                                                  1
+  1.1 The Python curses module . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       2
+
+2 Starting and ending a curses application                                                                         2
+
+3 Windows and Pads                                                                                                 3
+
+4 Displaying Text                                                                                                  4
+  4.1 Attributes and Color . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     5
+
+5 User Input                                                                                                       6
+
+6 For More Information                                                                                             7
+
+
+
+      Author
+          A.M. Kuchling, Eric S. Raymond
+      Release
+           2.04
+
+
+ Abstract
+
+ This document describes how to use the curses extension module to control text-mode displays.
+
+
+
+1 What is curses?
+The curses library supplies a terminal-independent screen-painting and keyboard-handling facility for text-based ter-
+minals; such terminals include VT100s, the Linux console, and the simulated terminal provided by various programs.
+Display terminals support various control codes to perform common operations such as moving the cursor, scrolling
+the screen, and erasing areas. Different terminals use widely differing codes, and often have their own minor quirks.
+In a world of graphical displays, one might ask “why bother”? It’s true that character-cell display terminals are an
+obsolete technology, but there are niches in which being able to do fancy things with them are still valuable. One
+niche is on small-footprint or embedded Unixes that don’t run an X server. Another is tools such as OS installers and
+kernel configurators that may have to run before any graphical support is available.
+
+
+
+                                                         1
+

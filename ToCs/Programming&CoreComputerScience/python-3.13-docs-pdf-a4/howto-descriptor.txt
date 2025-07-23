@@ -1,0 +1,56 @@
+                                                                Descriptor Guide
+                                                                                               Release 3.13.3
+
+
+                      Guido van Rossum and the Python development team
+
+
+                                                                                                   April 27, 2025
+                                                                                 Python Software Foundation
+                                                                                     Email: docs@python.org
+
+
+Contents
+
+1 Primer                                                                                                          3
+  1.1 Simple example: A descriptor that returns a constant . . . . . . . . . . . . . . . . . . . . . . . . .      3
+  1.2 Dynamic lookups . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       3
+  1.3 Managed attributes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      4
+  1.4 Customized names . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      5
+  1.5 Closing thoughts . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    6
+
+2 Complete Practical Example                                                                                      6
+  2.1 Validator class . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   7
+  2.2 Custom validators . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     7
+  2.3 Practical application . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   8
+
+3 Technical Tutorial                                                                                               9
+  3.1 Abstract . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     9
+  3.2 Definition and introduction . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      9
+  3.3 Descriptor protocol . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      9
+  3.4 Overview of descriptor invocation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     10
+  3.5 Invocation from an instance . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     10
+  3.6 Invocation from a class . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     11
+  3.7 Invocation from super . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     11
+  3.8 Summary of invocation logic . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       11
+  3.9 Automatic name notification . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       11
+  3.10 ORM example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      12
+
+4 Pure Python Equivalents                                                                                         13
+  4.1 Properties . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    13
+  4.2 Functions and methods . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       14
+  4.3 Kinds of methods . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      16
+  4.4 Static methods . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    16
+  4.5 Class methods . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     17
+  4.6 Member objects and __slots__ . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .        18
+
+
+
+      Author
+          Raymond Hettinger
+      Contact
+          <python at rcn dot com>
+
+
+                                                         1
+

@@ -1,0 +1,54 @@
+                Debugging C API extensions and
+                    CPython Internals with GDB
+                                                                                               Release 3.13.3
+
+
+                      Guido van Rossum and the Python development team
+
+
+                                                                                                   April 27, 2025
+                                                                                 Python Software Foundation
+                                                                                     Email: docs@python.org
+
+
+Contents
+
+1 Prerequisites                                                                                                   2
+  1.1 Setup with Python built from source . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       2
+  1.2 Setup for Python from a Linux distro . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      2
+
+2 Using the Debug build and Development mode                                                                      2
+
+3 Using the python-gdb extension                                                                                  3
+  3.1 Pretty-printers . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   3
+  3.2 py-list . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       4
+  3.3 py-up and py-down . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .         5
+  3.4 py-bt . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     6
+  3.5 py-print . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      7
+  3.6 py-locals . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       7
+
+4 Use with GDB commands                                                                                           8
+
+
+
+This document explains how the Python GDB extension, python-gdb.py, can be used with the GDB debugger to
+debug CPython extensions and the CPython interpreter itself.
+When debugging low-level problems such as crashes or deadlocks, a low-level debugger, such as GDB, is useful to
+diagnose and correct the issue. By default, GDB (or any of its front-ends) doesn’t support high-level information
+specific to the CPython interpreter.
+The python-gdb.py extension adds CPython interpreter information to GDB. The extension helps introspect the
+stack of currently executing Python functions. Given a Python object represented by a PyObject* pointer, the
+extension surfaces the type and value of the object.
+Developers who are working on CPython extensions or tinkering with parts of CPython that are written in C can use
+this document to learn how to use the python-gdb.py extension with GDB.
+
+
+ ® Note
+
+ This document assumes that you are familiar with the basics of GDB and the CPython C API. It consolidates
+ guidance from the devguide and the Python wiki.
+
+
+
+                                                         1
+

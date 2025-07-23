@@ -1,0 +1,237 @@
+# Table of Contents for The Data Warehouse Toolkit, Third Edition (2013) by Ralph Kimball and Margy Ross
+
+## Contents
+
+- **Introduction** . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . xxvii
+- **1 Data Warehousing, Business Intelligence, and Dimensional Modeling Primer** . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1
+  - Different Worlds of Data Capture and Data Analysis . . . . . . . . . . . . . . . . . . . 2
+  - Goals of Data Warehousing and Business Intelligence . . . . . . . . . . . . . . . . . . 3
+  - Publishing Metaphor for DW/BI Managers . . . . . . . . . . . . . . . . . . . . . . . . . 5
+  - Dimensional Modeling Introduction . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 7
+    - Star Schemas Versus OLAP Cubes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 8
+    - Fact Tables for Measurements . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 10
+    - Dimension Tables for Descriptive Context . . . . . . . . . . . . . . . . . . . . . . . 13
+    - Facts and Dimensions Joined in a Star Schema . . . . . . . . . . . . . . . . . . . 16
+  - Kimball’s DW/BI Architecture . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 18
+    - Operational Source Systems . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 18
+    - Extract, Transformation, and Load System . . . . . . . . . . . . . . . . . . . . . . 19
+    - Presentation Area to Support Business Intelligence . . . . . . . . . . . . . . . . 21
+    - Business Intelligence Applications . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 22
+    - Restaurant Metaphor for the Kimball Architecture . . . . . . . . . . . . . . . . 23
+  - Alternative DW/BI Architectures . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 26
+    - Independent Data Mart Architecture . . . . . . . . . . . . . . . . . . . . . . . . . . 26
+    - Hub-and-Spoke Corporate Information Factory Inmon Architecture . . . 28
+    - Hybrid Hub-and-Spoke and Kimball Architecture . . . . . . . . . . . . . . . . . 29
+  - Dimensional Modeling Myths . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 30
+    - Myth 1: Dimensional Models are Only for Summary Data . . . . . . . . . . 30
+    - Myth 2: Dimensional Models are Departmental, Not Enterprise . . . . . . 31
+    - Myth 3: Dimensional Models are Not Scalable . . . . . . . . . . . . . . . . . . . 31
+    - Myth 4: Dimensional Models are Only for Predictable Usage . . . . . . . . 31
+    - Myth 5: Dimensional Models Can’t Be Integrated . . . . . . . . . . . . . . . . 32
+  - More Reasons to Think Dimensionally . . . . . . . . . . . . . . . . . . . . . . . . . . . . 32
+  - Agile Considerations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 34
+  - Summary . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 35
+- **2 Kimball Dimensional Modeling Techniques Overview** . . . . . . . . . . . . . . 37
+  - Fundamental Concepts . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 37
+    - Gather Business Requirements and Data Realities . . . . . . . . . . . . . . . . . 37
+    - Collaborative Dimensional Modeling Workshops . . . . . . . . . . . . . . . . . 38
+    - Four-Step Dimensional Design Process . . . . . . . . . . . . . . . . . . . . . . . . 38
+    - Business Processes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 39
+    - Grain . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 39
+    - Dimensions for Descriptive Context . . . . . . . . . . . . . . . . . . . . . . . . . . . 40
+    - Facts for Measurements . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 40
+    - Star Schemas and OLAP Cubes . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 40
+    - Graceful Extensions to Dimensional Models . . . . . . . . . . . . . . . . . . . . . 41
+  - Basic Fact Table Techniques . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 41
+    - Fact Table Structure . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 41
+    - Additive, Semi-Additive, Non-Additive Facts . . . . . . . . . . . . . . . . . . . . 42
+    - Nulls in Fact Tables . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 42
+    - Conformed Facts . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 42
+    - Transaction Fact Tables . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 43
+    - Periodic Snapshot Fact Tables . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 43
+    - Accumulating Snapshot Fact Tables . . . . . . . . . . . . . . . . . . . . . . . . . . . 44
+    - Factless Fact Tables . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 44
+    - Aggregate Fact Tables or OLAP Cubes . . . . . . . . . . . . . . . . . . . . . . . . . 45
+    - Consolidated Fact Tables . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 45
+  - Basic Dimension Table Techniques . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 46
+    - Dimension Table Structure . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 46
+    - Dimension Surrogate Keys . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 46
+    - Natural, Durable, and Supernatural Keys . . . . . . . . . . . . . . . . . . . . . . . 46
+    - Drilling Down . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 47
+    - Degenerate Dimensions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 47
+    - Denormalized Flattened Dimensions . . . . . . . . . . . . . . . . . . . . . . . . . . 47
+    - Multiple Hierarchies in Dimensions . . . . . . . . . . . . . . . . . . . . . . . . . . . 48
+    - Flags and Indicators as Textual Attributes . . . . . . . . . . . . . . . . . . . . . . . 48
+    - Null Attributes in Dimensions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 48
+    - Calendar Date Dimensions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 48
+    - Role-Playing Dimensions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 49
+    - Junk Dimensions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 49
+    - Snowflaked Dimensions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 50
+    - Outrigger Dimensions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 50
+  - Integration via Conformed Dimensions . . . . . . . . . . . . . . . . . . . . . . . . . . . . 50
+    - Conformed Dimensions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 51
+    - Shrunken Dimensions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 51
+    - Drilling Across . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 51
+    - Value Chain . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 52
+    - Enterprise Data Warehouse Bus Architecture . . . . . . . . . . . . . . . . . . . . 52
+    - Enterprise Data Warehouse Bus Matrix . . . . . . . . . . . . . . . . . . . . . . . . 52
+    - Detailed Implementation Bus Matrix . . . . . . . . . . . . . . . . . . . . . . . . . . 53
+    - Opportunity/Stakeholder Matrix . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 53
+  - Dealing with Slowly Changing Dimension Attributes . . . . . . . . . . . . . . . . . . 53
+    - Type 0: Retain Original . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 54
+    - Type 1: Overwrite . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 54
+    - Type 2: Add New Row . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 54
+    - Type 3: Add New Attribute . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 55
+    - Type 4: Add Mini-Dimension . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 55
+    - Type 5: Add Mini-Dimension and Type 1 Outrigger . . . . . . . . . . . . . . . 55
+    - Type 6: Add Type 1 Attributes to Type 2 Dimension . . . . . . . . . . . . . . 56
+    - Type 7: Dual Type 1 and Type 2 Dimensions . . . . . . . . . . . . . . . . . . . . 56
+  - Dealing with Dimension Hierarchies . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 56
+    - Fixed Depth Positional Hierarchies . . . . . . . . . . . . . . . . . . . . . . . . . . . . 56
+    - Slightly Ragged/Variable Depth Hierarchies . . . . . . . . . . . . . . . . . . . . . 57
+    - Ragged/Variable Depth Hierarchies with Hierarchy Bridge Tables . . . . . 57
+    - Ragged/Variable Depth Hierarchies with Pathstring Attributes . . . . . . . 57
+  - Advanced Fact Table Techniques . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 58
+    - Fact Table Surrogate Keys . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 58
+    - Centipede Fact Tables . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 58
+    - Numeric Values as Attributes or Facts . . . . . . . . . . . . . . . . . . . . . . . . . . 59
+    - Lag/Duration Facts . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 59
+    - Header/Line Fact Tables . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 59
+    - Allocated Facts . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 60
+    - Profit and Loss Fact Tables Using Allocations . . . . . . . . . . . . . . . . . . . . 60
+    - Multiple Currency Facts . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 60
+    - Multiple Units of Measure Facts . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 61
+    - Year-to-Date Facts . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 61
+    - Multipass SQL to Avoid Fact-to-Fact Table Joins . . . . . . . . . . . . . . . . . . 61
+    - Timespan Tracking in Fact Tables . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 62
+    - Late Arriving Facts . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 62
+  - Advanced Dimension Techniques . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 62
+    - Dimension-to-Dimension Table Joins . . . . . . . . . . . . . . . . . . . . . . . . . . 62
+    - Multivalued Dimensions and Bridge Tables . . . . . . . . . . . . . . . . . . . . . . 63
+    - Time Varying Multivalued Bridge Tables . . . . . . . . . . . . . . . . . . . . . . . 63
+    - Behavior Tag Time Series . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 63
+    - Behavior Study Groups . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 64
+    - Aggregated Facts as Dimension Attributes . . . . . . . . . . . . . . . . . . . . . . 64
+    - Dynamic Value Bands . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 64
+    - Text Comments Dimension . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 65
+    - Multiple Time Zones . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 65
+    - Measure Type Dimensions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 65
+    - Step Dimensions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 65
+    - Hot Swappable Dimensions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 66
+    - Abstract Generic Dimensions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 66
+    - Audit Dimensions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 66
+    - Late Arriving Dimensions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 67
+  - Special Purpose Schemas . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 67
+    - Supertype and Subtype Schemas for Heterogeneous Products . . . . . . . 67
+    - Real-Time Fact Tables . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 68
+    - Error Event Schemas . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 68
+- **3 Retail Sales** . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 69
+  - Four-Step Dimensional Design Process . . . . . . . . . . . . . . . . . . . . . . . . . . . . 70
+    - Step 1: Select the Business Process . . . . . . . . . . . . . . . . . . . . . . . . . . . . 70
+    - Step 2: Declare the Grain . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 71
+    - Step 3: Identify the Dimensions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 72
+    - Step 4: Identify the Facts . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 72
+  - Retail Case Study . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 72
+    - Step 1: Select the Business Process . . . . . . . . . . . . . . . . . . . . . . . . . . . . 74
+    - Step 2: Declare the Grain . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 74
+    - Step 3: Identify the Dimensions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 76
+    - Step 4: Identify the Facts . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 76
+  - Dimension Table Details . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 79
+    - Date Dimension . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 79
+    - Product Dimension . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 83
+    - Store Dimension . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 87
+    - Promotion Dimension . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 89
+    - Other Retail Sales Dimensions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 92
+    - Degenerate Dimensions for Transaction Numbers . . . . . . . . . . . . . . . . 93
+  - Retail Schema in Action . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 94
+  - Retail Schema Extensibility . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 95
+  - Factless Fact Tables . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 97
+  - Dimension and Fact Table Keys . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 98
+    - Dimension Table Surrogate Keys . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 98
+    - Dimension Natural and Durable Supernatural Keys . . . . . . . . . . . . . . 100
+    - Degenerate Dimension Surrogate Keys . . . . . . . . . . . . . . . . . . . . . . . . 101
+    - Date Dimension Smart Keys . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 101
+    - Fact Table Surrogate Keys . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 102
+  - Resisting Normalization Urges . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 104
+    - Snowflake Schemas with Normalized Dimensions . . . . . . . . . . . . . . . 104
+    - Outriggers . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 106
+    - Centipede Fact Tables with Too Many Dimensions . . . . . . . . . . . . . . . 108
+  - Summary . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 109
+- **4 Inventory** . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 111
+  - Value Chain Introduction . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 111
+  - Inventory Models . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 112
+    - Inventory Periodic Snapshot . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 113
+    - Inventory Transactions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 116
+    - Inventory Accumulating Snapshot . . . . . . . . . . . . . . . . . . . . . . . . . . . 118
+  - Fact Table Types . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 119
+    - Transaction Fact Tables . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 120
+    - Periodic Snapshot Fact Tables . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 120
+    - Accumulating Snapshot Fact Tables . . . . . . . . . . . . . . . . . . . . . . . . . . 121
+    - Complementary Fact Table Types . . . . . . . . . . . . . . . . . . . . . . . . . . . . 122
+  - Value Chain Integration . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 122
+  - Enterprise Data Warehouse Bus Architecture . . . . . . . . . . . . . . . . . . . . . . . 123
+    - Understanding the Bus Architecture . . . . . . . . . . . . . . . . . . . . . . . . . . 124
+    - Enterprise Data Warehouse Bus Matrix . . . . . . . . . . . . . . . . . . . . . . . . 125
+  - Conformed Dimensions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 130
+    - Drilling Across Fact Tables . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 130
+    - Identical Conformed Dimensions . . . . . . . . . . . . . . . . . . . . . . . . . . . . 131
+    - Shrunken Rollup Conformed Dimension with Attribute Subset . . . . . . 132
+    - Shrunken Conformed Dimension with Row Subset . . . . . . . . . . . . . . . 132
+    - Shrunken Conformed Dimensions on the Bus Matrix . . . . . . . . . . . . . 134
+    - Limited Conformity . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 135
+    - Importance of Data Governance and Stewardship . . . . . . . . . . . . . . . 135
+    - Conformed Dimensions and the Agile Movement . . . . . . . . . . . . . . . 137
+  - Conformed Facts . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 138
+  - Summary . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 139
+- **5 Procurement** . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 141
+  - Procurement Case Study . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 141
+  - Procurement Transactions and Bus Matrix . . . . . . . . . . . . . . . . . . . . . . . . . 142
+    - Single Versus Multiple Transaction Fact Tables . . . . . . . . . . . . . . . . . . 143
+    - Complementary Procurement Snapshot . . . . . . . . . . . . . . . . . . . . . . . 147
+  - Slowly Changing Dimension Basics . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 147
+    - Type 0: Retain Original . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 148
+    - Type 1: Overwrite . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 149
+    - Type 2: Add New Row . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 150
+    - Type 3: Add New Attribute . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 154
+    - Type 4: Add Mini-Dimension . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 156
+  - Hybrid Slowly Changing Dimension Techniques . . . . . . . . . . . . . . . . . . . . . 159
+    - Type 5: Mini-Dimension and Type 1 Outrigger . . . . . . . . . . . . . . . . . . 160
+    - Type 6: Add Type 1 Attributes to Type 2 Dimension . . . . . . . . . . . . . . 160
+    - Type 7: Dual Type 1 and Type 2 Dimensions . . . . . . . . . . . . . . . . . . . . 162
+  - Slowly Changing Dimension Recap . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 164
+  - Summary . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 165
+- **6 Order Management** . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 167
+  - Order Management Bus Matrix . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 168
+  - Order Transactions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 168
+    - Fact Normalization . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 169
+    - Dimension Role Playing . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 170
+    - Product Dimension Revisited . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 172
+    - Customer Dimension . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 174
+    - Deal Dimension . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 177
+    - Degenerate Dimension for Order Number . . . . . . . . . . . . . . . . . . . . . 178
+    - Junk Dimensions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 179
+    - Header/Line Pattern to Avoid . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 181
+    - Multiple Currencies . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 182
+    - Transaction Facts at Different Granularity . . . . . . . . . . . . . . . . . . . . . . 184
+    - Another Header/Line Pattern to Avoid . . . . . . . . . . . . . . . . . . . . . . . . 186
+  - Invoice Transactions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 187
+  - Service Level Performance as Facts, Dimensions, or Both . . . . . . . . . . . . . 188
+  - Profit and Loss Facts . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 189
+  - Audit Dimension . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 192
+  - Accumulating Snapshot for Order Fulfillment Pipeline . . . . . . . . . . . . . . . . 194
+    - Lag Calculations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 196
+    - Multiple Units of Measure . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 197
+    - Beyond the Rearview Mirror . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 198
+  - Summary . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 199
+- **7 Accounting** . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 201
+  - Accounting Case Study and Bus Matrix . . . . . . . . . . . . . . . . . . . . . . . . . . . 202
+  - General Ledger Data . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 203
+    - General Ledger Periodic Snapshot . . . . . . . . . . . . . . . . . . . . . . . . . . . 203
+    - Chart of Accounts . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 203
+    - Period Close . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 204
+    - Year-to-Date Facts . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 206
+    - Multiple Currencies Revisited . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 206
+    - General Ledger Journal Transactions . . . . . . . . . . . . . . . . . . . . . . . . . 206
+  - Multiple Fiscal Accounting Calendars . . . . . . . . . . . . . . . . . . . . . . . . . . . . 208
+  - Drilling Down Through a Multilevel Hierarchy . . . . . . . . . . . . . . . . . . . . . 209
+  - Financial Statements . . . . . . . . . . . . .
