@@ -34,3 +34,18 @@ def processData():
 
 if __name__ == "__main__":
     processData()
+
+# Answer the following theoretical questions:
+#     Based on the course materials, explain the key difference between a fault and a failure. In this exercise, is the negative number a 
+# fault or a failure?
+# Answer: is a fault
+#     Proprietary Alternative: If this script were deployed as an AWS Lambda function triggered by new lines in a file, how might the 
+# platform's behavior for the hardware fault (negative number) and software bug (ZeroDivisionError) differ from your script's behavior? 
+# What are the advantages of the managed service approach?
+# Answer: using kubernetes managing the function we could have a killed funtion to avoid consequences with the bad signal and then alive it
+# again to keep the service available for new signals
+#     Open-Source Advantage: What is the primary advantage of implementing this fault tolerance logic yourself in Python, as you have done, 
+# versus relying on a proprietary platform's defaults?
+# Answer: tech enterprises give highly common patterns for system behaviors, if your system is too unique you should need a combination of
+# private services to perform the same behavior you should solve with less python lines, in fact could be impossible with privative services
+# the first makes expensive the system and the second forces you to follow too complex or inappropriate standards

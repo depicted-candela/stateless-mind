@@ -1,5 +1,7 @@
 # Table of Contents
+
 ## Designing Data-Intensive Applications
+
 ### The Big Ideas Behind Reliable, Scalable, and Maintainable Systems
 
 Preface xiii
@@ -7,6 +9,7 @@ Preface xiii
 ## Part I. Foundations of Data Systems
 
 ### 1. Reliable, Scalable, and Maintainable Applications 3
+
 - Thinking About Data Systems 4
 - Reliability 6
   - Hardware Faults 7
@@ -24,6 +27,7 @@ Preface xiii
 - Summary 22
 
 ### 2. Data Models and Query Languages 27
+
 - Relational Model Versus Document Model 28
   - The Birth of NoSQL 29
   - The Object-Relational Mismatch 29
@@ -42,6 +46,7 @@ Preface xiii
 - Summary 63
 
 ### 3. Storage and Retrieval 69
+
 - Data Structures That Power Your Database 70
   - Hash Indexes 72
   - SSTables and LSM-Trees 76
@@ -59,6 +64,7 @@ Preface xiii
 - Summary 103
 
 ### 4. Encoding and Evolution 111
+
 - Formats for Encoding Data 112
   - Language-Specific Formats 113
   - JSON, XML, and Binary Variants 114
@@ -74,6 +80,7 @@ Preface xiii
 ## Part II. Distributed Data
 
 ### 5. Replication 151
+
 - Leaders and Followers 152
   - Synchronous Versus Asynchronous Replication 153
   - Setting Up New Followers 155
@@ -96,6 +103,7 @@ Preface xiii
 - Summary 192
 
 ### 6. Partitioning 199
+
 - Partitioning and Replication 200
 - Partitioning of Key-Value Data 201
   - Partitioning by Key Range 202
@@ -112,6 +120,7 @@ Preface xiii
 - Summary 216
 
 ### 7. Transactions 221
+
 - The Slippery Concept of a Transaction 222
 - The Meaning of ACID 223
 - Single-Object and Multi-Object Operations 228
@@ -127,6 +136,7 @@ Preface xiii
 - Summary 266
 
 ### 8. The Trouble with Distributed Systems 273
+
 - Faults and Partial Failures 274
   - Cloud Computing and Supercomputing 275
 - Unreliable Networks 277
@@ -146,6 +156,7 @@ Preface xiii
 - Summary 310
 
 ### 9. Consistency and Consensus 321
+
 - Consistency Guarantees 322
 - Linearizability 324
   - What Makes a System Linearizable? 325
@@ -166,6 +177,7 @@ Preface xiii
 ## Part III. Derived Data
 
 ### 10. Batch Processing 389
+
 - Batch Processing with Unix Tools 391
   - Simple Log Analysis 391
   - The Unix Philosophy 394
@@ -182,6 +194,7 @@ Preface xiii
 - Summary 429
 
 ### 11. Stream Processing 439
+
 - Transmitting Event Streams 440
   - Messaging Systems 441
   - Partitioned Logs 446
@@ -198,6 +211,7 @@ Preface xiii
 - Summary 479
 
 ### 12. The Future of Data Systems 489
+
 - Data Integration 490
   - Combining Specialized Tools by Deriving Data 490
   - Batch and Stream Processing 494
