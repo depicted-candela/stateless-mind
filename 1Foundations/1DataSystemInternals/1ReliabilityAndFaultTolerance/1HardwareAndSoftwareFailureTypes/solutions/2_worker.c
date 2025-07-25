@@ -25,11 +25,37 @@
 // would incorrectly flag the paused worker as "crashed." What is the 
 // fundamental ambiguity this reveals about failure detection in distributed systems?
 #include <stdio.h>
+#include <signal.h>
+#include <unistd.h>
+#include <stdlib.h>
+
+#define LOCK_FILE "worker.lock"
+
+void cleanup() {
+    remove(LOCK_FILE);
+    printf("The %s file was successfully deleted\n");
+}
+
+void handleSignal() {
+    cleanup();
+    exit(0);
+}
 
 int main() {
-    FILE *fp = fopen("worker.lock", "w");
-    fprintf(fp, "%d", getpid());
-    fclose(fp);
-    signal(SIGINT, )
-    remove("worker.lock");
+    signal(SIGINT, handleSignal);
+    signal(SIGTERM, handleSignal);
+    
+    FILE *lock_file = fopen(LOCK_FILE, "w");
+    if (lock_file == NULL) {
+        printf("The %s file can't be opened");
+        return 0;
+    }
+    fprintf(lock_file, "%d", getpid());
+    fclose(lock_file);
+
+    while (1) {
+        printf("\nHeartbeat");
+        fflush(stdout);
+        sleep(1);
+    }
 }
