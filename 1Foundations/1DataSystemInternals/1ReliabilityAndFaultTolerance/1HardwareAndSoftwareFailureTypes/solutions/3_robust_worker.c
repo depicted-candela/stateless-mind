@@ -11,14 +11,14 @@
 #include <stdlib.h>
 #define WORKER "robust.lock"
 
-int handlesSegmentationFault(int sig) {
+void handlesSegmentationFault(int sig) {
     remove(WORKER);
-    fprintf(stderr, "A segmentation error broke %s, thus the process was stopped", WORKER);
+    fprintf(stderr, "A segmentation error broke %s, thus the process was stopped by ", WORKER);
     signal(sig, SIG_DFL); // Like an exception well ordered
-    raise(signal);          // to be raised informing the OS
+    raise(sig);          // to be raised informing the OS
 }
 
-void main() {
+int main() {
     signal(SIGSEGV, handlesSegmentationFault);
     FILE *robust_worker = fopen(WORKER, "w");
     if (robust_worker == NULL) {
