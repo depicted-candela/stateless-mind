@@ -24,7 +24,7 @@ def processData():
         except TypeError:
             logging.warning(f"Line {line} is not correctly valued")
         except ValueError as e:
-            logging.error(f"Signal value as 0 with error as {e}")
+            logging.error(f"Signal value as 0 with error as {e}") 
             sys.exit()
         except Exception as e:
             logging.warning(f"Unexpected exception ({e}) for line {line}")

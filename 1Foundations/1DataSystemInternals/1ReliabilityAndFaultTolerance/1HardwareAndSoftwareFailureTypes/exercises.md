@@ -41,7 +41,7 @@
                 <strong>Create a Project Directory:</strong> Create a dedicated folder for these exercises to keep your files organized.
             </li>
             <li>
-                <strong>Generate the Dataset:</strong> Save the following Python script as <code>generateData.py</code> in your project directory. This script will create the <code>input.dat</code> file used in subsequent exercises.
+                <strong>Generate the Dataset:</strong> Save the following Python script as <code>1_processData.py</code> in your project directory. This script will create the <code>input.dat</code> file used in subsequent exercises.
 
 ```python
 # generateData.py
@@ -505,7 +505,6 @@ def runJob(restartCount=0):
         if not os.path.exists(C_WORKER_CMD):
             logging.critical(f"Worker executable '{C_WORKER_CMD}' not found. Did you run 'make'?")
             sys.exit(1)
-            
         logging.info(f"Starting worker process: {C_WORKER_CMD}")
         workerProcess = subprocess.Popen(
             [C_WORKER_CMD],
@@ -529,7 +528,6 @@ def runJob(restartCount=0):
             out = workerProcess.stdout.readline()
             if out:
                 logging.info(f"Worker output: {out.strip()}")
-        
         # Check final status
         if workerProcess.returncode != 0:
             logging.critical(f"Worker crashed with exit code {workerProcess.returncode}. Restarting.")
