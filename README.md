@@ -1,4 +1,4 @@
-for increased user experience, clone this repository and enjoy it in VS Code
+for increased user experience, clone this repository and enjoy the lectures with VS Code
 
 # Stateless Mind: Architecting Serverless Blueprints and Probabilistic Intelligence
 

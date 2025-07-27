@@ -14,51 +14,61 @@
 // It must catch SIGSEGV to perform the same cleanup before the process dies.
 #include <stdio.h>
 #include <stdlib.h>
-#include <signal.h>
+#include <string.h>
 #include <unistd.h>
+#include <signal.h>
 
-#define LOCKER "cworker.lock"
+#define LOCK_FILE "cworker.lock"
 
-void handlesGracefulShutdown(int sign) {
-    remove(LOCKER);
-    if (sign == SIGSEGV) perror("SEGMENTATION FAULT\n");
-    signal(sign, SIG_DFL);
-    raise(sign);
+// A signal-safe handler for cleanup.
+// Using write() is safer than printf() inside a signal handler.
+// _exit() is used for immediate termination without calling other handlers.
+void cleanupOnSignal(int sig) {
+    remove(LOCK_FILE);
+    const char msg[] = "Worker terminated by signal, cleaning up lock file.\n";
+    write(STDERR_FILENO, msg, sizeof(msg) - 1);
+    _exit(128 + sig); // Exit with a code indicating the signal
 }
 
 int main() {
-    signal(SIGTERM, handlesGracefulShutdown);
-    signal(SIGSEGV, handlesGracefulShutdown);
-    FILE *cworker = fopen(LOCKER, "w");
-    if (!cworker) {
-        perror("The lock file couldn't be created");
+    // Register signal handlers for graceful shutdown and crashes.
+    signal(SIGTERM, cleanupOnSignal);
+    signal(SIGSEGV, cleanupOnSignal);
+
+    // Create a lock file with the process ID.
+    FILE *lockFile = fopen(LOCK_FILE, "w");
+    if (!lockFile) {
+        perror("Failed to create lock file");
         return 1;
     }
-    fprintf(cworker, "%d", getpid());
-    fclose(cworker);
-    setbuf(stdout, NULL); // Disable buffering for stdout
-    setbuf(stderr, NULL); // Disable buffering for stderr
-    char line[32];
-    int converted_line;
+    fprintf(lockFile, "%d", getpid());
+    fclose(lockFile);
+
+    // Set line buffering for stdout and stderr to ensure the supervisor
+    // receives messages as they are produced, line by line.
+    setvbuf(stdout, NULL, _IOLBF, 0);
+    setvbuf(stderr, NULL, _IOLBF, 0);
+
+    char line[256];
     while (fgets(line, sizeof(line), stdin)) {
-        converted_line = atoi(line);
-        if (converted_line < 0) {
-            fprintf(stderr, "Corrupted data {%d}\n", converted_line);
-            fflush(stderr);
+        int n = atoi(line);
+
+        if (n == 999) {
+            // Trigger a segmentation fault to test the SIGSEGV handler.
+            fprintf(stderr, "ERROR: Triggering fatal software bug.\n");
+            *(int*)NULL = 0;
+        } else if (n < 0) {
+            // Handle simulated hardware fault.
+            fprintf(stderr, "ERROR: Corrupted data %d\n", n);
             continue;
+        } else {
+            // Process valid data.
+            long long result = (long long)n * n;
+            printf("%d,%lld\n", n, result);
         }
-        if (converted_line == 0) {
-            fprintf(stderr, "Recoverable software error: input 0\n");
-            fflush(stderr);
-            continue;
-        }
-        if (converted_line == 999) {
-            raise(SIGSEGV);
-        }
-        long long squared_line = (long long)converted_line * converted_line;
-        printf("%d,%lld\n", converted_line, squared_line);
-        fflush(stdout);
     }
-    remove(LOCKER);
+
+    // Clean up the lock file on normal exit.
+    remove(LOCK_FILE);
     return 0;
 }

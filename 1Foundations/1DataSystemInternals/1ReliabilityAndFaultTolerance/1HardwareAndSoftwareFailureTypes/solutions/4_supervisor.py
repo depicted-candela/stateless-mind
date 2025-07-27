@@ -67,7 +67,7 @@ def usesHardcoreWorker(starting_step=0):
                     input_index += 1
                     sleep(0.01)  # Reduced delay for faster processing
                 # Check for output
-                for fd, event in poller.poll(100):  # Timeout after 100ms
+                for fd, _ in poller.poll(100):  # Timeout after 100ms
                     if fd == hard_worker.stdout.fileno():
                         processed_line = hard_worker.stdout.readline()
                         if processed_line:
@@ -81,7 +81,7 @@ def usesHardcoreWorker(starting_step=0):
                     break
         # Check for remaining output after input is exhausted
         while hard_worker.poll() is None:
-            for fd, event in poller.poll(100):
+            for fd, _ in poller.poll(100):
                 if fd == hard_worker.stdout.fileno():
                     processed_line = hard_worker.stdout.readline()
                     if processed_line:
@@ -99,7 +99,7 @@ def usesHardcoreWorker(starting_step=0):
         if hard_worker.returncode is not None and hard_worker.returncode != 0:
             logging.warning(f"Critical error, probably a segmentation fault (exit code {hard_worker.returncode})")
             if os.path.exists(LOCKER): os.remove(LOCKER)
-            usesHardcoreWorker(processed_lines + 1) if remaining_inputs > 2 else logging.error("Max restart attempts reached or all lines processed, exiting")
+            usesHardcoreWorker(processed_lines + 1) if remaining_inputs > 2 else logging.error("All lines processed and error overcomed, exiting")
         else: logging.info("All lines processed successfully")
     except Exception as e:
         logging.error(f"Process aborted because of {e} exception")

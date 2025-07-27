@@ -104,7 +104,6 @@ animation: slideUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 .container > h2 { animation-delay: 0.4s; }
 .container > h3 { animation-delay: 0.5s; }
 .container > p { animation-delay: 0.6s; }
-.container > pre { animation-delay: 0.7s; }
 .container > table { animation-delay: 0.8s; }
 .container > .oracle-specific { animation-delay: 0.9s; }
 .container > ul, .container > ol { animation-delay: 0.65s; }
