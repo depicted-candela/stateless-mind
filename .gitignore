@@ -2,7 +2,8 @@ ai_context.txt
 .venv
 library.txt
 /BOOKS
-/Prompts
+Prompts.md
 /styles/core.css
 /styles/solutions.css
 /styles/exercises.css
+GeneratingProcess.md

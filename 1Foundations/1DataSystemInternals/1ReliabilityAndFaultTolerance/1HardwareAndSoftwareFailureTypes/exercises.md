@@ -431,29 +431,30 @@ clean:
 <h5><code>hardcore_worker.c</code>:</h5>
 
 ```c
-#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-#include &lt;string.h&gt;
-#include &lt;unistd.h&gt;
-#include &lt;signal.h&gt;
-#include &lt;sys/types.h&gt;
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <signal.h>
+
 #define LOCK_FILE "cworker.lock"
-void cleanupAndExit(int sig) {
+
+// A signal-safe handler for cleanup.
+// Using write() is safer than printf() inside a signal handler.
+// _exit() is used for immediate termination without calling other handlers.
+void cleanupOnSignal(int sig) {
     remove(LOCK_FILE);
-    // Use a temp buffer to be safe in a signal handler
-    char msg[] = "Worker shutting down gracefully.\n";
-    write(STDOUT_FILENO, msg, sizeof(msg) - 1);
-    
-    // For segfault, re-raise to get a core dump if needed
-    if (sig == SIGSEGV) {
-        signal(sig, SIG_DFL);
-        raise(sig);
-    }
-    exit(0);
+    const char msg[] = "Worker terminated by signal, cleaning up lock file.\n";
+    write(STDERR_FILENO, msg, sizeof(msg) - 1);
+    _exit(128 + sig); // Exit with a code indicating the signal
 }
+
 int main() {
-    signal(SIGTERM, cleanupAndExit);
-    signal(SIGSEGV, cleanupAndExit);
+    // Register signal handlers for graceful shutdown and crashes.
+    signal(SIGTERM, cleanupOnSignal);
+    signal(SIGSEGV, cleanupOnSignal);
+
+    // Create a lock file with the process ID.
     FILE *lockFile = fopen(LOCK_FILE, "w");
     if (!lockFile) {
         perror("Failed to create lock file");
@@ -461,95 +462,141 @@ int main() {
     }
     fprintf(lockFile, "%d", getpid());
     fclose(lockFile);
+
+    // Set line buffering for stdout and stderr to ensure the supervisor
+    // receives messages as they are produced, line by line.
+    setvbuf(stdout, NULL, _IOLBF, 0);
+    setvbuf(stderr, NULL, _IOLBF, 0);
+
     char line[256];
     while (fgets(line, sizeof(line), stdin)) {
         int n = atoi(line);
+
         if (n == 999) {
+            // Trigger a segmentation fault to test the SIGSEGV handler.
             fprintf(stderr, "ERROR: Triggering fatal software bug.\n");
-            *(int*)NULL = 0; // Trigger SIGSEGV
-        }
-        if (n < 0) {
+            *(int*)NULL = 0;
+        } else if (n < 0) {
+            // Handle simulated hardware fault.
             fprintf(stderr, "ERROR: Corrupted data %d\n", n);
             continue;
+        } else {
+            // Process valid data.
+            long long result = (long long)n * n;
+            printf("%d,%lld\n", n, result);
         }
-        long long result = (long long)n * n;
-        printf("%d,%lld\n", n, result);
-        fflush(stdout);
     }
-    cleanupAndExit(0);
+
+    // Clean up the lock file on normal exit.
+    remove(LOCK_FILE);
     return 0;
 }
 ```
 <h5><code>supervisor.py</code>:</h5>
 
 ```python
-import subprocess
-import os
-import signal
-import time
-import logging
-import sys
-# Import and run the data generator
-import generateData
-logging.basicConfig(level=logging.INFO, format='%(asctime)s SUPERVISOR - %(levelname)s - %(message)s')
-C_WORKER_CMD = "./hardcore_worker"
-INPUT_FILE = "input.dat"
-LOCK_FILE = "cworker.lock"
-def runJob(restartCount=0):
-    if restartCount > 1:
-        logging.error("Worker has failed repeatedly. Aborting job.")
-        return
-    if restartCount > 0:
-        logging.warning(f"Attempting to restart worker (Attempt {restartCount}).")
+from time import sleep
+import os, logging, sys, subprocess, select
+
+from generateData import generateDataFile
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s -%(levelname)s - %(message)s',
+    stream=sys.stdout
+)
+
+DATA = "input.dat"
+LOCKER = "cworker.lock"
+STARTING_COMMAND = "./4_hardcore_worker"
+
+def usesHardcoreWorker(starting_step=0):
+    if not os.path.exists(STARTING_COMMAND):
+        logging.error(f"The executable {STARTING_COMMAND} does not exist")
+        sys.exit(1)
+    if not os.path.exists(DATA):
+        logging.error(f"The file {DATA} does not exist")
+        sys.exit(1)
+    if starting_step == 0:
+        logging.info("First batch")
+    else:
+        logging.info(f"Batch started again at position {starting_step}")
+    hard_worker = subprocess.Popen(
+        [STARTING_COMMAND],
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        bufsize=1  # Line buffering
+    )
     try:
-        if not os.path.exists(C_WORKER_CMD):
-            logging.critical(f"Worker executable '{C_WORKER_CMD}' not found. Did you run 'make'?")
-            sys.exit(1)
-        logging.info(f"Starting worker process: {C_WORKER_CMD}")
-        workerProcess = subprocess.Popen(
-            [C_WORKER_CMD],
-            stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True
-        )
-        with open(INPUT_FILE, 'r') as f:
-            for line in f:
-                workerProcess.stdin.write(line)
-                workerProcess.stdin.flush()
-                time.sleep(0.01) # Slow down input feeding for demonstration
-        workerProcess.stdin.close()
-        # Monitor output
-        while workerProcess.poll() is None:
-            err = workerProcess.stderr.readline()
-            if "Corrupted data" in err:
-                logging.warning(f"Worker reported data corruption: {err.strip()}")
-            
-            out = workerProcess.stdout.readline()
-            if out:
-                logging.info(f"Worker output: {out.strip()}")
-        # Check final status
-        if workerProcess.returncode != 0:
-            logging.critical(f"Worker crashed with exit code {workerProcess.returncode}. Restarting.")
-            # Check for cleanup
-            if os.path.exists(LOCK_FILE):
-                logging.error("Worker did not clean up lock file on crash!")
-            else:
-                logging.info("Worker successfully cleaned up lock file on crash.")
-            runJob(restartCount + 1)
-        else:
-            logging.info("Worker finished successfully.")
+        processed_lines = starting_step
+        with open(DATA, "r") as f:
+            # Skip lines if resuming
+            for _ in range(starting_step): f.readline()
+            # Process input and output concurrently
+            inputs = f.readlines()  # Read all remaining lines
+            remaining_inputs = len(inputs)
+            input_index = 0
+            poller = select.poll()
+            poller.register(hard_worker.stdout.fileno(), select.POLLIN)
+            poller.register(hard_worker.stderr.fileno(), select.POLLIN)
+            while input_index < len(inputs) or hard_worker.poll() is None:
+                if input_index < len(inputs) and hard_worker.poll() is None:
+                    hard_worker.stdin.write(inputs[input_index])
+                    hard_worker.stdin.flush()
+                    input_index += 1
+                    sleep(0.01)  # Reduced delay for faster processing
+                # Check for output
+                for fd, _ in poller.poll(100):  # Timeout after 100ms
+                    if fd == hard_worker.stdout.fileno():
+                        processed_line = hard_worker.stdout.readline()
+                        if processed_line:
+                            logging.info(f"Line as: {processed_line.strip()}")
+                            processed_lines += 1
+                    elif fd == hard_worker.stderr.fileno():
+                        error_catcher = hard_worker.stderr.readline()
+                        if "Corrupted data" in error_catcher or "Recoverable software error" in error_catcher:
+                            logging.warning(error_catcher.strip())
+                if hard_worker.poll() is not None:
+                    break
+        # Check for remaining output after input is exhausted
+        while hard_worker.poll() is None:
+            for fd, _ in poller.poll(100):
+                if fd == hard_worker.stdout.fileno():
+                    processed_line = hard_worker.stdout.readline()
+                    if processed_line:
+                        logging.info(f"Line as: {processed_line.strip()}")
+                        processed_lines += 1
+                elif fd == hard_worker.stderr.fileno():
+                    error_catcher = hard_worker.stderr.readline()
+                    if "Corrupted data" in error_catcher or "Recoverable software error" in error_catcher:
+                        logging.warning(error_catcher.strip())
+        # Handle worker termination
+        if hard_worker.poll() is None:
+            hard_worker.terminate()  # Send SIGTERM
+            hard_worker.wait(timeout=1)  # Wait for graceful shutdown
+            logging.info("Worker terminated gracefully")
+        if hard_worker.returncode is not None and hard_worker.returncode != 0:
+            logging.warning(f"Critical error, probably a segmentation fault (exit code {hard_worker.returncode})")
+            if os.path.exists(LOCKER): os.remove(LOCKER)
+            usesHardcoreWorker(processed_lines + 1) if remaining_inputs > 2 else logging.error("All lines processed and error overcomed, exiting")
+        else: logging.info("All lines processed successfully")
     except Exception as e:
-        logging.critical(f"Supervisor error: {e}")
-        if 'workerProcess' in locals() and workerProcess.poll() is None:
-            workerProcess.terminate()
-def main():
-    if os.path.exists(LOCK_FILE):
-        os.remove(LOCK_FILE)
-    generateData.generateDataFile(INPUT_FILE)
-    runJob()
+        logging.error(f"Process aborted because of {e} exception")
+        if hard_worker.poll() is None:
+            hard_worker.terminate()
+            hard_worker.wait(timeout=1)
+    finally:
+        if hard_worker.poll() is None:
+            hard_worker.terminate()
+            hard_worker.wait(timeout=1)
+        exit(0)
+    return
+
 if __name__ == "__main__":
-    main()
+    generateDataFile()
+    usesHardcoreWorker()
 ```
 <p>To run the solution:</p>
 <ol>
