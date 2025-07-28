@@ -116,6 +116,7 @@ This final layer, from **Computer Organization and Design**, explains *what* a s
     1.  **Virtual Memory (p. 380):** The OS gives each process its own virtual address space. It maintains a **page table** to map these virtual addresses to physical addresses in RAM.
     2.  **Memory Protection (p. 380):** The OS uses this page table, in conjunction with the hardware's Memory Management Unit (MMU), to enforce permissions. The page containing address `0` (which `NULL` points to) is intentionally marked as invalid or non-writable for user-space processes.
 *   **Triggering the Signal (from Chapter 4, Section 4.9 "Exceptions"):**
+
     3.  **Hardware Exception (p. 312):** When the C code `*(int*)NULL = 0;` executes, the CPU attempts to write to virtual address 0. The MMU detects that this address is in a protected page and triggers a hardware **exception** (also called a trap or fault).
     4.  **OS Kernel Intervention:** This hardware exception immediately transfers control from the user program to the operating system's kernel.
     5.  **Signal Generation:** The kernel's exception handler identifies the cause (an illegal memory access) and sends the `SIGSEGV` (Segmentation Violation) signal to the offending process. This is the event that your C worker's `signal(SIGSEGV, ...)` handler is registered to catch.

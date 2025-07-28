@@ -527,15 +527,13 @@ def usesHardcoreWorker(starting_step=0):
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True,
-        bufsize=1  # Line buffering
+        bufsize=1
     )
     try:
         processed_lines = starting_step
         with open(DATA, "r") as f:
-            # Skip lines if resuming
             for _ in range(starting_step): f.readline()
-            # Process input and output concurrently
-            inputs = f.readlines()  # Read all remaining lines
+            inputs = f.readlines()
             remaining_inputs = len(inputs)
             input_index = 0
             poller = select.poll()
@@ -546,8 +544,7 @@ def usesHardcoreWorker(starting_step=0):
                     hard_worker.stdin.write(inputs[input_index])
                     hard_worker.stdin.flush()
                     input_index += 1
-                    sleep(0.01)  # Reduced delay for faster processing
-                # Check for output
+                    sleep(0.01)
                 for fd, _ in poller.poll(100):  # Timeout after 100ms
                     if fd == hard_worker.stdout.fileno():
                         processed_line = hard_worker.stdout.readline()
@@ -560,7 +557,6 @@ def usesHardcoreWorker(starting_step=0):
                             logging.warning(error_catcher.strip())
                 if hard_worker.poll() is not None:
                     break
-        # Check for remaining output after input is exhausted
         while hard_worker.poll() is None:
             for fd, _ in poller.poll(100):
                 if fd == hard_worker.stdout.fileno():
@@ -572,10 +568,9 @@ def usesHardcoreWorker(starting_step=0):
                     error_catcher = hard_worker.stderr.readline()
                     if "Corrupted data" in error_catcher or "Recoverable software error" in error_catcher:
                         logging.warning(error_catcher.strip())
-        # Handle worker termination
         if hard_worker.poll() is None:
-            hard_worker.terminate()  # Send SIGTERM
-            hard_worker.wait(timeout=1)  # Wait for graceful shutdown
+            hard_worker.terminate()
+            hard_worker.wait(timeout=1)
             logging.info("Worker terminated gracefully")
         if hard_worker.returncode is not None and hard_worker.returncode != 0:
             logging.warning(f"Critical error, probably a segmentation fault (exit code {hard_worker.returncode})")
