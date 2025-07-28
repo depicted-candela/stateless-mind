@@ -57,8 +57,6 @@ def observes_worker(starting_line = 0):
         worker_buffer.register(hardcore_worker.stdout.fileno(), select.POLLIN)
         worker_buffer.register(hardcore_worker.stderr.fileno(), select.POLLIN)
         while maximum_step < batch_size or hardcore_worker.poll() is None:
-            if maximum_step >= batch_size:
-                break
             line = lines[maximum_step]
             hardcore_worker.stdin.write(line)
             hardcore_worker.stdin.flush()
@@ -69,11 +67,16 @@ def observes_worker(starting_line = 0):
                     maximum_step += 1
                 if fd == hardcore_worker.stderr.fileno():
                     error_line = hardcore_worker.stderr.readline()
-                    if "Corrupted data" in error_line or "Triggering fatal" in error_line: 
+                    if "Corrupted data" in error_line: 
                         logging.warning(f"{error_line}")
                         maximum_step += 1
-            if hardcore_worker.poll() is not None: break
-    
+                    elif "Triggering fatal" in error_line:
+                        logging.warning(f"FATAL: {error_line}")
+                        maximum_step += 1
+                        hardcore_worker.terminate()
+                    else: logging.warning(f"FATAL: {error_line}")
+            if maximum_step == batch_size: break
+
         if batch_size > 1: observes_worker(starting_line + maximum_step - 1)
 
     except Exception as e:
@@ -81,7 +84,9 @@ def observes_worker(starting_line = 0):
         if batch_size == maximum_step: hardcore_worker.terminate()
         
     finally: 
-        if batch_size == maximum_step and os.path.exists(LOCK_WORKER): os.remove(LOCK_WORKER)    
+        if batch_size == maximum_step and os.path.exists(LOCK_WORKER): 
+            hardcore_worker.terminate()
+            os.remove(LOCK_WORKER)
 
 if __name__ == "__main__":
     generateData.generateDataFile()

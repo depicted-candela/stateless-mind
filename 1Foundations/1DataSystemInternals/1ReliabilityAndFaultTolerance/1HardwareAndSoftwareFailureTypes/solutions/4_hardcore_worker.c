@@ -49,7 +49,7 @@ int main() {
         }
         if (processed_number == 999) {
             fprintf(stderr, "Triggering fatal software bug.\n");
-            *(int*)NULL = 0;
+            raise(SIGSEGV);
         }
         long long squared_number = processed_number * processed_number;
         fprintf(stdout, "%d, %lld\n", processed_number, squared_number);
