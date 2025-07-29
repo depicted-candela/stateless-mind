@@ -1,4 +1,15 @@
-for increased user experience, clone this repository and enjoy the lectures with VS Code
+This course was developed for Debian 12 users, but you can take the lectures and complete the exercises on other operating systems like Windows or macOS. However, it is important to understand that certain critical technologies in the curriculum, such as Docker, fall into a category known as **OS-level virtualization**. These tools are not simple applications; they are deeply integrated with and dependent on specific features of the host operating system's kernel.
+
+When you use Docker on Windows or macOS, it runs within a lightweight Linux virtual machine (VM) that is managed for you. Therefore, to truly grasp the material and troubleshoot effectively, a foundational knowledge of virtualization becomes essential. This extra layer of abstraction is particularly relevant when studying topics such as:
+
+*   **Hardware and software failure types**: You must be able to distinguish between a failure in your application, the container, the Docker daemon, or the underlying VM.
+*   **Vertical vs. horizontal scaling trade-offs**: The performance and resource limits of your containers are influenced by the resources allocated to the host VM.
+*   **Recovery mechanisms (e.g., failover, snapshots)**: Understanding the full system stack, including the virtualization layer, is critical for designing robust recovery strategies.
+*   **Deployment and monitoring**: Observability pipelines must account for metrics from both the containers and the VM they run inside.
+
+Using a Debian environment provides the most direct and un-abstracted learning experience for these topics, allowing you to interact with the technologies as they were designed to run natively.
+
+**For increased user experience, clone this repository and enjoy the lectures with VS Code**
 
 # Stateless Mind: Architecting Serverless Blueprints and Probabilistic Intelligence
 
@@ -53,8 +64,9 @@ for increased user experience, clone this repository and enjoy the lectures with
       - *Designing Data-Intensive Applications*: Chapter 5 (Handling Node Outages), Chapter 8 (Detecting Faults)
       - *Fundamentals of Data Engineering*: Chapter 3: Designing Good Data Architecture (Plan for Failure)
       - *Readings in Database Systems*: Section "Techniques Everyone Should Know" for snapshot and recovery mechanisms.
-    - **Technologies/Programming**: PostgreSQL (point-in-time recovery), Python (backup scripts)
-    - **Training Application**: Implement a PostgreSQL snapshot and recovery process, automated with Python scripts, applying principles from *DDIA*: Ch. 5.
+      - **Streaming Systems (Akidau et al.)**: Chapter 7: "The Practicalities of Persistent State" and Chapter 5: "Exactly-Once and Side Effects". These chapters are canonical for understanding stateful recovery in modern streaming.
+    - **Technologies/Programming**: PostgreSQL (point-in-time recovery), Python (backup scripts), **Apache Flink**: Document its state backends and checkpointing mechanism.
+    - **Training Application**: Implement a PostgreSQL snapshot and recovery process, automated with Python scripts, applying principles from *DDIA*: Ch. 5. Contrast this by building a stateful Flink job (e.g., a simple counter) and demonstrate its recovery from a failure by observing its checkpoint/restore mechanism.
 - **1.1.2 Scalability**
   - **Load parameters (e.g., throughput, latency)**
     - **Chapters**:
@@ -233,6 +245,9 @@ for increased user experience, clone this repository and enjoy the lectures with
   - **Data types and structures (e.g., lists, dictionaries)**
     - **Chapters**:
       - *Python for Data Analysis*: Chapter 3: Built-In Data Structures, Functions, and Files
+      - **Python 3.13 Docs (tutorial.pdf)**: Chapters 3, 4, 5 for a comprehensive introduction to data structures, control flow, and modules.
+      - **Python 3.13 Docs (library.pdf)**: Chapter 4: "Built-in Types" for an authoritative reference.
+      - **Python 3.13 Docs (howto-functional.pdf)**: To introduce functional programming concepts like iterators and generators, which are fundamental to efficient data processing.
     - **Technologies/Programming**: Python (core syntax; see *Python Tutorial*: Ch. 3 & 5)
     - **Training Application**: Implement list and dictionary operations in Python for data processing.
   - **Control flow (e.g., loops, conditionals)**
@@ -311,8 +326,9 @@ for increased user experience, clone this repository and enjoy the lectures with
       - *The C Programming Language*: Chapter 5: Pointers and Arrays, Chapter 8: The UNIX System Interface (Storage Allocator)
       - *The Rust Programming Language*: Chapter 4: Understanding Ownership, Chapter 15: Smart Pointers
       - *The Rust Reference*: Section 10.1.13: Pointer types, Section 13.1: Memory allocation and lifetime
+      - **Computer Organization and Design (Patterson & Hennessy)**: Chapter 5: "Large and Fast: Exploiting Memory Hierarchy".
     - **Technologies/Programming**: C (pointer arithmetic), Rust (ownership, smart pointers)
-    - **Training Application**: Implement a dynamic array in C using pointers and memory allocation; rewrite it in Rust using smart pointers to compare memory safety models.
+    - **Training Application**: Implement a dynamic array in C using pointers and memory allocation; rewrite it in Rust using smart pointers to compare memory safety models. Then, write a simple C program that demonstrates cache misses vs. cache hits (e.g., by iterating through a large 2D array row-wise vs. column-wise) and explain the performance difference using concepts from Patterson & Hennessy, Chapter 5.
   - **System calls in C**
     - **Chapters**:
       - *The C Programming Language*: Chapter 7: Input and Output, Chapter 8: The UNIX System Interface
@@ -389,8 +405,9 @@ for increased user experience, clone this repository and enjoy the lectures with
       - *Mathematics for Machine Learning*: Chapter 5: Vector Calculus
       - *Calculus, Vol. I*: Chapter 5: Differential Calculus
       - *Calculus, Vol. II*: Part III: Nonlinear Analysis (Differential Calculus of Scalar and Vector Fields)
+      - **Introduction to Calculus and Analysis Vol II (Courant & John)**: Chapter 1: "Functions of Several Variables and Their Derivatives" and Chapter 3: "Developments and Applications of the Differential Calculus".
     - **Technologies/Programming**: Python (SymPy for symbolic computation)
-    - **Training Application**: Compute gradients using SymPy, a key step in optimization algorithms covered in *Mathematics for Machine Learning*: Ch. 7.
+    - **Training Application**: Compute gradients using SymPy, a key step in optimization algorithms covered in *Mathematics for Machine Learning*: Ch. 7. Solve selected exercises from Courant & John Vol II, Chapter 3 to build a stronger theoretical intuition for how gradients relate to surfaces and optimization.
   - **Optimization basics (e.g., minima, maxima)**
     - **Chapters**:
       - *Mathematics for Machine Learning*: Chapter 7: Continuous Optimization
@@ -484,6 +501,7 @@ for increased user experience, clone this repository and enjoy the lectures with
       - *The Data Warehouse Toolkit*: Chapter 1: Fact Tables and Dimensions Joined in a Star Schema
       - *Analytics Engineering with SQL and dbt*: Chapter 2: Modeling with the Star Schema
       - *Fundamentals of Data Engineering*: Chapter 8: Queries, Modeling, and Transformation (Techniques for Modeling Batch Analytical Data)
+      - **Fundamentals of Data Engineering (Reis & Housley)**: Chapter 8: "Queries, Modeling, and Transformation", section on "Techniques for Modeling Batch Analytical Data".
     - **Technologies/Programming**: SQL (PostgreSQL), dbt
     - **Training Application**: Implement a star schema in PostgreSQL with dbt.
 - **2.1.2 Slowly Changing Dimensions**
@@ -714,8 +732,9 @@ for increased user experience, clone this repository and enjoy the lectures with
   - **Handling late data with watermarks**
     - **Chapters**:
       - *Streaming Systems*: Chapter 3: Watermarks
-    - **Technologies/Programming**: Apache Kafka, Apache Flink
-    - **Training Application**: Handle late data in a streaming pipeline using Flink watermarks.
+      - **Introduction to Probability (Blitzstein & Hwang)**: Chapter 13: "Poisson Processes".
+    - **Technologies/Programming**: Apache Kafka, Apache Flink, **Python 3.13 Docs (library.pdf)** - Chapter 9.7: statistics
+    - **Training Application**: Handle late data in a streaming pipeline using Flink watermarks. Additionally, use Python's scipy.stats to model event arrivals with a Poisson process, helping to predict the expected volume of late data based on concepts from Blitzstein & Hwang.
 - **3.1.3 Fault Tolerance in Streams**
   - **Exactly-once processing**
     - **Chapters**:
@@ -754,8 +773,9 @@ for increased user experience, clone this repository and enjoy the lectures with
   - **Deployment and monitoring**
     - **Chapters**:
       - *Designing Machine Learning Systems*: Chapter 7: Model Deployment and Prediction Service, Chapter 8: Data Distribution Shifts and Monitoring
-    - **Technologies/Programming**: Docker, Prometheus, Python
-    - **Training Application**: Deploy a model with Docker and monitor with Prometheus.
+      - **Fundamentals of Data Engineering (Reis & Housley)**: Chapter 2: "The Data Engineering Lifecycle", section on "DataOps".
+    - **Technologies/Programming**: Docker, Prometheus, Python (howto-logging.pdf and howto-logging-cookbook.pdf)
+    - **Training Application**: Deploy a model with Docker and monitor with Prometheus. Implement structured logging within the prediction service using Python's logging module, following the best practices in howto-logging-cookbook.txt, to create monitorable, parseable logs for Prometheus.
 - **3.2.2 Feature Engineering for ML**
   - **Feature stores and embeddings**
     - **Chapters**:
@@ -1024,8 +1044,8 @@ for increased user experience, clone this repository and enjoy the lectures with
   - **Caching and virtual memory**
     - **Chapters**:
       - *Computer Organization and Design*: Chapter 5: Large and Fast: Exploiting Memory Hierarchy
-    - **Technologies/Programming**: C (memory management)
-    - **Training Application**: Simulate caching behavior in C.
+    - **Technologies/Programming**: C (memory management), Python 3.13 Docs (howto-perf_profiling.pdf)
+    - **Training Application**: Simulate caching behavior in C. Then, write a Python version of the same logic and use the Linux perf profiler as described in howto-perf_profiling.txt to see if cache effects are visible even at the interpreter level. Discuss why or why not.
   - **Memory management strategies**
     - **Chapters**:
       - *Computer Organization and Design*: Chapter 5: Large and Fast: Exploiting Memory Hierarchy
@@ -1039,7 +1059,9 @@ for increased user experience, clone this repository and enjoy the lectures with
 ### Section 4.6: Advanced Statistics, Linear Algebra, and Optimization
 
 - **Books**: *All of Statistics* by Larry Wasserman, *Linear Algebra Done Right* by Sheldon Axler, *Introduction to Stochastic Processes* by Gregory F. Lawler, *The Design of Approximation Algorithms* by Williamson and Shmoys, *Linear Algebra and Its Applications* by David C. Lay
+
 - **4.6.1 Statistical Inference**
+  
   - **Hypothesis testing and confidence intervals**
     - **Chapters**:
       - *All of Statistics*: Chapter 10: Hypothesis Testing and p-values
@@ -1050,7 +1072,9 @@ for increased user experience, clone this repository and enjoy the lectures with
       - *All of Statistics*: Chapter 13: Linear and Logistic Regression
     - **Technologies/Programming**: Python (scikit-learn)
     - **Training Application**: Implement regression models in scikit-learn.
+
 - **4.6.2 Advanced Linear Algebra**
+  
   - **Inner product spaces**
     - **Chapters**:
       - *Linear Algebra Done Right*: Chapter 6: Inner Product Spaces
@@ -1063,27 +1087,46 @@ for increased user experience, clone this repository and enjoy the lectures with
       - *Linear Algebra and Its Applications*: Chapter 7: The Singular Value Decomposition
     - **Technologies/Programming**: Python (NumPy)
     - **Training Application**: Implement SVD in NumPy for dimensionality reduction.
+
 - **4.6.3 Stochastic Processes**
+  
   - **Markov chains: Transition matrices, steady states**
+    
     - **Chapters**:
       - *Introduction to Stochastic Processes*: Chapter 1: Finite Markov Chains
       - *Introduction to Probability* (Bertsekas & Tsitsiklis): Chapter 7: Markov Chains
       - *Introduction to Probability* (Blitzstein & Hwang): Chapter 11: Markov Chains
     - **Technologies/Programming**: Python (NumPy)
     - **Training Application**: Simulate a Markov chain with transition matrices in NumPy.
+  
   - **Poisson processes: Event modeling for streaming**
+    
     - **Chapters**:
+      
       - *Introduction to Stochastic Processes*: Chapter 6: Renewal Processes (as a generalization)
+      
       - *Introduction to Probability* (Bertsekas & Tsitsiklis): Chapter 6: The Bernoulli and Poisson Processes
+      
       - *Introduction to Probability* (Blitzstein & Hwang): Chapter 13: Poisson Processes
+        
+        Introduction to Probability (Bertsekas & Tsitsiklis: Chapter 6: "The Bernoulli and Poisson Processes".
+        
+        Introduction to Probability (Blitzstein & Hwang: Chapter 13: "Poisson Processes".
+    
     - **Technologies/Programming**: Python (SciPy)
+    
     - **Training Application**: Model a Poisson process for streaming events in SciPy.
+  
   - **Queuing theory: System performance analysis**
+    
     - **Chapters**:
       - *Introduction to Stochastic Processes*: Chapter 3: Continuous-Time Markov Chains (relates to queuing)
+      - **Introduction to Stochastic Processes (Lawler)**: Chapter 3: "Continuous-Time Markov Chains", as it provides the foundation for many queuing models (e.g., M/M/1 queues).
     - **Technologies/Programming**: Python (SciPy)
-    - **Training Application**: Analyze queue performance using SciPy.
+    - **Training Application**: Analyze queue performance using SciPy. Simulate a simple M/M/1 queue in Python to model a data processing service. Analyze wait times and system load, applying principles from Lawler's chapter on continuous-time Markov chains.
+
 - **4.6.4 Heuristic and Approximation Algorithms**
+  
   - **Greedy algorithms for clustering and scheduling**
     - **Chapters**:
       - *The Design of Approximation Algorithms*: Chapter 2: Greedy Algorithms and Local Search
@@ -1094,8 +1137,11 @@ for increased user experience, clone this repository and enjoy the lectures with
       - *The Design of Approximation Algorithms*: Chapter 5: Random Sampling and Randomized Rounding of Linear Programs
     - **Technologies/Programming**: Python (NumPy)
     - **Training Application**: Implement a randomized algorithm for scalability in NumPy.
+
 - **Practice**: Perform statistical analysis, implement SVD, simulate a Poisson process, and implement a greedy clustering algorithm using Python (NumPy, SciPy, scikit-learn) and Spark.
+
 - **Technology**: Python (NumPy, SciPy, scikit-learn), Apache Spark.
+
 - **Duration**: 6-8 weeks.
 
 ---

@@ -1,0 +1,85 @@
+.
+├── DataEngineering&Systems
+│   ├── AnalyticsEngineeringWithSQLandDbt_RuiMachado-HelderRussa_2023.md
+│   ├── DesigningData-IntensiveApplications_MartinKleppmann_2017.md
+│   ├── DifferentialEquationsDynamicalSystemsIntroductionChaos_Hirsch-Smale-Devaney_2013.md
+│   ├── ElementsOfInformationTheorySecondEdition_ThomasMCover-JoyAThomas.md
+│   ├── FundamentalsOfDataEngineering_JoeReis-MattHousley_2022.md
+│   ├── ReadingsInDatabaseSystems_Bailis-Hellerstein-Stonebraker_2015.md
+│   ├── StreamingSystems_TylerAkidau-SlavaChernyak-ReuvenLax_2018.md
+│   └── TheDataWarehouseToolkitThirdEdition_RalphKimball-MargyRoss_2013.md
+├── FoundationalMathematics&Statistics
+│   ├── AllofStatistics_LarryWasserman_2004.md
+│   ├── ConcreteMathematics_Graham-Knuth-Patashnik_1994.md
+│   ├── ConvexOptimizationTheory_DimitriPBertsekas_2009.md
+│   ├── DiscreteMathematicsandItsApplications_KennethHRosen_2018.md
+│   ├── IntroductiontoCalculusandAnalysisVolII_RichardCourant-FritzJohn.md
+│   ├── IntroductionToCalculusAndAnalysisVolI_RichardCourant-FritzJohn.md
+│   ├── IntroductionToLinearOptimization_DimitriBertsimas-JohnTsitsiklis_1997.md
+│   ├── IntroductionToProbability_DimitriPBertsekas-JohnNTsitsiklis_2008.md
+│   ├── IntroductionToProbability_JosephKBlitzstein-JessicaHwang_2019.md
+│   ├── IntroductionToStochasticProcesses_GregoryFLawler.md
+│   ├── LinearAlgebraAndItsApplications_DavidCLay_2016.md
+│   ├── LinearAlgebraDoneRight_SheldonAxler_2024.md
+│   ├── MathematicsForComputerScience_Lehman-Leighton-Meyer_2015.md
+│   ├── MathematicsForMachineLearning_Deisenroth-Faisal-Ong_2020.md
+│   ├── NumericalAnalysis_JDouglasFaires_2016.md
+│   └── TheDesignOfApproximationAlgorithms_DavidPWilliamson-DavidBShmoys_2012.md
+├── MachineLearning&DataScience
+│   ├── DeepLearningWithPython_FrancoisChollet_2021.md
+│   ├── DesigningMachineLearningSystems_ChipHuyen_2022.md
+│   ├── IntroductionToInformationRetrieval_Manning-Raghavan-Schutze_2008.md
+│   ├── MiningofMassiveDatasets_Leskovek-Rajaraman-Ullman_2014.md
+│   └── ReinforcementLearningAndOptimalControl_DimitriPBertsekas_2019.md
+├── Programming&CoreComputerScience
+│   ├── ComputerOrganizationAndDesign_Patterson-Hennessy_2020.md
+│   ├── docker
+│   │   └── compose
+│   │       └── 00-overview.md
+│   ├── IntroductiontoCalculusandAnalysisVolII_RichardCourant-FritzJohn.md
+│   ├── python-3.13-docs-pdf-a4
+│   │   ├── c-api.txt
+│   │   ├── extending.txt
+│   │   ├── faq.txt
+│   │   ├── howto-annotations.txt
+│   │   ├── howto-argparse-optparse.txt
+│   │   ├── howto-argparse.txt
+│   │   ├── howto-clinic.txt
+│   │   ├── howto-cporting.txt
+│   │   ├── howto-curses.txt
+│   │   ├── howto-descriptor.txt
+│   │   ├── howto-enum.txt
+│   │   ├── howto-free-threading-extensions.txt
+│   │   ├── howto-free-threading-python.txt
+│   │   ├── howto-functional.txt
+│   │   ├── howto-gdb_helpers.txt
+│   │   ├── howto-instrumentation.txt
+│   │   ├── howto-ipaddress.txt
+│   │   ├── howto-isolating-extensions.txt
+│   │   ├── howto-logging-cookbook.txt
+│   │   ├── howto-logging.txt
+│   │   ├── howto-mro.txt
+│   │   ├── howto-perf_profiling.txt
+│   │   ├── howto-pyporting.txt
+│   │   ├── howto-regex.txt
+│   │   ├── howto-sockets.txt
+│   │   ├── howto-sorting.txt
+│   │   ├── howto-timerfd.txt
+│   │   ├── howto-unicode.txt
+│   │   ├── howto-urllib2.txt
+│   │   ├── installing.txt
+│   │   ├── library.txt
+│   │   ├── python.txt
+│   │   ├── reference.txt
+│   │   ├── tutorial.txt
+│   │   ├── using.txt
+│   │   └── whatsnew.txt
+│   ├── PythonForDataAnalysis_WesMcKinney_2022.md
+│   ├── RUST
+│   │   ├── TheRustProgrammingLanguage1.88.0.md
+│   │   └── TheRustReference1.88.0.md
+│   ├── SQLforDataScientists_ReneeM.P.Teate_2021.md
+│   └── TheCProgrammingLanguage_BrianWKernighan-DennisMRitchie_1988.md
+└── tree.txt
+
+9 directories, 74 files

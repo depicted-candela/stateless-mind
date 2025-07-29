@@ -1,0 +1,46 @@
+services:
+  leader:
+    image: postgres:14
+    container_name: leader
+    hostname: leader
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./leader/postgresql.conf:/etc/postgresql/postgresql.conf
+      - ./leader-data:/var/lib/postgresql/data
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=appdb
+    networks:
+      - replication-net
+
+  follower:
+    image: postgres:14
+    container_name: follower
+    hostname: follower
+    restart: always
+    ports:
+      - "5433:5432"
+    depends_on:
+      - leader
+    volumes:
+      - ./follower/postgresql.conf:/etc/postgresql/postgresql.conf
+      - ./follower-data:/var/lib/postgresql/data
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=appdb
+    networks:
+      - replication-net
+
+volumes:
+  leader-data:
+  follower-data:
+
+networks:
+  replication-net:
+    driver: bridge
