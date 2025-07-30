@@ -5,7 +5,7 @@ services:
     hostname: leader
     restart: always
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - ./leader/postgresql.conf:/etc/postgresql/postgresql.conf
       - ./leader-data:/var/lib/postgresql/data
@@ -23,7 +23,7 @@ services:
     hostname: follower
     restart: always
     ports:
-      - "5433:5432"
+      - "5434:5432"
     depends_on:
       - leader
     volumes:

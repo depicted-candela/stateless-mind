@@ -3,7 +3,7 @@
 
 # Dataset and Environment Setup
 
-For these exercises, you will use Docker to create a PostgreSQL leader-follower replication setup. This provides a consistent and isolated environment.
+For these exercises, you will use Docker to create a PostgreSQL leader-follower replication setup. Thus you must have postgresql and docker desktop with docker compose already installed. This provides a consistent and isolated environment.
 
 **1. Directory Structure:**
 
@@ -27,7 +27,6 @@ solutions/
 This file defines the leader and follower services.
 
 ```yaml
-version: '3.8'
 services:
   leader:
     image: postgres:14
@@ -35,7 +34,7 @@ services:
     hostname: leader
     restart: always
     ports:
-      - "8886:8886"
+      - "5433:5433"
     volumes:
       - ./leader/postgresql.conf:/etc/postgresql/postgresql.conf
       - ./leader-data:/var/lib/postgresql/data
@@ -53,7 +52,7 @@ services:
     hostname: follower
     restart: always
     ports:
-      - "8887:8886"
+      - "5434:5433"
     depends_on:
       - leader
     volumes:
@@ -156,15 +155,19 @@ Your task is to finalize the configuration of the Docker environment to establis
 4.  **Add replication user to `pg_hba.conf` on the leader:**
     ```bash
     echo "host replication replicator all md5" | docker exec -i leader tee -a /var/lib/postgresql/data/pg_hba.conf
-    docker exec -it leader pg_ctl reload
+    docker exec -it --user postgres leader pg_ctl reload
     ```
 
 5.  **Take a base backup from the leader:** This command stops the follower, clears its data directory, and uses `pg_basebackup` to clone the leader's data. This is the standard procedure for initializing a follower.
     ```bash
     docker compose stop follower
-    sudo rm -rf ./follower-data/*   Clear previous data
-    docker run --rm -v $(pwd)/follower-data:/output -v $(pwd)/follower/postgresql.conf:/pgconf/postgresql.conf --network=solutions_replication-net postgres:14 pg_basebackup -h leader -D /output -U replicator -p 5432 -vP -R --slot=follower_slot
-    sudo chown -R 999:999 ./follower-data  Change ownership to the postgres user inside the container
+    sudo rm -rf ./follower-data/*  # Clear previous data
+    docker run --rm \
+        -e PGPASSWORD=replicatorpass \
+        -v $(pwd)/follower-data:/output \
+        --network=solutions_replication-net \
+        postgres:14 \
+        pg_basebackup -h leader -D /output -U replicator -p 5432 -vP -R --slot=follower_slot
     ```
     *Note: The `-R` flag automatically writes the `standby.signal` file and connection info into the follower's data directory.*
 
@@ -206,8 +209,8 @@ Asynchronous replication introduces a delay known as replication lag. This conce
     import psycopg2
     import time
 
-    LEADERPARAMS = "dbname=appdb user=postgres password=postgres host=localhost port=5432"
-    FOLLOWERPARAMS = "dbname=appdb user=postgres password=postgres host=localhost port=5433"
+    LEADERPARAMS = "dbname=appdb user=postgres password=postgres host=localhost port=5433"
+    FOLLOWERPARAMS = "dbname=appdb user=postgres password=postgres host=localhost port=5434"
 
     def getPgConnection(connString):
         try:
@@ -288,7 +291,7 @@ Setting up replication manually requires understanding WALs, replication slots, 
 
 These exercises highlight the operational complexities and potential failure modes of replication.
 
-## Exercise 1: The Pitfall of Asynchronous Replication Lag
+## Exercise 4: The Pitfall of Asynchronous Replication Lag
 
 **Problem:**
 The primary disadvantage of asynchronous replication is data loss on leader failure. If the leader fails before writes are sent to the follower, that data is gone. Simulate this scenario to observe the data loss directly.
@@ -302,8 +305,7 @@ The primary disadvantage of asynchronous replication is data loss on leader fail
     ```
 3.  **Perform a write on the leader:** Since the leader is disconnected, this write will *not* be replicated.
     ```bash
-    docker exec -it leader psql -U postgres -d appdb -c "INSERT INTO inventory (productId, productName, quantity, lastUpdated) VALUES (201, 'IsolatedPhoton', 10, NOW());"
-     Verify the write on the leader
+    docker exec -it leader psql -U postgres -d appdb -c "INSERT INTO inventory (productId, productName, quantity, lastUpdated) VALUES (201, 'IsolatedPhoton', 10, NOW());" ## Verify the write on the leader
     docker exec -it leader psql -U postgres -d appdb -c "SELECT * FROM inventory WHERE productId=201;"
     ```
 4.  **Simulate a catastrophic leader failure:** We simply remove the leader container. In a real-world scenario, this would be a server crash.
@@ -312,9 +314,8 @@ The primary disadvantage of asynchronous replication is data loss on leader fail
     ```
 5.  **Promote the follower:** The follower now becomes the new leader, but it never received the last write.
     ```bash
-    docker exec -it follower touch /var/lib/postgresql/data/standby.signal && docker compose restart follower
-     The presence of standby.signal makes it a follower, removing it (or promoting) makes it a primary. Let's assume we would promote it with pg_ctl promote
-    docker exec -it follower pg_ctl promote
+    docker exec -it follower touch standby.signal && docker compose restart follower ## The presence of standby.signal makes it a follower, removing it (or promoting) makes it a primary. Let's assume we would promote it with pg_ctl promote
+    docker exec -it --user postgres follower pg_ctl promote
     ```
 6.  **Check for the "lost" data on the new leader (the old follower):**
     ```bash
@@ -324,7 +325,7 @@ The primary disadvantage of asynchronous replication is data loss on leader fail
     ```
     This demonstrates the classic pitfall: the write was confirmed to the client by the old leader but is now lost forever.
 
-## Exercise 2: Understanding Split-Brain in Multi-Leader Replication
+## Exercise 5: Understanding Split-Brain in Multi-Leader Replication
 
 **Problem:**
 This is a conceptual question based on DDIA Chapter 5. While our setup is leader-follower, it's crucial to understand the primary danger of multi-leader replication. Describe what "split brain" is in a multi-leader context. Why is it a significant problem, and what is the fundamental mechanism used to prevent it?
@@ -340,6 +341,8 @@ This is a conceptual question based on DDIA Chapter 5. While our setup is leader
 ---
 
 # (iii) Contrasting with Inefficient/Naive Solutions
+
+## Exercise 6: Naive Solutions
 
 This exercise contrasts the correct replication pattern with a common but flawed alternative.
 
@@ -365,6 +368,7 @@ The correct solution is the leader-follower setup from Exercise (i).
     *   **Writes:** All write operations (`INSERT`, `UPDATE`, `DELETE`) are **always** sent to the leader's address (`localhost:5432`).
     *   **Reads:** All read operations (`SELECT`) can be load-balanced between the leader (`localhost:5432`) and the follower (`localhost:5433`).
 3.  **Demonstrate the correct read/write pattern with Python:**
+    `naiveSolution.py`
     ```python
     import psycopg2
     import random
@@ -373,7 +377,7 @@ The correct solution is the leader-follower setup from Exercise (i).
     FOLLOWERPARAMS = "dbname=appdb user=postgres password=postgres host=localhost port=5433"
     READENDPOINTS = [LEADERPARAMS, FOLLOWERPARAMS]
 
-     WRITES always go to the leader
+    ## WRITES always go to the leader
     def updateProductQuantity(productId, newQuantity):
         with psycopg2.connect(LEADERPARAMS) as conn:
             with conn.cursor() as cur:
@@ -383,7 +387,7 @@ The correct solution is the leader-follower setup from Exercise (i).
                 )
         print(f"Updated productId {productId} on LEADER.")
 
-     READS can go to any endpoint
+    ## READS can go to any endpoint
     def getProductQuantity(productId):
         connString = random.choice(READENDPOINTS)
         port = connString.split('port=')[1]
@@ -397,7 +401,7 @@ The correct solution is the leader-follower setup from Exercise (i).
                 return quantity
 
     updateProductQuantity(101, 99)
-     Give a moment for replication
+    ## Give a moment for replication
     import time
     time.sleep(1)
     getProductQuantity(101)
