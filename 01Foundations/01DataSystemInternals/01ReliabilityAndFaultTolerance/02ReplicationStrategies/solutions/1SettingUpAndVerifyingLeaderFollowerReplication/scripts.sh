@@ -1,3 +1,4 @@
+docker compose up -d
 docker compose down -v
 docker compose up -d leader
 docker exec -it leader psql -U postgres -d appdb -c "CREATE USER replicator WITH REPLICATION PASSWORD 'replicatorpass';"

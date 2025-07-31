@@ -136,29 +136,40 @@ Your task is to finalize the configuration of the Docker environment to establis
 
 **Solution:**
 
-1.  **Stop running containers if they exist:**
+1.  **Start the entire system without the signal to create directories:**
+    ```bash 
+    docker compose up -d
+    ```
+
+2.  **Stop running containers if they exist:**
     ```bash
     docker compose down -v
     ```
 
-2.  **Start the leader node:**
+3.  **Fix Host Directory Ownership:**
+    ```bash
+    sudo chown -R $(id -u):$(id -g) ./leader-data ./follower-data
+    ```
+
+4.  **Start the leader node:**
     ```bash
     docker compose up -d leader
+    sleep 5
     ```
 
-3.  **Create the replication user and slot on the leader:** Connect to the leader and create a user with replication privileges. A replication slot ensures the leader retains WAL logs until the follower has consumed them.
+5.  **Create the replication user and slot on the leader:** Connect to the leader and create a user with replication privileges. A replication slot ensures the leader retains WAL logs until the follower has consumed them.
     ```bash
-    docker exec -it leader psql -U postgres -d appdb -c "CREATE USER replicator WITH REPLICATION PASSWORD 'replicatorpass';"
-    docker exec -it leader psql -U postgres -d appdb -c "SELECT * FROM pg_create_physical_replication_slot('follower_slot');"
+    docker exec -it --user postgres leader psql -U postgres -d appdb -c "CREATE USER replicator WITH REPLICATION PASSWORD 'replicatorpass';"
+    docker exec -it --user postgres leader psql -U postgres -d appdb -c "SELECT * FROM pg_create_physical_replication_slot('follower_slot');"
     ```
 
-4.  **Add replication user to `pg_hba.conf` on the leader:**
+6.  **Add replication user to `pg_hba.conf` on the leader:**
     ```bash
     echo "host replication replicator all md5" | docker exec -i leader tee -a /var/lib/postgresql/data/pg_hba.conf
     docker exec -it --user postgres leader pg_ctl reload
     ```
 
-5.  **Take a base backup from the leader:** This command stops the follower, clears its data directory, and uses `pg_basebackup` to clone the leader's data. This is the standard procedure for initializing a follower.
+7.  **Take a base backup from the leader:** This command stops the follower, clears its data directory, and uses `pg_basebackup` to clone the leader's data. This is the standard procedure for initializing a follower.
     ```bash
     docker compose stop follower
     sudo rm -rf ./follower-data/*  # Clear previous data
@@ -171,27 +182,28 @@ Your task is to finalize the configuration of the Docker environment to establis
     ```
     *Note: The `-R` flag automatically writes the `standby.signal` file and connection info into the follower's data directory.*
 
-6.  **Start the follower:**
+8.  **Start the follower:**
     ```bash
     docker compose up -d follower
     ```
 
-7.  **Create and populate the `inventory` table on the leader:**
+9.  **Create and populate the `inventory` table on the leader:**
     ```bash
     docker exec -it leader psql -U postgres -d appdb -c "CREATE TABLE inventory (productId INT PRIMARY KEY, productName VARCHAR(255) NOT NULL, quantity INT, lastUpdated TIMESTAMP);"
     docker exec -it leader psql -U postgres -d appdb -c "INSERT INTO inventory (productId, productName, quantity, lastUpdated) VALUES (101, 'QuantumWidget', 100, NOW()), (102, 'HyperSpanner', 75, NOW()), (103, 'FluxCapacitor', 50, NOW());"
     ```
 
-8.  **Verify replication on the follower:** The follower is read-only. A successful query confirms that replication is working.
-    ```bash
-    docker exec -it follower psql -U postgres -d appdb -c "SELECT * FROM inventory;"
-     Expected output:
-      productId |  productName  | quantity |         lastUpdated
-     -----------+---------------+----------+----------------------------
-            101 | QuantumWidget |      100 | 2025-07-22 23:41:34.123456
-            102 | HyperSpanner  |       75 | 2025-07-22 23:41:34.123456
-            103 | FluxCapacitor |       50 | 2025-07-22 23:41:34.123456
-    ```
+10.  **Verify replication on the follower:** The follower is read-only. A successful query confirms that replication is working.
+
+```bash
+docker exec -it follower psql -U postgres -d appdb -c "SELECT * FROM inventory;"
+    Expected output:
+    productId |  productName  | quantity |         lastUpdated
+    -----------+---------------+----------+----------------------------
+        101 | QuantumWidget |      100 | 2025-07-22 23:41:34.123456
+        102 | HyperSpanner  |       75 | 2025-07-22 23:41:34.123456
+        103 | FluxCapacitor |       50 | 2025-07-22 23:41:34.123456
+```
 
 ## Exercise 2: Monitoring Replication Lag with Python
 
@@ -514,7 +526,7 @@ You are tasked with building a fault-tolerant Python service that provides a sim
                 followerConn.close()
         print("--------------------")
 
-     --- Main execution loop ---
+    ## --- Main execution loop ---
     print("Service running with initial configuration.")
     healthCheck()
     updateInventory(101, 88)
@@ -522,28 +534,30 @@ You are tasked with building a fault-tolerant Python service that provides a sim
     readInventory(101)
     healthCheck()
 
+    print("In a separate terminal, run: docker rm -f leader")
     input("\nPress Enter to simulate leader failure (docker rm -f leader)...")
-     In a separate terminal, run: docker rm -f leader
+    ## In a separate terminal, run: docker rm -f leader
 
     print("\nRe-running health check after simulated failure...")
     healthCheck()
     updateInventory(102, 66)  This will fail
 
+    print("In a separate terminal: docker exec -it --user postgres follower pg_ctl promote")
     input("\nLeader is down. Press Enter to promote follower and reconfigure service...")
 
-     --- Manual Failover and Reconfiguration ---
-     In a separate terminal: docker exec -it follower pg_ctl promote
+    ## --- Manual Failover and Reconfiguration ---
+    ## In a separate terminal: docker exec -it --user postgres follower pg_ctl promote
     print("Follower promoted. Reconfiguring service...")
     config["leader"] = "dbname=appdb user=postgres password=postgres host=localhost port=5433"
-    config["follower"] = None  No follower exists anymore
+    config["follower"] = None # No follower exists anymore
 
     print("Service reconfigured. New leader is at port 5433.")
-    healthCheck()  Follower will show as down because config is None
+    healthCheck()  ## Follower will show as down because config is None
     
-     Writes now go to the new leader
+    ## Writes now go to the new leader
     updateInventory(102, 66)
     
-     We can also read from the new leader now
+    ## We can also read from the new leader now
     print(f"\n--> Attempting read from new LEADER ({config['leader']})")
     conn = getConnection("leader")
     with conn.cursor() as cur:
