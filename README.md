@@ -57,7 +57,7 @@ Using a Debian environment provides the most direct and un-abstracted learning e
     - **Chapters**:
       - *Designing Data-Intensive Applications*: Chapter 5: Replication (leader-based, multi-leader replication), Chapter 9: Consistency and Consensus (replication consistency)
       - *Readings in Database Systems*: Section "Weak Isolation and Distribution" for replication models and trade-offs.
-    - **Technologies/Programming**: PostgreSQL (replication setup), Python (psycopg2 for replication monitoring; see *Python for Data Analysis*: Ch. 6)
+    - **Technologies/Programming**: PostgreSQL (replication setup), Python (psycopg2 for replication monitoring; see *Python for Data Analysis*: Ch. 6), docker compose [reference](https://github.com/docker/compose/tree/main/docs/reference) and docker rootless [tutorial](https://docs.docker.com/engine/security/rootless/)
     - **Training Application**: Configure PostgreSQL leader-follower replication as described in *Designing Data-Intensive Applications*: Ch. 5, and write Python scripts to monitor replication lag.
   - **Recovery mechanisms (e.g., failover, snapshots)**
     - **Chapters**:

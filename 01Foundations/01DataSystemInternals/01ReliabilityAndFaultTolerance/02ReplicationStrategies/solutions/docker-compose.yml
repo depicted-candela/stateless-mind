@@ -1,6 +1,6 @@
 services:
   leader:
-    image: postgres:14
+    image: postgres:15
     container_name: leader
     hostname: leader
     restart: always
@@ -18,7 +18,7 @@ services:
       - replication-net
 
   follower:
-    image: postgres:14
+    image: postgres:15
     container_name: follower
     hostname: follower
     restart: always

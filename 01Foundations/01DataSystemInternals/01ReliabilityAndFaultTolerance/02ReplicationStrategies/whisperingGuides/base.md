@@ -1,0 +1,25 @@
+  - **Replication strategies (e.g., leader-follower, multi-leader)**
+    - **Chapters**:
+      - *Designing Data-Intensive Applications*: Chapter 5: Replication (leader-based, multi-leader replication), Chapter 9: Consistency and Consensus (replication consistency)
+      - *Readings in Database Systems*: Section "Weak Isolation and Distribution" for replication models and trade-offs.
+      - *PostgreSQL 15.13 Documentation*:
+          - **Chapter 27: High Availability, Load Balancing, and Replication**: Core concepts for leader-follower setup, hot standby, and failover logic.
+          - **Chapter 30: Reliability and the Write-Ahead Log**: Explains the underlying WAL mechanism, asynchronous commit, and why replication lag occurs.
+          - **Chapter 20: Server Configuration**: Details on `postgresql.conf` settings for replication (`wal_level`, `max_wal_senders`).
+          - **Chapter 21: Client Authentication**: Essential for configuring the `pg_hba.conf` file to allow the replication user to connect.
+          - **Chapter 28: Monitoring Database Activity**: Describes the system views (`pg_stat_replication`, `pg_stat_wal_receiver`) used for monitoring lag.
+          - **Chapter 9: Functions and Operators**: Documents the specific SQL functions (`pg_current_wal_lsn()`, `pg_last_wal_replay_lsn()`) used in the monitoring scripts.
+          - **Section II: PostgreSQL Client Applications**: Reference for the command-line tools used, such as `pg_basebackup` and `pg_ctl`.
+    - **Technologies/Programming**: PostgreSQL (replication setup), Python (psycopg2 for replication monitoring; see *Python for Data Analysis*: Ch. 6), Docker (Compose and Rootless Mode).
+        - **Docker Compose Specification References**:
+            - To understand the `docker-compose.yml` file used in the exercises, focus on these core documents:
+                - [**`02-model.md` - The Compose Application Model**](https://github.com/compose-spec/compose-spec/blob/master/02-model.md): Provides the high-level conceptual overview of how services, networks, and volumes interact.
+                - [**`05-services.md` - Services Top-Level Element**](https://github.com/compose-spec/compose-spec/blob/master/05-services.md): **(Most Important)** Explains the keywords used to define the `leader` and `follower` services, including `image`, `container_name`, `ports`, `volumes`, `environment`, and `depends_on`.
+                - [**`06-networks.md` - Networks Top-Level Element**](https://github.com/compose-spec/compose-spec/blob/master/06-networks.md): Explains how the custom `replication-net` is defined, which allows services to communicate by name (e.g., `pg_basebackup -h leader`).
+                - [**`07-volumes.md` - Volumes Top-Level Element**](https://github.com/compose-spec/compose-spec/blob/master/07-volumes.md): Explains the concept of named volumes. The exercise uses bind mounts for data persistence (`- ./leader-data:/var/lib/...`), which is also defined under the `volumes` section of the `05-services.md` file.
+            - For a deeper understanding of common real-world practices (not all are used in these exercises but are good for context):
+                - [**`build.md` - Compose Build Specification**](https://github.com/compose-spec/compose-spec/blob/master/build.md): Describes how to build a custom image from a `Dockerfile`, which would be needed if the exercise involved a custom application container (like the Python scripts).
+                - [**`12-interpolation.md` - Interpolation**](https://github.com/compose-spec/compose-spec/blob/master/12-interpolation.md): Explains how to use environment variables (e.g., `${TAG}`) inside your `docker-compose.yml` to make it more flexible.
+        - **Docker Rootless Mode**:
+            - [Rootless Mode Tutorial](https://docs.docker.com/engine/security/rootless/): Essential for running the Docker daemon as a non-root user, which is a security best practice and helps avoid the `sudo` permission issues seen in the setup script.
+    - **Training Application**: Configure PostgreSQL leader-follower replication as described in *Designing Data-Intensive Applications*: Ch. 5, and write Python scripts to monitor replication lag.

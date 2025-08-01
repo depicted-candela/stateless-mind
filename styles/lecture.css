@@ -26,7 +26,7 @@
     --glow-intensity: 0.5;
 
     /* Callout box colors */
---opensource-specific-bg: rgba(242, 101, 34, 0.1); /* Soft Amber for open-source */
+    --opensource-specific-bg: rgba(242, 101, 34, 0.1); /* Soft Amber for open-source */
     --opensource-specific-border: #F26522; /* Vivid Amber for open-source */
     --privative-bridge-bg: rgba(93, 129, 165, 0.1); /* Muted Steel Blue for privative */
     --privative-bridge-border: #5D81A5; /* Deeper Steel Blue for privative */
@@ -118,6 +118,7 @@ transition: color var(--transition-speed) ease;
 
 h1 {
 border-bottom: 4px solid var(--secondary-color);
+padding-top: 40px;
 padding-bottom: 15px;
 font-size: 2.8em;
 text-align: center;
