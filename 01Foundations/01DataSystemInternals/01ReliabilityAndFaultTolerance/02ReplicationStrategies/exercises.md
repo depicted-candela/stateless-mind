@@ -117,7 +117,7 @@ INSERT INTO inventory (productId, productName, quantity, lastUpdated) VALUES
 **To Start the Environment:**
 See the state of docker with `sudo systemctl status docker`, and restart it with `sudo systemctl restart docker` as necessary where `sudo systemctl enable docker` starts docker as the machine is turned on
 
-Follow this [instructions](https://docs.docker.com/engine/security/rootless/)
+Follow this [instructions](https://docs.docker.com/engine/security/rootless/) running this `export DOCKER_HOST=unix://$XDG_RUNTIME_DIR/docker.sock` in the **Client** step
 
 Run `docker compose up -d` in the `solutions` directory. The containers will start, but replication is not yet configured. The exercises will guide you through the full setup.
 

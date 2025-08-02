@@ -25,18 +25,18 @@ echo "You will be prompted for your sudo password once at the beginning."
 # 'Prime the pump' for sudo. This will ask for the password upfront and cache it.
 sudo -v
 
-# --- 1. Clean Up Existing Environment ---
+# --- 1. Clean Up & Prepare Directories ---
 echo ""
-echo "--- Step 1: Cleaning up previous Docker environment... ---"
-# Use '|| true' to prevent script exit if containers don't exist
-docker compose down -v || true 
-sudo rm -rf ./follower-data/* ./leader-data/*
-echo "Environment cleaned."
-
-# --- 2. Set Permissions and Start Leader ---
-echo ""
-echo "--- Step 2: Setting data directory permissions and starting leader... ---"
+echo "--- Step 1: Cleaning up previous environment and setting permissions... ---"
+docker compose down -v --remove-orphans # Use --remove-orphans to be extra clean
+sudo rm -rf ./leader-data ./follower-data
+mkdir -p ./leader-data ./follower-data # Ensure directories exist
 sudo chown -R $(id -u):$(id -g) ./leader-data ./follower-data
+echo "Environment cleaned and directory permissions set."
+
+# --- 2. Start Leader ---
+echo ""
+echo "--- Step 2: Starting leader... ---"
 docker compose up -d leader
 echo "Waiting 5 seconds for leader to initialize..."
 sleep 5
@@ -57,11 +57,12 @@ echo "--- Step 4: Taking base backup from leader to initialize follower... ---"
 # Stop the follower container if it's running from a previous attempt
 docker compose stop follower || true
 sudo rm -rf ./follower-data/* # Clear again to be safe
+sudo rm -rf ./leader-data/output/*
 docker run --rm \
     -e PGPASSWORD=replicatorpass \
     -v $(pwd)/follower-data:/output \
     --network=solutions_replication-net \
-    postgres:15 \
+    postgres:14 \
     pg_basebackup -h leader -D /output -U replicator -p 5432 -vP -R --slot=follower_slot
 echo "Base backup complete."
 
