@@ -238,7 +238,8 @@ def checkReplicationLag():
         followerLsn = followerCursor.fetchone()
 
         # Convert LSNs (e.g., '0/1A833D0') to integers and subtract
-        leaderLsnInt = int(leaderLsn.split('/'), 16) * 16**8 + int(leaderLsn.split('/'), 16)
+        leaderSection, offset = leaderLsn.split('/')
+        leaderLsnInt = int(leaderLsn.split('/')[0], 16) * 16**8 + int(leaderLsn.split('/')[0], 16)
         followerLsnInt = int(followerLsn.split('/'), 16) * 16**8 + int(followerLsn.split('/'), 16)
 
         lagBytes = leaderLsnInt - followerLsnInt

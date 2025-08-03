@@ -38,10 +38,8 @@ def checkReplicationLag():
         print(f"Current replication lag: {lagBytes} bytes")
 
     finally:
-        if leaderConn:
-            leaderConn.close()
-        if followerConn:
-            followerConn.close()
+        if leaderConn: leaderConn.close()
+        if followerConn: followerConn.close()
 
 if __name__ == "__main__":
     while True:

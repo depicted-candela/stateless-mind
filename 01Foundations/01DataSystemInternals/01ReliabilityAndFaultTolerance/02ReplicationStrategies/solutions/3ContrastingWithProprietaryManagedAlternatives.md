@@ -1,0 +1,7 @@
+# **Answer:**
+
+Problem: Setting up replication manually requires understanding WALs, replication slots, and pg_basebackup. How does a managed database service like Amazon RDS or Google Cloud SQL alter the approach to creating a read replica (a follower)? What are the primary advantages and disadvantages of using the managed service for this task compared to your manual setup?
+
+Something highly important about services is simplicity: while open source methodologies applied directly over machines tends to be error prone (because of lack of understanding of how the Operative System works or the commands that specific software requires to be used appropriately, because there flexibility is paramount, and developers tend to overlook the fact that users know the technical specifications their patterns require), privative services tends to focus on the most common pattern usages in order to give recipes that almost anyone could understand in at most one week.
+
+Because of replications are highly useful for almost any enterprise they're generalized an simplified in their frontend services, thus the user will never need to remember where postgresql.conf files are rather than remember the required quality attributes that replication gives: availability, usability, consistency, scalability, distributability, and performance. When users know what they need, they just select such services easily offered with intuitive frontend or cli services with the patterns abstracted using meaningful graphics or names

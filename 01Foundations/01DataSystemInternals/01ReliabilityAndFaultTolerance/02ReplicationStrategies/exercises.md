@@ -193,17 +193,18 @@ Your task is to finalize the configuration of the Docker environment to establis
     docker exec -it leader psql -U postgres -d appdb -c "INSERT INTO inventory (productId, productName, quantity, lastUpdated) VALUES (101, 'QuantumWidget', 100, NOW()), (102, 'HyperSpanner', 75, NOW()), (103, 'FluxCapacitor', 50, NOW());"
     ```
 
-10.  **Verify replication on the follower:** The follower is read-only. A successful query confirms that replication is working.
-
+10.  **Verify replication on the follower:**
 ```bash
 docker exec -it follower psql -U postgres -d appdb -c "SELECT * FROM inventory;"
-    Expected output:
-    productId |  productName  | quantity |         lastUpdated
-    -----------+---------------+----------+----------------------------
-        101 | QuantumWidget |      100 | 2025-07-22 23:41:34.123456
-        102 | HyperSpanner  |       75 | 2025-07-22 23:41:34.123456
-        103 | FluxCapacitor |       50 | 2025-07-22 23:41:34.123456
+        Expected output:
+        productId |  productName  | quantity |         lastUpdated
+        -----------+---------------+----------+----------------------------
+            101 | QuantumWidget |      100 | 2025-07-22 23:41:34.123456
+            102 | HyperSpanner  |       75 | 2025-07-22 23:41:34.123456
+            103 | FluxCapacitor |       50 | 2025-07-22 23:41:34.123456
 ```
+The follower is read-only. A successful query confirms that replication is working.
+
 
 ## Exercise 2: Monitoring Replication Lag with Python
 
@@ -313,7 +314,7 @@ The primary disadvantage of asynchronous replication is data loss on leader fail
 1.  **Ensure replication is running.**
 2.  **Stop network connectivity from the leader to the follower:** The easiest way to do this without stopping the container is to disconnect the `leader` from the network.
     ```bash
-    docker network disconnect solutions_replication-net leader
+    docker network disconnect replication-net leader
     ```
 3.  **Perform a write on the leader:** Since the leader is disconnected, this write will *not* be replicated.
     ```bash

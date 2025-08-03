@@ -1,6 +1,5 @@
 import psycopg2
 import time
-import sys
 
 # Global connection details, matching docker-compose.yml
 config = {

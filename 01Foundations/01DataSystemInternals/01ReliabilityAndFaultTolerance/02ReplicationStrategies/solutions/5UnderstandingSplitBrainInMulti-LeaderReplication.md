@@ -1,0 +1,5 @@
+# **Exercise 5:** Understanding Split-Brain in Multi-Leader Replication
+
+*Problem:* This is a conceptual question based on DDIA Chapter 5. While our setup is leader-follower, it's crucial to understand the primary danger of multi-leader replication. Describe what "split brain" is in a multi-leader context. Why is it a significant problem, and what is the fundamental mechanism used to prevent it?
+
+*Answer:* the multi leader exists because of a leader-follower with a broken link and a system making the follower a leader, two leaders exist and now aggregated behaviors are processed by two different replicas. Thus, depending of the network configuration the channels will be different because of the data they receive, making the entire system inconsistent. This can be solved with an intermediate service that detects if the leader was really turned off before to set a follower as leader.
