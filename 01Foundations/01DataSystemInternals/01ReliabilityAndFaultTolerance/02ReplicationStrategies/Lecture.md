@@ -71,6 +71,7 @@
 </ol>
 <h2 id="lecture-outline">Lecture Outline</h2>
 <p>This lecture dissects data replication, the foundational technique for escaping the tyranny of a single server. We begin by defining replication not as a feature, but as a fundamental architectural choice driven by the need for availability, scalability, and speed. We'll explore the three canonical strategies—leader-follower, multi-leader, and leaderless—and the pivotal decision between synchronous and asynchronous consistency. Using Docker and PostgreSQL, we will then build a functioning leader-follower system, turning abstract theory into tangible practice. This hands-on work will serve as a bridge to understanding managed cloud services and as a cautionary tale against flawed, naive alternatives. We conclude by crystallizing the profound advantages of replication while shining a harsh light on its most treacherous pitfalls, equipping you not just with the <em>how</em>, but the <em>why</em> and the <em>what if</em>.</p>
+<p>run <code>export DOCKER_HOST=unix://$XDG_RUNTIME_DIR/docker.sock</code> in all terminals to be used for these exercises for docker rootless usage, see first exercise for more details</p>
 <h2 id="key-readings">Key Readings</h2>
 <ul>
 <li><p><strong>Primary</strong>: <em>Designing Data-Intensive Applications</em> (DDIA) by Martin Kleppmann, Chapter 5: "Replication". This is our theoretical North Star.<sup id="fnref1"><a href="#fn1" class="footnote-ref">1</a></sup></p></li>

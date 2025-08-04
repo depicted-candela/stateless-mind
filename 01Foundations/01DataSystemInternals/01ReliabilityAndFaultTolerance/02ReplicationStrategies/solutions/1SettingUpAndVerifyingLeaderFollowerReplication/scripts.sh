@@ -3,8 +3,13 @@
 # Exit immediately if a command exits with a non-zero status.
 # set -e
 
+# --- Setting rootless docker ---
+systemctl --user start docker.service
+export DOCKER_HOST=unix://$XDG_RUNTIME_DIR/docker.sock
+
 # --- Self-location and Directory Change Logic ---
 # This is the magic part. It ensures the script always runs from the 'solutions' directory.
+
 #
 # "$0" is the path to this script itself.
 # dirname "$0" gets the directory part of that path (e.g., ./1SettingUpAndVerifyingLeaderFollowerReplication)
@@ -28,8 +33,8 @@ sudo -v
 # --- 1. Clean Up & Prepare Directories ---
 echo ""
 echo "--- Step 1: Cleaning up previous environment and setting permissions... ---"
-docker compose down -v --remove-orphans # Use --remove-orphans to be extra clean
-sudo rm -rf ./leader-data ./follower-data
+docker compose down -v --remove-orphans
+rm -rf ./leader-data ./follower-data
 mkdir -p ./leader-data ./follower-data # Ensure directories exist
 sudo chown -R $(id -u):$(id -g) ./leader-data ./follower-data
 echo "Environment cleaned and directory permissions set."

@@ -44,8 +44,7 @@ def updateInventory(productId, quantity):
     except psycopg2.Error as e:
         print(f"Write failed: {e}")
     finally:
-        if conn:
-            conn.close()
+        if conn: conn.close()
 
 def readInventory(productId):
     """Connects to the FOLLOWER and performs a read operation."""
@@ -59,13 +58,15 @@ def readInventory(productId):
         with conn:
             conn.set_session(readonly=True) # Ensure session is read-only on follower
             with conn.cursor() as cur:
-                cur.execute("SELECT productName, quantity FROM inventory WHERE productId = %s", (productId,))
+                cur.execute(
+                    "SELECT productName, quantity FROM inventory WHERE productId = %s", 
+                    (productId,)
+                    )
                 result = cur.fetchone()
                 print(f"Read from follower: {result}")
                 return result
     finally:
-        if conn:
-            conn.close()
+        if conn: conn.close()
 
 def healthCheck():
     """Checks connectivity and replication lag."""
@@ -88,14 +89,16 @@ def healthCheck():
                 fcur.execute("SELECT pg_last_wal_replay_lsn();")
                 follower_result = fcur.fetchone()
                 followerLsn_str = follower_result[0] if follower_result else None
-
-                # *** THE FIX IS HERE ***
+                
                 # Check if both LSNs were successfully retrieved before doing calculations.
                 if leaderLsn_str and followerLsn_str:
                     # Convert LSN from hex string (e.g., '0/1A833D0') to an integer for comparison
-                    leaderLsn = int(leaderLsn_str.split('/')[0], 16) << 32 | int(leaderLsn_str.split('/')[1], 16)
-                    followerLsn = int(followerLsn_str.split('/')[0], 16) << 32 | int(followerLsn_str.split('/')[1], 16)
-                    
+                    leaderPosition_int = int(leaderLsn_str.split('/')[0], 16)
+                    leaderLag_int = int(leaderLsn_str.split('/')[1], 16)
+                    followerPosition_int = int(followerLsn_str.split('/')[0], 16)
+                    followerLag_int = int(followerLsn_str.split('/')[1], 16)
+                    leaderLsn = leaderPosition_int << 32 | leaderLag_int
+                    followerLsn = followerPosition_int << 32 | followerLag_int
                     lagBytes = leaderLsn - followerLsn
                     print(f"Replication Lag: {lagBytes} bytes")
                 else:

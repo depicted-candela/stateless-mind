@@ -17,7 +17,7 @@ Here's a breakdown of the necessary features and configurations:
 
 **2. Docker Installation:**
    - Install Docker Desktop with Docker Compose.
-   - For rootless Docker, follow the instructions at [https://docs.docker.com/engine/security/rootless/](https://docs.docker.com/engine/security/rootless/) and run `export DOCKER_HOST=unix://$XDG_RUNTIME_DIR/docker.sock` in your terminal.
+   - For rootless Docker, follow the instructions at [https://docs.docker.com/engine/security/rootless/](https://docs.docker.com/engine/security/rootless/) and run `export DOCKER_HOST=unix://$XDG_RUNTIME_DIR/docker.sock` in all terminals to be used for these exercises with docker rootless.
 
 **3. Docker Compose Configuration (`docker-compose.yml`):**
    - This file defines the `leader` and `follower` services.

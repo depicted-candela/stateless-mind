@@ -434,7 +434,7 @@ You are tasked with building a fault-tolerant Python service that provides a sim
 **Requirements:**
 1.  Use the PostgreSQL leader-follower setup from Exercise (i).
 2.  Create a Python script `resilientService.py` that does the following:
-    *   It maintains a connection to both the leader (`localhost:5432`) and the follower (`localhost:5433`).
+    *   It maintains a connection to both the leader (`localhost:5433`) and the follower (`localhost:5434`).
     *   It includes a function `updateInventory(productId, quantity)` that **always writes to the leader**.
     *   It includes a function `readInventory(productId)` that **always reads from the follower** to simulate read scaling.
     *   It includes a `healthCheck()` function that reports:

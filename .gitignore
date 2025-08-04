@@ -8,3 +8,5 @@ Prompts.md
 GeneratingProcess.md
 01Foundations/01DataSystemInternals/01ReliabilityAndFaultTolerance/02ReplicationStrategies/solutions/leader-data/
 01Foundations/01DataSystemInternals/01ReliabilityAndFaultTolerance/02ReplicationStrategies/solutions/follower-data/
+contextualizer.sh
+*/contextualizer.sh

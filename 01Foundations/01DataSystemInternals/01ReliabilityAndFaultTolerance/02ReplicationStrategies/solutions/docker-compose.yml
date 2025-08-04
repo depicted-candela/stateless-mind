@@ -35,11 +35,9 @@ services:
       - POSTGRES_DB=appdb
     networks:
       - replication-net
-
 volumes:
   leader-data:
   follower-data:
-
 networks:
   replication-net:
     driver: bridge
