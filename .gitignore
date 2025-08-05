@@ -1,7 +1,10 @@
 ai_context.txt
 .venv
+*/.venv
 /BOOKS
 Prompts.md
+*/flink-1.18.1/
+*/flink-checkpoints/
 /styles/core.css
 /styles/solutions.css
 /styles/exercises.css
