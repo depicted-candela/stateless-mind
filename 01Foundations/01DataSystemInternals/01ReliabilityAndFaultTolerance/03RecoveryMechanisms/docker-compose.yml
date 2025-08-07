@@ -1,0 +1,85 @@
+services:
+  primary:
+    image: postgres:15
+    container_name: primary
+    volumes:
+      - ./primary/init:/docker-entrypoint-initdb.d
+      - postgresPrimaryData:/var/lib/postgresql/data
+      - walArchive:/archive
+    environment:
+      POSTGRES_DB: statelessCommerce
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+    # CORRECTED: The command now correctly invokes the 'postgres' executable
+    # and passes the configuration flags as arguments.
+    command: >
+      postgres
+      -c wal_level=replica
+      -c archive_mode=on
+      -c archive_command='cp %p /archive/%f'
+      -c max_wal_senders=10
+      -c hot_standby=on
+    ports:
+      - "${PRIMARY_HOST_PORT}:5432"
+    networks:
+      - postgresnet
+      - clientnet
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d statelessCommerce"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  replica:
+    build:
+      context: ./replica
+    container_name: replica
+    depends_on:
+      primary:
+        # Ensures replica setup begins only after the primary is fully healthy.
+        condition: service_healthy
+    volumes:
+      - postgresReplicaData:/var/lib/postgresql/data
+      - walArchive:/archive
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+    ports:
+      - "${REPLICA_HOST_PORT}:5432"
+    networks:
+      - postgresnet
+
+  pythonClient:
+    image: python:3.10-slim
+    container_name: pythonClient
+    working_dir: /app
+    volumes:
+      - ./solutions:/solutions
+    command: tail -f /dev/null # Keep container running
+    networks:
+      - clientnet
+    depends_on:
+      - primary
+      - replica
+    environment:
+      PRIMARY_HOST: primary
+      REPLICA_HOST: replica
+      DB_USER: admin
+      DB_PASSWORD: password
+      DB_NAME: statelessCommerce
+
+volumes:
+  # Named volumes ensure data persistence and are managed by Docker.
+  postgresPrimaryData:
+    name: statelessCommercePrimaryData
+  postgresReplicaData:
+    name: statelessCommerceReplicaData
+  walArchive:
+    name: statelessCommerceWalArchive
+
+networks:
+  # Explicit network definitions for better isolation and portability.
+  postgresnet:
+    driver: bridge
+  clientnet:
+    driver: bridge
