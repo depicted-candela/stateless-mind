@@ -1,6 +1,7 @@
 *ai_context.txt
 .venv
 */.venv
+*/.env
 */setup-docs.md
 /BOOKS
 Prompts.md
