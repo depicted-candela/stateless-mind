@@ -240,4 +240,5 @@ EOF
 
 echo "Replica setup complete. The container will now start PostgreSQL..."
 # The script now finishes, allowing the original Docker entrypoint to start postgres.
-```</details>
+```
+</details>
