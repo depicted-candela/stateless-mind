@@ -5,18 +5,15 @@ services:
     volumes:
       - ./primary/init:/docker-entrypoint-initdb.d
       - postgresPrimaryData:/var/lib/postgresql/data
-      - walArchive:/archive
     environment:
       POSTGRES_DB: statelessCommerce
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: password
-    # CORRECTED: The command now correctly invokes the 'postgres' executable
-    # and passes the configuration flags as arguments.
     command: >
       postgres
       -c wal_level=replica
       -c archive_mode=on
-      -c archive_command='cp %p /archive/%f'
+      -c archive_command='mkdir -p /var/lib/postgresql/data/wal-archive && cp %p /var/lib/postgresql/data/wal-archive/%f'
       -c max_wal_senders=10
       -c hot_standby=on
     ports:
@@ -36,11 +33,10 @@ services:
     container_name: replica
     depends_on:
       primary:
-        # Ensures replica setup begins only after the primary is fully healthy.
         condition: service_healthy
     volumes:
       - postgresReplicaData:/var/lib/postgresql/data
-      - walArchive:/archive
+      - postgresPrimaryData:/primary_data:ro
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: password
@@ -49,13 +45,14 @@ services:
     networks:
       - postgresnet
 
-  pythonClient:
-    image: python:3.10-slim
-    container_name: pythonClient
+  python_client:
+    build:
+      context: ./python_client
+    container_name: python_client
     working_dir: /app
     volumes:
       - ./solutions:/solutions
-    command: tail -f /dev/null # Keep container running
+    command: tail -f /dev/null
     networks:
       - clientnet
     depends_on:
@@ -69,16 +66,12 @@ services:
       DB_NAME: statelessCommerce
 
 volumes:
-  # Named volumes ensure data persistence and are managed by Docker.
   postgresPrimaryData:
     name: statelessCommercePrimaryData
   postgresReplicaData:
     name: statelessCommerceReplicaData
-  walArchive:
-    name: statelessCommerceWalArchive
 
 networks:
-  # Explicit network definitions for better isolation and portability.
   postgresnet:
     driver: bridge
   clientnet:

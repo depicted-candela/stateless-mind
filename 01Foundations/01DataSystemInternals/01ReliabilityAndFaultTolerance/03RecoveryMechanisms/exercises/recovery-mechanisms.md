@@ -1,4 +1,4 @@
-#### **(i) Meanings, Values, Relations, and Advantages**
+# **(i) Meanings, Values, Relations, and Advantages**
 
 **Exercise 1.1: Point-in-Time Recovery (PITR) in Action**
 
@@ -25,7 +25,7 @@
     a.  Connect and get timestamp:
         ```bash
         docker-compose exec primary psql -U admin -d statelessCommerce -c "SELECT now();"
-        # Example output: 2025-08-01 10:30:00.123456+00
+         Example output: 2025-08-01 10:30:00.123456+00
         ```
     b.  Run the deletion.
     c.  The solution involves orchestrating a recovery.
@@ -65,9 +65,9 @@
         run_command(["rm", "-rf", "/var/lib/postgresql/data/*"], "primary")
         
         print("\n[Step 3] Restoring from base backup by copying from archive...")
-        # In a real scenario, you'd restore from your backup storage (e.g., S3).
-        # We simulate this by copying the archived data back.
-        wal_archive_path = "/archive" # Path inside the container
+         In a real scenario, you'd restore from your backup storage (e.g., S3).
+         We simulate this by copying the archived data back.
+        wal_archive_path = "/archive"  Path inside the container
         run_command(["pg_basebackup", "-D", "/var/lib/postgresql/data", "-h", os.environ['PRIMARY_HOST'], "-U", os.environ['DB_USER'], "-P", "-R"], "primary")
 
 
@@ -110,10 +110,10 @@
     
     **Execution:**
     ```bash
-    # Get the timestamp, then delete the data in psql
-    # Then run the script:
+     Get the timestamp, then delete the data in psql
+     Then run the script:
     docker-compose exec pythonClient python /solutions/pitrOrchestrator.py
-    # When prompted, enter the timestamp you recorded before the deletion.
+     When prompted, enter the timestamp you recorded before the deletion.
     ```
     After running, connect to the primary and verify the 'Johnson' customer has been restored.
 
@@ -123,7 +123,7 @@
 
 ---
 
-#### **(ii) Disadvantages and Pitfalls**
+# **(ii) Disadvantages and Pitfalls**
 
 **Exercise 2.1: The Peril of Replication Lag**
 
@@ -165,7 +165,7 @@ A failover is a common recovery mechanism in a replicated setup. However, it's n
 
 ---
 
-#### **(iii) Contrasting with Inefficient/Naive Solutions**
+# **(iii) Contrasting with Inefficient/Naive Solutions**
 
 **Exercise 3.1: The Filesystem Copy Disaster**
 
@@ -214,7 +214,7 @@ A junior engineer suggests that for backups, we can just use `docker cp` to copy
 
 ---
 
-#### **(iv) Hardcore Combined Problem**
+# **(iv) Hardcore Combined Problem**
 
 **Exercise 4.1: The Full Disaster Recovery Drill**
 
@@ -244,13 +244,13 @@ Your task is to orchestrate a full recovery. Simply failing over to the replica 
 First, we simulate the network lag by pausing the replica, and then run the damaging command on the primary.
 
 ```bash
-# In one terminal, pause the replica
+ In one terminal, pause the replica
 docker-compose pause replica
 
-# In another terminal, connect to primary and run TRUNCATE
-# First, get the current time!
+ In another terminal, connect to primary and run TRUNCATE
+ First, get the current time!
 docker-compose exec primary psql -U admin -d statelessCommerce -c "SELECT now();"
-# RECORD THIS TIMESTAMP! e.g., '2025-08-01 11:00:00 UTC'
+ RECORD THIS TIMESTAMP! e.g., '2025-08-01 11:00:00 UTC'
 docker-compose exec primary psql -U admin -d statelessCommerce -c "TRUNCATE TABLE products CASCADE;"
 docker-compose exec primary psql -U admin -d statelessCommerce -c "SELECT COUNT(*) FROM products;" -- Should be 0
 ```
@@ -259,7 +259,7 @@ Now, unpause the replica and run the lag check script.
 
 ```bash
 docker-compose unpause replica
-# Wait a few seconds for it to reconnect
+ Wait a few seconds for it to reconnect
 docker-compose exec pythonClient python /solutions/checkReplicationLag.py
 ```
 
@@ -312,7 +312,7 @@ def main():
         print(f"Replica LSN: {replica_lsn_str} ({replica_bytes} bytes)")
         print(f"Replication Lag: {lag_bytes / 1024:.2f} KB")
 
-        if lag_bytes > 500: # Setting a threshold for significant lag
+        if lag_bytes > 500:  Setting a threshold for significant lag
             print("\nWARNING: Replica is significantly lagging. Direct failover would result in data loss.")
         else:
             print("\nReplica is in sync or has minimal lag.")
@@ -384,20 +384,20 @@ def main():
     run_host_command(["docker-compose", "stop", "primary"])
     
     print("\n[Step 5] Simulating restore: Re-initializing primary and configuring PITR...")
-    # Get the absolute path to the WAL archive on the host
+     Get the absolute path to the WAL archive on the host
     wal_volume_path = run_host_command(["docker", "volume", "inspect", "-f", "{{.Mountpoint}}", "statelessCommerceWalArchive"]).stdout.strip()
     
-    # We must run these next commands inside a temporary container with the volumes mounted
-    # to manipulate the files correctly.
+     We must run these next commands inside a temporary container with the volumes mounted
+     to manipulate the files correctly.
     data_volume = "statelessCommercePrimaryData"
     archive_volume = "statelessCommerceWalArchive"
     
-    # 1. Clean the data directory
+     1. Clean the data directory
     run_host_command(["docker", "run", "--rm", "-v", f"{data_volume}:/data", "busybox", "rm", "-rf", "/data/*"])
     
-    # 2. Run pg_basebackup to restore from the WAL archive (this is a conceptual step)
-    # A real backup would be on S3. Here, we just re-init and will rely on WAL replay.
-    # We re-create the data dir from scratch, then apply WALs.
+     2. Run pg_basebackup to restore from the WAL archive (this is a conceptual step)
+     A real backup would be on S3. Here, we just re-init and will rely on WAL replay.
+     We re-create the data dir from scratch, then apply WALs.
     run_host_command(["docker", "run", "--rm", "-v", f"{data_volume}:/data", "-v", f"{archive_volume}:/archive", "postgres:15", "pg_basebackup", "-D", "/data", "-R", "--wal-method=fetch"])
 
 
@@ -412,7 +412,7 @@ def main():
 
     print("\n[Step 8] Monitoring recovery...")
     recovered = False
-    for _ in range(60): # Increase timeout for recovery
+    for _ in range(60):  Increase timeout for recovery
         result = subprocess.run(["docker-compose", "exec", "primary", "pg_isready", "-U", "admin"], capture_output=True, text=True)
         if "accepting connections" in result.stdout:
             print("Recovery complete. New primary is online.")

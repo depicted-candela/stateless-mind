@@ -1,0 +1,2 @@
+# pythonClient/requirements.txt
+psycopg2-binary

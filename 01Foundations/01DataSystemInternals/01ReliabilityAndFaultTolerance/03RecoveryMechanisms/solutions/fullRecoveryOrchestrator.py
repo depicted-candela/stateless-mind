@@ -1,7 +1,6 @@
 import subprocess
 import sys
 import time
-import os
 
 def run_host_command(command):
     """Runs a command on the host machine."""
