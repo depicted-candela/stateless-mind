@@ -4,18 +4,13 @@ services:
     container_name: primary
     volumes:
       - ./primary/init:/docker-entrypoint-initdb.d
+      - ./primary/postgresql.conf:/etc/postgresql/postgresql.conf
       - postgresPrimaryData:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: statelessCommerce
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: password
-    command: >
-      postgres
-      -c wal_level=replica
-      -c archive_mode=on
-      -c archive_command='mkdir -p /var/lib/postgresql/data/wal-archive && cp %p /var/lib/postgresql/data/wal-archive/%f'
-      -c max_wal_senders=10
-      -c hot_standby=on
+    command: -c config_file=/etc/postgresql/postgresql.conf
     ports:
       - "${PRIMARY_HOST_PORT}:5432"
     networks:
