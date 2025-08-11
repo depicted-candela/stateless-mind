@@ -1,17 +1,23 @@
 #!/bin/bash
 set -e
 
-# This script runs once as root when the database is first initialized.
+# This script runs once as the postgres user during database initialization.
 
-# 1. Create a subdirectory within the data volume for WAL files.
+# 1. Create a subdirectory for WAL files inside the main data volume.
+#    This avoids all host permission issues.
 mkdir -p /var/lib/postgresql/data/wal-archive
 
-# 2. Change ownership of this NEW subdirectory to the postgres user.
-# This works because this script runs as root before the server starts as postgres.
-chown -R postgres:postgres /var/lib/postgresql/data/wal-archive
-
-# 3. Append a rule to pg_hba.conf to allow the replica to connect.
-echo "host replication all 0.0.0.0/0 md5" >> "$PGDATA/pg_hba.conf"
+# 2. Append replication rules to the default pg_hba.conf.
+echo "host replication admin 0.0.0.0/0 md5" >> "$PGDATA/pg_hba.conf"
 echo "host all all 0.0.0.0/0 md5" >> "$PGDATA/pg_hba.conf"
 
-echo "Initialization complete: pg_hba.conf updated and WAL archive directory prepared."
+# 3. Append necessary parameters to the default postgresql.conf.
+cat >> "$PGDATA/postgresql.conf" <<EOF
+wal_level = replica
+archive_mode = on
+archive_command = 'cp %p /var/lib/postgresql/data/wal-archive/%f'
+max_wal_senders = 10
+hot_standby = on
+EOF
+
+echo "Initialization complete: pg_hba.conf and postgresql.conf configured for replication."

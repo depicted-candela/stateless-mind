@@ -4,13 +4,11 @@ services:
     container_name: primary
     volumes:
       - ./primary/init:/docker-entrypoint-initdb.d
-      - ./primary/postgresql.conf:/etc/postgresql/postgresql.conf
       - postgresPrimaryData:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: statelessCommerce
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: password
-    command: -c config_file=/etc/postgresql/postgresql.conf
     ports:
       - "${PRIMARY_HOST_PORT}:5432"
     networks:

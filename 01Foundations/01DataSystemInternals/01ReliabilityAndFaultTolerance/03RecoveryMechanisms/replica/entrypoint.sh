@@ -8,26 +8,26 @@ pg_ctl -D "$PGDATA" -m fast -w stop
 rm -rf "$PGDATA"/*
 
 echo "Starting base backup from primary..."
-# Use a temporary .pgpass file for credentials.
-echo "primary:5432:*:admin:password" > ~/.pgpass
-chmod 0600 ~/.pgpass
+
+# Use the PGPASSWORD environment variable for non-interactive authentication.
+export PGPASSWORD=$POSTGRES_PASSWORD
 
 # Loop until the base backup succeeds.
 until pg_basebackup --pgdata="$PGDATA" --host=primary --username=admin -W --wal-method=stream --slot=replica_slot --create-slot
 do
-  echo "Waiting for primary to connect..."
+  echo "Waiting for primary to connect to create base backup..."
   sleep 1s
 done
 
-rm ~/.pgpass
+unset PGPASSWORD
 chmod 0700 "$PGDATA"
 touch "$PGDATA/standby.signal"
 
-# Create postgresql.auto.conf with the corrected restore_command.
+# Create postgresql.auto.conf with the correct restore_command.
 cat > "$PGDATA/postgresql.auto.conf" <<EOF
-primary_conninfo = 'host=primary port=5432 user=admin password=password'
+primary_conninfo = 'host=primary port=5432 user=admin password=$POSTGRES_PASSWORD'
 restore_command = 'cp /primary_data/wal-archive/%f %p'
 primary_slot_name = 'replica_slot'
 EOF
 
-echo "Replica setup complete."
+echo "Replica setup complete. The container will now start PostgreSQL."
