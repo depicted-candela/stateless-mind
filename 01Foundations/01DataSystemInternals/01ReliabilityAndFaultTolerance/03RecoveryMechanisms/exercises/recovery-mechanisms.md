@@ -7,10 +7,10 @@
 3.  **Practice:**
     a.  Connect to the `primary` database and record the current timestamp.
     b.  Delete all customers with the last name 'Johnson'.
-        ```sql
-        DELETE FROM customers WHERE lastName = 'Johnson';
-        SELECT * FROM customers; -- Verify deletion
-        ```
+    ```sql
+    DELETE FROM customers WHERE lastName = 'Johnson';
+    SELECT * FROM customers; -- Verify deletion
+    ```
     c.  You've just made a critical error. Use the provided Python script `pitrOrchestrator.py` to perform a PITR. The script automates the process of stopping the primary, clearing its data, and replaying WAL files up to the timestamp you recorded.
 4.  **Proprietary Contrast:** Describe how a managed database service like Amazon RDS or Google Cloud SQL simplifies this entire recovery process for the user. What trade-offs are being made?
 
@@ -65,9 +65,9 @@
         run_command(["rm", "-rf", "/var/lib/postgresql/data/*"], "primary")
         
         print("\n[Step 3] Restoring from base backup by copying from archive...")
-         In a real scenario, you'd restore from your backup storage (e.g., S3).
-         We simulate this by copying the archived data back.
-        wal_archive_path = "/archive"  Path inside the container
+        # In a real scenario, you'd restore from your backup storage (e.g., S3).
+        # We simulate this by copying the archived data back.
+        wal_archive_path = "/archive" # Path inside the container
         run_command(["pg_basebackup", "-D", "/var/lib/postgresql/data", "-h", os.environ['PRIMARY_HOST'], "-U", os.environ['DB_USER'], "-P", "-R"], "primary")
 
 
@@ -109,12 +109,14 @@
     </details>
     
     **Execution:**
+    Get the timestamp, then delete the data in psql
+    Then run the script:
+    
     ```bash
-     Get the timestamp, then delete the data in psql
-     Then run the script:
     docker-compose exec pythonClient python /solutions/pitrOrchestrator.py
-     When prompted, enter the timestamp you recorded before the deletion.
     ```
+
+    When prompted, enter the timestamp you recorded before the deletion.
     After running, connect to the primary and verify the 'Johnson' customer has been restored.
 
 4.  **Proprietary Contrast:** Managed services like Amazon RDS abstract this entirely. You typically select a backup from a list, choose "Point-in-Time Restore", and enter a timestamp in a web UI. The service handles creating a new instance, finding the correct base backup, fetching the WAL files from its internal storage (like S3), and performing the replay. The trade-off is **simplicity vs. control/cost**. With RDS, you don't manage the WAL archive or `restore_command`, but you pay for the managed service and have less control over the underlying storage and recovery mechanisms. The open-source way is more complex but offers maximum flexibility and potentially lower direct costs.
@@ -131,22 +133,22 @@ A failover is a common recovery mechanism in a replicated setup. However, it's n
 
 1.  **Pitfall Demonstration:**
     a.  First, stop the network connection from the primary to the replica to simulate a network partition.
-        ```bash
-        docker-compose pause replica
-        ```
+    ```bash
+    docker-compose pause replica
+    ```
     b.  Connect to the `primary` and insert a new, critical customer record.
-        ```sql
-        INSERT INTO customers (firstName, lastName, email) VALUES ('Charlie', 'Davis', 'charlie.davis@critical.com');
-        ```
+    ```sql
+    INSERT INTO customers (firstName, lastName, email) VALUES ('Charlie', 'Davis', 'charlie.davis@critical.com');
+    ```
     c.  Now, simulate a primary failure by stopping the container.
-        ```bash
-        docker-compose stop primary
-        ```
+    ```bash
+    docker-compose stop primary
+    ```
     d.  "Failover" by promoting the replica. Un-pause it and promote it.
-        ```bash
-        docker-compose unpause replica
-        docker-compose exec replica pg_ctl promote
-        ```
+    ```bash
+    docker-compose unpause replica
+    docker-compose exec replica pg_ctl promote
+    ```
     e.  Connect to the now-promoted replica (running on the host port specified by `REPLICA_HOST_PORT`) and check for the critical customer 'Charlie Davis'. Is the record there?
 2.  **Explanation:** Why is the record missing? What fundamental trade-off of distributed systems does this demonstrate?
 
@@ -173,23 +175,23 @@ A junior engineer suggests that for backups, we can just use `docker cp` to copy
 
 1.  **The Naive Approach (Simulated):**
     a.  While the primary database is running, execute a command that simulates a filesystem copy.
-        ```bash
-        docker-compose exec primary tar -cf /tmp/baddata.tar -C /var/lib/postgresql/data .
-        ```
+    ```bash
+    docker-compose exec primary tar -cf /tmp/baddata.tar -C /var/lib/postgresql/data .
+    ```
     b.  Now, simulate a disaster. Stop the primary and wipe its data directory.
-        ```bash
-        docker-compose stop primary
-        docker-compose exec primary rm -rf /var/lib/postgresql/data/*
-        ```
+    ```bash
+    docker-compose stop primary
+    docker-compose exec primary rm -rf /var/lib/postgresql/data/*
+    ```
     c.  Attempt to restore using the "backup" you just made.
-        ```bash
-        docker-compose exec primary tar -xf /tmp/baddata.tar -C /var/lib/postgresql/data
-        docker-compose start primary
-        ```
+    ```bash
+    docker-compose exec primary tar -xf /tmp/baddata.tar -C /var/lib/postgresql/data
+    docker-compose start primary
+    ```
     d.  Check the logs of the primary container. Does it start correctly? If not, why?
-        ```bash
-        docker-compose logs primary
-        ```
+    ```bash
+    docker-compose logs primary
+    ```
 2.  **The Correct Approach:** Describe why the naive approach fails. What makes a tool like `pg_basebackup` fundamentally different and correct?
 
 <details>

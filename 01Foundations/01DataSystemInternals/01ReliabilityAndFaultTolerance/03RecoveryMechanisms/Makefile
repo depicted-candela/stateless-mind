@@ -1,35 +1,39 @@
-# Makefile for managing the Stateless Mind PostgreSQL Environment
-
-# This target automatically creates a .env file with default ports if one does not exist.
+# This target automatically creates a .env file with the current user's UID/GID
+# if one does not already exist. This is crucial for rootless Docker volume permissions.
 .PHONY: all
 all: .env
 
 .env:
 	@echo "Creating default .env file..."
-	@echo "PRIMARY_HOST_PORT=5433" > .env
+	@echo "UID=$$(id -u)" > .env
+	@echo "GID=$$(id -g)" >> .env
+	@echo "PRIMARY_HOST_PORT=5433" >> .env
 	@echo "REPLICA_HOST_PORT=5434" >> .env
 
-# Load environment variables from .env file.
+# Load environment variables from .env file to make them available to this Makefile
+# and subsequent shell commands.
 include .env
 export PGPASSWORD=password
 
+# Default command to show help.
 .DEFAULT_GOAL := help
 
-.PHONY: help up down start stop logs clean psql-primary psql-replica test-lag
+.PHONY: help up down start stop logs psql-primary psql-replica test-lag clean promote-replica
 
 help:
 	@echo "Usage: make [target]"
 	@echo ""
 	@echo "Targets:"
-	@echo "  up             Builds and starts all services in detached mode."
-	@echo "  down           Stops and removes containers/networks (preserves data)."
-	@echo "  clean          Stops and removes everything, INCLUDING ALL DATA VOLUMES."
-	@echo "  start          Starts the services."
-	@echo "  stop           Stops the services without removing them."
-	@echo "  logs           Follows the logs of all running services."
-	@echo "  psql-primary   Connect to the primary PostgreSQL database."
-	@echo "  psql-replica   Connect to the replica PostgreSQL database."
-	@echo "  test-lag       Run the Python script to check replication lag."
+	@echo "  up                Builds and starts all services in detached mode."
+	@echo "  down              Stops and removes all containers, networks (preserves data)."
+	@echo "  clean             DESTRUCTIVE: Stops and removes everything, including data volumes."
+	@echo "  start             Starts the services."
+	@echo "  stop              Stops the services without removing them."
+	@echo "  logs              Follows the logs of all running services."
+	@echo "  psql-primary      Connect to the primary PostgreSQL database."
+	@echo "  psql-replica      Connect to the replica PostgreSQL database."
+	@echo "  test-lag          Run the Python script to check replication lag."
+	@echo "  promote-replica   Promotes the replica to a primary server (for failover tests)."
 
 up: .env
 	@echo "🚀 Starting up the environment..."
@@ -38,10 +42,6 @@ up: .env
 down:
 	@echo "🔥 Tearing down the environment (preserving data volumes)..."
 	docker-compose down
-
-clean:
-	@echo "🔥 DESTRUCTIVE: Tearing down the environment AND DELETING ALL DATA..."
-	docker-compose down -v
 
 start:
 	@echo "▶️ Starting services..."
@@ -66,3 +66,12 @@ psql-replica:
 test-lag:
 	@echo "🐍 Running replication lag check..."
 	docker-compose exec python_client python /solutions/checkReplicationLag.py
+
+# SOLUTION: Add a dedicated target for promoting the replica as the correct user.
+promote-replica:
+	@echo "🚀 Promoting replica to primary..."
+	docker-compose exec --user postgres replica pg_ctl promote
+
+clean:
+	@echo "🔥 DESTRUCTIVE: Tearing down the environment AND DELETING ALL DATA..."
+	docker-compose down -v

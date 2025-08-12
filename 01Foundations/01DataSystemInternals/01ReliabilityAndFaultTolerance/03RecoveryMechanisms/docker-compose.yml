@@ -37,6 +37,7 @@ services:
       - "${REPLICA_HOST_PORT}:5432"
     networks:
       - postgresnet
+      - clientnet
 
   python_client:
     build:
